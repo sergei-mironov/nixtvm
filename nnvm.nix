@@ -10,6 +10,17 @@ let
 in
 
 rec {
+
+  tvm = stdenv.mkDerivation rec {
+    name = "tvm";
+    src = ../nnvm/tvm;
+    buildInputs = [];
+    installPhase = ''
+      mkdir -pv $out/lib
+      make installdev DESTDIR=$out
+    '';
+  };
+
   nnvm = stdenv.mkDerivation {
 
     src = filterSource (path: type :
@@ -20,6 +31,7 @@ rec {
 
     name = "nnvm";
     buildInputs = with pkgs; with pp; [
+      cmake
       python
       setuptools
       gfortran
@@ -32,15 +44,6 @@ rec {
   '';
   };
 
-  tvm = stdenv.mkDerivation rec {
-    name = "tvm";
-    src = ../nnvm/tvm;
-    buildInputs = [];
-    installPhase = ''
-      mkdir -pv $out/lib
-      make installdev DESTDIR=$out
-    '';
-  };
 
   nnvm-python = pp.buildPythonPackage rec {
     pname = "nnvm";
