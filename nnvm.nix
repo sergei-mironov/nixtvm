@@ -36,12 +36,14 @@ rec {
     version = "0.8";
     name = "${pname}-${version}";
     src = ../nnvm/tvm;
-    buildInputs = with pkgs; with pp; [tvm decorator numpy tornado];
+    buildInputs = with pkgs; with pp; [tvm tvm-python decorator numpy tornado];
 
     preConfigure = ''
       cd topi/python
       export LD_LIBRARY_PATH="${tvm}/lib:$LD_LIBRARY_PATH";
     '';
+
+    doCheck=false;
   };
 
   nnvm = stdenv.mkDerivation {
@@ -87,7 +89,11 @@ rec {
       tvm
       nnvm
       tvm-python
+      tvm-python-topi
       decorator
+      pillow
+      opencv3
+      cffi
     ];
 
 
