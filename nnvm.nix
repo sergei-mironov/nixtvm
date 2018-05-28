@@ -14,14 +14,38 @@ rec {
   tvm = stdenv.mkDerivation rec {
     name = "tvm";
     src = ../nnvm/tvm;
-    buildInputs = [];
-    installPhase = ''
-      mkdir -pv $out/lib
-      make installdev DESTDIR=$out
+    buildInputs = with pkgs; [cmake];
+
+    cmakeFlags = "-DINSTALL_DEV=ON";
+  };
+
+  tvm-python = pp.buildPythonPackage rec {
+    pname = "tvm";
+    version = "0.8";
+    name = "${pname}-${version}";
+    src = ../nnvm/tvm/python;
+    buildInputs = with pkgs; with pp; [tvm decorator numpy tornado];
+
+    preConfigure = ''
+      export LD_LIBRARY_PATH="${tvm}/lib:$LD_LIBRARY_PATH";
+    '';
+  };
+
+  tvm-python-topi = pp.buildPythonPackage rec {
+    pname = "tvm";
+    version = "0.8";
+    name = "${pname}-${version}";
+    src = ../nnvm/tvm;
+    buildInputs = with pkgs; with pp; [tvm decorator numpy tornado];
+
+    preConfigure = ''
+      cd topi/python
+      export LD_LIBRARY_PATH="${tvm}/lib:$LD_LIBRARY_PATH";
     '';
   };
 
   nnvm = stdenv.mkDerivation {
+    name = "nnvm";
 
     src = filterSource (path: type :
          (cleanSourceFilter path type)
@@ -29,7 +53,8 @@ rec {
       && !(baseNameOf path == "lib" && type == "directory")
       ) ../nnvm;
 
-    name = "nnvm";
+    cmakeFlags = "-DBUILD_STATIC_NNVM=On";
+
     buildInputs = with pkgs; with pp; [
       cmake
       python
@@ -38,10 +63,10 @@ rec {
     ];
 
 
-  installPhase = ''
-    mkdir -pv $out/lib
-    cp lib/* $out/lib
-  '';
+  # installPhase = ''
+  #   mkdir -pv $out/lib
+  #   cp lib/* $out/lib
+  # '';
   };
 
 
@@ -60,12 +85,16 @@ rec {
     buildInputs = with pp; [
       numpy
       tvm
+      nnvm
+      tvm-python
+      decorator
     ];
 
-    # cd python
-    # export PYTHONPATH=`pwd`:$PYTHONPATH
-    # python setup.py install --prefix=$out
-    # cd ..
+
+  # cd python
+  # export PYTHONPATH=`pwd`:$PYTHONPATH
+  # python setup.py install --prefix=$out
+  # cd ..
   };
 }
 
