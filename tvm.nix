@@ -94,6 +94,7 @@ rec {
 
     buildInputs = with pkgs; with pp; [
       cmake decorator numpy tornado pp.nose ncurses zlib scipy mktags
+      mxnet scikitlearn numpy matplotlib
     ] ++ tvmDeps;
 
     inherit tvmCmakeFlags;
@@ -110,37 +111,5 @@ rec {
     '';
   };
 
-
-
-
-  # nnvm-python = pp.buildPythonPackage rec {
-  #   pname = "nnvm";
-  #   version = "0.8";
-  #   name = "${pname}-${version}";
-
-  #   src = ../nnvm/python;
-
-
-  #   preConfigure = ''
-  #     export LD_LIBRARY_PATH="${nnvm}/lib:${tvm}/lib:$LD_LIBRARY_PATH";
-  #   '';
-
-  #   buildInputs = with pp; [
-  #     numpy
-  #     tvm
-  #     tvm-python
-  #     tvm-python-topi
-  #     decorator
-  #     pillow
-  #     opencv3
-  #     cffi
-  #   ];
-
-
-  # # cd python
-  # # export PYTHONPATH=`pwd`:$PYTHONPATH
-  # # python setup.py install --prefix=$out
-  # # cd ..
-  # };
 }
 
