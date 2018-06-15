@@ -94,7 +94,7 @@ rec {
 
     buildInputs = with pkgs; with pp; [
       cmake decorator numpy tornado pp.nose ncurses zlib scipy mktags
-      mxnet scikitlearn numpy matplotlib
+      mxnet scikitlearn numpy matplotlib ipdb
     ] ++ tvmDeps;
 
     inherit tvmCmakeFlags;
