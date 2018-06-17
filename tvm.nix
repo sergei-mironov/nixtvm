@@ -93,8 +93,20 @@ rec {
     name = "shell";
 
     buildInputs = with pkgs; with pp; [
-      cmake decorator numpy tornado pp.nose ncurses zlib scipy mktags
-      mxnet scikitlearn numpy matplotlib ipdb
+      cmake
+      decorator
+      tornado
+      pp.nose
+      ncurses
+      zlib
+      scipy
+      mktags
+      numpy
+      scikitlearn
+      matplotlib
+      ipython
+      tensorflow
+      ipdb
     ] ++ tvmDeps;
 
     inherit tvmCmakeFlags;
@@ -104,10 +116,22 @@ rec {
         . /etc/myprofile
       fi
 
+      mkdir .ipython-profile 2>/dev/null || true
+      cat >.ipython-profile/ipython_config.py <<EOF
+      print("Enabling autoreload")
+      c = get_config()
+      c.InteractiveShellApp.exec_lines = []
+      c.InteractiveShellApp.exec_lines.append('%load_ext autoreload')
+      c.InteractiveShellApp.exec_lines.append('%autoreload 2')
+      EOF
+
+      alias ipython='ipython --matplotlib=qt5 --profile-dir=.ipython-profile'
+
+
       TVM=$HOME/proj/tvm
-      export PYTHONPATH="$TVM/python:$TVM/topi/python:$TVM/nnvm/python:$PYTHONPATH"
+      export PYTHONPATH="src:$TVM/python:$TVM/topi/python:$TVM/nnvm/python:$PYTHONPATH"
       # export LD_LIBRARY_PATH="$TVM:$LD_LIBRARY_PATH"
-      cd $TVM
+      # cd $TVM
     '';
   };
 
