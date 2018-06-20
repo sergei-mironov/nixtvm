@@ -18,7 +18,7 @@ Overall procedure
 
      The build hook (see tvm.nix) will set up environment and change directory to
      `nixtvm/tvm`.
-     
+
         $ nix-shell tvm-llvm.nix -A shell
 
   4. Build either using upstream docker, or manually on the current system
@@ -53,18 +53,10 @@ Manual build may be performed directly in TVM source tree.
     $ cd tvm
     $ mkdir build
     $ cd build
-    $ cp ../cmake/config.cmale .
+    $ cp ../cmake/config.cmake .
     $ vi config.cmake
     $ cmake ..
     $ make -j5
 
 Running tests in this mode is possible but requires some hacks due to PYTHONPATH collisions.
-
-
-
-
-
-
-
-
 
