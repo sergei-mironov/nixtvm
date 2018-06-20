@@ -5,16 +5,16 @@ TVM/NNVM environment setup
 Overall procedure
 -----------------
 
-1. Login to ws machine
+ 1. Login to ws machine
 
   $ ssh 10.122.85.37
 
-2. Clone this repository recursively
+ 2. Clone this repository recursively
 
   $ git clone --recursive https://http://code.huawei.com/mrc-cbg-opensource/nixtvm
   $ cd nixtvm
 
-3. Enter the development environment
+ 3. Enter the development environment
 
   $ nix-shell tvm-llvm.nix -A shell
 
@@ -22,7 +22,7 @@ Overall procedure
   `nixtvm/tvm`.
 
 
-4. Build either using upstream docker, or manually on the current system
+ 4. Build either using upstream docker, or manually on the current system
 
 
 Build TVM using docker (preferred)
