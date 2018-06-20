@@ -126,11 +126,35 @@ rec {
       cdex() { cd $TVM/nnvm/examples; }
 
       build() {(
-        cdtvm ; sh ./tests/ci_build/ci_build.sh cpu ./tests/scripts/task_build.sh build -j5 ;
+        cdtvm
+        mkdir build 2>/dev/null
+        cat >build/config.cmake <<EOF
+          set(USE_CUDA OFF)
+          set(USE_ROCM OFF)
+          set(USE_OPENCL OFF)
+          set(USE_METAL OFF)
+          set(USE_VULKAN OFF)
+          set(USE_OPENGL OFF)
+          set(USE_RPC ON)
+          set(USE_GRAPH_RUNTIME ON)
+          set(USE_GRAPH_RUNTIME_DEBUG OFF)
+          set(USE_LLVM ON)
+          set(USE_BLAS none)
+          set(USE_RANDOM OFF)
+          set(USE_NNPACK OFF)
+          set(USE_CUDNN OFF)
+          set(USE_CUBLAS OFF)
+          set(USE_MIOPEN OFF)
+          set(USE_MPS OFF)
+          set(USE_ROCBLAS OFF)
+          set(USE_SORT ON)
+      EOF
+        sh ./tests/ci_build/ci_build.sh cpu ./tests/scripts/task_build.sh build -j5 ;
       )}
 
       test() {(
-        cdtvm ; sh ./tests/ci_build/ci_build.sh cpu ./tests/scripts/task_python_nnvm.sh
+        cdtvm
+        sh ./tests/ci_build/ci_build.sh cpu ./tests/scripts/task_python_nnvm.sh
       )}
 
       cdtvm
