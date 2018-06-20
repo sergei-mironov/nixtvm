@@ -57,11 +57,6 @@ rec {
   nnvm = stdenv.mkDerivation {
     name = "nnvm";
 
-    # src = filterSource (path: type :
-    #      (cleanSourceFilter path type)
-    #   && !(baseNameOf path == "build" && type == "directory")
-    #   && !(baseNameOf path == "lib" && type == "directory")
-    #   ) ../nnvm;
     src = ../tvm-clean;
 
     cmakeFlags = "-DBUILD_STATIC_NNVM=On";
@@ -72,12 +67,6 @@ rec {
       setuptools
       gfortran
     ];
-
-
-  # installPhase = ''
-  #   mkdir -pv $out/lib
-  #   cp lib/* $out/lib
-  # '';
   };
 
 
@@ -107,6 +96,9 @@ rec {
       ipython
       tensorflow
       ipdb
+      gdb
+      ctags
+      docker
     ] ++ tvmDeps;
 
     inherit tvmCmakeFlags;
@@ -127,11 +119,21 @@ rec {
 
       alias ipython='ipython --matplotlib=qt5 --profile-dir=.ipython-profile'
 
+      TVM=tvm
+      export PYTHONPATH="$TVM/python:$TVM/topi/python:$TVM/nnvm/python:$PYTHONPATH"
 
-      TVM=$HOME/proj/tvm
-      export PYTHONPATH="src:$TVM/python:$TVM/topi/python:$TVM/nnvm/python:$PYTHONPATH"
-      # export LD_LIBRARY_PATH="$TVM:$LD_LIBRARY_PATH"
-      # cd $TVM
+      cdtvm() { cd $TVM ; }
+      cdex() { cd $TVM/nnvm/examples; }
+
+      build() {(
+        cdtvm ; sh ./tests/ci_build/ci_build.sh cpu ./tests/scripts/task_build.sh build -j5 ;
+      )}
+
+      test() {(
+        cdtvm ; sh ./tests/ci_build/ci_build.sh cpu ./tests/scripts/task_python_nnvm.sh
+      )}
+
+      cdtvm
     '';
   };
 
