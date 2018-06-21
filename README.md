@@ -33,30 +33,25 @@ TVM submodule.
 Execute `build` shell function defined by environment hook script (see tvm.nix
 for details)
 
-    $ build
+    $ type dmake  # Review the build algorithm
+    $ dmake
 
 Note, that in this case the tvm binaries would be linked with LIBC form docker
 image so all subsequent runs should be performed using docker.
 
 Currently, the only working command implemented so far is
 
-    $ test
+    $ dtest
 
 More test commands may be extracted using `cat Jenkinsfile | grep docker`
 
 
-Build manually
+Build natively
 --------------
 
-Manual build may be performed directly in TVM source tree.
+Manual build may be performed directly in TVM source tree. The build procedure
+is included in `nmake` shell function (native make)
 
-    $ cd tvm
-    $ mkdir build
-    $ cd build
-    $ cp ../cmake/config.cmake .
-    $ vi config.cmake
-    $ cmake ..
-    $ make -j5
-
-Running tests in this mode is possible but requires some hacks due to PYTHONPATH collisions.
+    $ type nmake  # Review the build algorithm
+    $ nmake
 

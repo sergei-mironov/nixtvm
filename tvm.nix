@@ -2,10 +2,11 @@
 , stdenv ? pkgs.stdenv
 , tvmCmakeFlagsEx ? abort "Use tvm-<mode>.nix"
 , tvmDepsEx ? abort "Use tvm-<mode>.nix"
+, tvmCmakeConfig ? ""
 } :
 
 let
-  inherit (pkgs) fetchgit fetchgitLocal;
+  inherit (pkgs) writeText fetchgit fetchgitLocal;
   inherit (builtins) filterSource;
   inherit (pkgs.lib.sources) cleanSourceFilter;
 
@@ -70,7 +71,7 @@ rec {
   };
 
 
-  mktags = pkgs.writeShellScriptBin "mktags.sh" ''
+  mktags = pkgs.writeShellScriptBin "mktags" ''
     find -name '*cc' -or -name '*hpp' -or -name '*h' | \
       ctags -L - --c++-kinds=+p --fields=+iaS --extra=+q --language-force=C++
     find -name '*py' | \
@@ -99,6 +100,7 @@ rec {
       gdb
       ctags
       docker
+      pyqt5
     ] ++ tvmDeps;
 
     inherit tvmCmakeFlags;
@@ -108,6 +110,7 @@ rec {
         . /etc/myprofile
       fi
 
+      CWD=`pwd`
       mkdir .ipython-profile 2>/dev/null || true
       cat >.ipython-profile/ipython_config.py <<EOF
       print("Enabling autoreload")
@@ -116,41 +119,35 @@ rec {
       c.InteractiveShellApp.exec_lines.append('%load_ext autoreload')
       c.InteractiveShellApp.exec_lines.append('%autoreload 2')
       EOF
+      export QT_QPA_PLATFORM_PLUGIN_PATH=`echo ${pkgs.qt5.qtbase.bin}/lib/qt-*/plugins/platforms/`
 
-      alias ipython='ipython --matplotlib=qt5 --profile-dir=.ipython-profile'
+      alias ipython='ipython --matplotlib=qt5 --profile-dir=$CWD/.ipython-profile'
+      alias ipython0='ipython --profile-dir=$CWD/.ipython-profile'
 
-      TVM=tvm
-      export PYTHONPATH="$TVM/python:$TVM/topi/python:$TVM/nnvm/python:$PYTHONPATH"
+      TVM=$CWD/tvm
+      export PYTHONPATH="$CWD/src/tutorials:$TVM/python:$TVM/topi/python:$TVM/nnvm/python:$PYTHONPATH"
+      export LD_LIBRARY_PATH="$CWD/tvm/build-native:$LD_LIBRARY_PATH"
 
       cdtvm() { cd $TVM ; }
       cdex() { cd $TVM/nnvm/examples; }
 
-      build() {(
+      nmake() {(
+        cdtvm
+        mkdir build-native 2>/dev/null
+        cp ${writeText "cfg" tvmCmakeConfig} build-native/cmake.config
+        cd build-native
+        cmake ..
+        make -j6 "$@"
+      )}
+
+      dmake() {(
         cdtvm
         mkdir build 2>/dev/null
-        cat >build/config.cmake <<EOF
-          set(USE_CUDA OFF)
-          set(USE_ROCM OFF)
-          set(USE_OPENCL OFF)
-          set(USE_METAL OFF)
-          set(USE_VULKAN OFF)
-          set(USE_OPENGL OFF)
-          set(USE_RPC ON)
-          set(USE_GRAPH_RUNTIME ON)
-          set(USE_GRAPH_RUNTIME_DEBUG OFF)
-          set(USE_LLVM ON)
-          set(USE_BLAS none)
-          set(USE_RANDOM OFF)
-          set(USE_NNPACK OFF)
-          set(USE_CUDNN OFF)
-          set(USE_CUBLAS OFF)
-          set(USE_MIOPEN OFF)
-          set(USE_MPS OFF)
-          set(USE_ROCBLAS OFF)
-          set(USE_SORT ON)
-      EOF
-        sh ./tests/ci_build/ci_build.sh cpu ./tests/scripts/task_build.sh build -j5 ;
+        cd ${writeText "cfg" tvmCmakeConfig} build/cmake.config
+        sh ./tests/ci_build/ci_build.sh cpu ./tests/scripts/task_build.sh build -j6 "$@";
       )}
+
+      alias build="dmake"
 
       test() {(
         cdtvm
