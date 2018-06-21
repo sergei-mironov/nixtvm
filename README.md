@@ -21,16 +21,19 @@ Overall procedure
 
         $ nix-shell tvm-llvm.nix -A shell
 
-  4. Build either using upstream docker, or manually on the current system
+     Important tasks such as `make`, `clean` and `test` are wrapped with shell
+     functions. See `shell` expression defined in `tvm.nix` for details.
+
+  4. Build either using upstream docker, or manually on the current system.
 
 
-Build TVM using docker (preferred)
-----------------------------------
+Build TVM using docker
+----------------------
 
-Original TVM sources needed proxy patch which is already applied in the current
+Original TVM sources need huawei-proxy-patch which is already applied in the current
 TVM submodule.
 
-Execute `build` shell function defined by environment hook script (see tvm.nix
+Execute `dmake` shell function defined by environment hook script (see tvm.nix
 for details)
 
     $ type dmake  # Review the build algorithm
@@ -54,4 +57,28 @@ is included in `nmake` shell function (native make)
 
     $ type nmake  # Review the build algorithm
     $ nmake
+
+`nclean` command is also defined
+
+    $ type nclean  # Review the algorithm
+    $ nclean
+
+
+Working with TVM
+================
+
+Inside `nix-shell tvm-llvm.nix -A shell`, users are able to run development
+tools such as python, g++, gdb, etc. `LD_LIBRARY_PATH` and `PYTHONPATH` include
+build directory. After running `nmake`, this directory should contain the
+just-built version of TVM.
+
+Additionaly, `src` folder contains some tutorials used as a playground. For
+example, to test the reduction code, one may run
+
+    $ nmake
+    $ ipython
+    >> from reduction import *  # <nixtvm>/src/tutorials/reduction.py will be used
+    >> lesson1()
+
+
 

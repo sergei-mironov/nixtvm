@@ -134,22 +134,30 @@ rec {
       nmake() {(
         cdtvm
         mkdir build-native 2>/dev/null
-        cp ${writeText "cfg" tvmCmakeConfig} build-native/cmake.config
+        cat ${writeText "cfg" tvmCmakeConfig} >build-native/config.cmake
         cd build-native
         cmake ..
         make -j6 "$@"
       )}
 
+      nclean() {(
+        cdtvm
+        cd build-native
+        make clean
+        rm CMakeCache.txt
+        rm -rf CMakeFiles
+      )}
+
       dmake() {(
         cdtvm
         mkdir build 2>/dev/null
-        cd ${writeText "cfg" tvmCmakeConfig} build/cmake.config
+        cat ${writeText "cfg" tvmCmakeConfig} >build/config.cmake
         sh ./tests/ci_build/ci_build.sh cpu ./tests/scripts/task_build.sh build -j6 "$@";
       )}
 
       alias build="dmake"
 
-      test() {(
+      dtest() {(
         cdtvm
         sh ./tests/ci_build/ci_build.sh cpu ./tests/scripts/task_python_nnvm.sh
       )}

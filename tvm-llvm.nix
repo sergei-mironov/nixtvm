@@ -4,7 +4,7 @@
 
 import ./tvm.nix {
   tvmCmakeFlagsEx = "-DUSE_LLVM=ON";
-  tvmDepsEx = with pkgs; [ llvm_5 ];
+  tvmDepsEx = with pkgs; [ llvm_5 openblas ];
   tvmCmakeConfig = ''
     set(USE_CUDA OFF)
     set(USE_ROCM OFF)
@@ -16,7 +16,7 @@ import ./tvm.nix {
     set(USE_GRAPH_RUNTIME ON)
     set(USE_GRAPH_RUNTIME_DEBUG OFF)
     set(USE_LLVM ON)
-    set(USE_BLAS none)
+    set(USE_BLAS openblas)
     set(USE_RANDOM OFF)
     set(USE_NNPACK OFF)
     set(USE_CUDNN OFF)
