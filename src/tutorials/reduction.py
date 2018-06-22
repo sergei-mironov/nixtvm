@@ -52,7 +52,9 @@ def lesson1():
   Before doing anything, let us print out the IR code of default schedule.
   '''))
   s = tvm.create_schedule(B.op)
-  print(tvm.lower(s, [A, B], simple_mode=True))
+  l = tvm.lower(s, [A, B], simple_mode=True)
+  print(l)
+  return l
 
 
 def lesson2():

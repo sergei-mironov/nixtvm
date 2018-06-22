@@ -124,9 +124,12 @@ rec {
       alias ipython='ipython --matplotlib=qt5 --profile-dir=$CWD/.ipython-profile'
       alias ipython0='ipython --profile-dir=$CWD/.ipython-profile'
 
-      TVM=$CWD/tvm
+      export TVM=$CWD/tvm
       export PYTHONPATH="$CWD/src/tutorials:$TVM/python:$TVM/topi/python:$TVM/nnvm/python:$PYTHONPATH"
-      export LD_LIBRARY_PATH="$CWD/tvm/build-native:$LD_LIBRARY_PATH"
+      export LD_LIBRARY_PATH="$TVM/build-native:$LD_LIBRARY_PATH"
+      export C_INCLUDE_PATH="$TVM/include:$TVM/dmlc-core/include:$TVM/HalideIR/src:$TVM/dlpack/include:$TVM/topi/include:$TVM/nnvm/include"
+      export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
+      export LIBRARY_PATH=$TVM/build-native
 
       cdtvm() { cd $TVM ; }
       cdex() { cd $TVM/nnvm/examples; }
