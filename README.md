@@ -117,6 +117,9 @@ to link with C++ applications.
 Running executables using TVM/NNVM
 ==================================
 
+General information
+-------------------
+
 We expect that native build procedure described above has been completed.
 
 Inside `nix-shell tvm-llvm.nix -A shell`, users are able to run development
