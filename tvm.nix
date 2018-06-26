@@ -101,6 +101,8 @@ rec {
       ctags
       docker
       pyqt5
+      llvm
+      clang
     ] ++ tvmDeps;
 
     inherit tvmCmakeFlags;
