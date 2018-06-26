@@ -15,8 +15,8 @@ following stages:
 
  1. Defining a model in C++ or Python
  2. Compiling the model into Dynamic Library
- 3. Using the dynamic library in the project
-
+ 3. Integrating the library with the main project
+ 4. Using the library
 
 ### Defining a model
 
@@ -177,11 +177,6 @@ We link this program using GCC compiler with a following command:
 
     $ gcc -ltvm_runtime main.cc -o main
 
-Now we may run the `main` program to perform the computation we requested:
-
-    $ ./main
-    0 11 22 33 44 55 66 77 88 99
-
 ##### Stage 1. Loading the library
 
 The `vecadd.so` library is loaded from the current directory. After that, the
@@ -195,7 +190,17 @@ output array. Input arrays are Initialized.
 ##### Stage 3. Executing the function
 
 Here we pass pointers to input and output arrays to `vecadd` function. After
-the computation os performed, the output array contain the result of addition
+the computation is performed, the output array contain the result of addition
 of the input arrays.
+
+
+### Using the library
+
+To demonstrate how to use the library we run the computation requested:
+
+    $ ./main
+    0 11 22 33 44 55 66 77 88 99
+
+The result of addition is directed to the standard output.
 
 
