@@ -124,8 +124,8 @@ We expect that native build procedure described above has been completed.
 
 Inside `nix-shell tvm-llvm.nix -A shell`, users are able to run development
 tools such as python, g++, gdb, etc. `LD_LIBRARY_PATH` and `PYTHONPATH` include
-build directory. After running `nmake`, `build-native` directory should contain
-the just-built version of TVM.
+build directory. After running `nmake` shell function, just-built libraries
+should appear in `build-native` directory.
 
 In order to run examples, the following shell environment variables should be
 changed:

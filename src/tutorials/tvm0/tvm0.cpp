@@ -33,7 +33,13 @@ int main()
 	auto args = tvm::Array<tvm::Tensor>({A, B, C});
 	auto lowered = tvm::lower(s, args, "vecadd", binds, config);
 
-  cout << lowered << endl;
+  cerr << lowered << endl;
+
+	auto target = tvm::Target::create("llvm");
+	auto target_host = tvm::Target::create("llvm");
+	tvm::runtime::Module mod = tvm::build(lowered, target, target_host, config);
+
+  cout << mod->GetSource("asm") << endl;
 
   /*
 	// Define a Schedule
