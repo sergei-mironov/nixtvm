@@ -96,6 +96,7 @@ rec {
       matplotlib
       ipython
       tensorflow
+      mxnet
       ipdb
       gdb
       ctags
