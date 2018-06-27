@@ -113,6 +113,10 @@ rec {
         . /etc/myprofile
       fi
 
+      if test -f ~/.display ; then
+        . ~/.display
+      fi
+
       CWD=`pwd`
       mkdir .ipython-profile 2>/dev/null || true
       cat >.ipython-profile/ipython_config.py <<EOF
@@ -122,10 +126,12 @@ rec {
       c.InteractiveShellApp.exec_lines.append('%load_ext autoreload')
       c.InteractiveShellApp.exec_lines.append('%autoreload 2')
       EOF
-      export QT_QPA_PLATFORM_PLUGIN_PATH=`echo ${pkgs.qt5.qtbase.bin}/lib/qt-*/plugins/platforms/`
 
-      alias ipython='ipython --matplotlib=qt5 --profile-dir=$CWD/.ipython-profile'
-      alias ipython0='ipython --profile-dir=$CWD/.ipython-profile'
+      if test -n "$DISPLAY"; then
+        export QT_QPA_PLATFORM_PLUGIN_PATH=`echo ${pkgs.qt5.qtbase.bin}/lib/qt-*/plugins/platforms/`
+        alias ipython='ipython --matplotlib=qt5 --profile-dir=$CWD/.ipython-profile'
+        alias ipython0='ipython --profile-dir=$CWD/.ipython-profile'
+      fi
 
       export TVM=$CWD/tvm
       export PYTHONPATH="$CWD/src/tutorials:$TVM/python:$TVM/topi/python:$TVM/nnvm/python:$PYTHONPATH"
@@ -166,6 +172,10 @@ rec {
       dtest() {(
         cdtvm
         sh ./tests/ci_build/ci_build.sh cpu ./tests/scripts/task_python_nnvm.sh
+      )}
+
+      cdc() {(
+        cd $CWD
       )}
 
       cdtvm
