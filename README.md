@@ -4,14 +4,14 @@ TVM/NNVM environment setup
 This document describes the working process regarding TVM/NNVM project arranged
 in Moscow Research center.
 
-The main machine is a Linux workstation with [NixOS](www.nixos.org) operating
+The main machine is a Linux workstation with [NixOS](http://www.nixos.org) operating
 system installed. This operating system has a notion of build environments
 where users may define the exact set of packages and versions they use. This
 definitions are stored as 'expressions' in Nix language. By using this feature,
 developers may be sure they use exactly the same versions of environment which
 make collaborative development easier.
 
-This repository expects the NixOS [packages](www.github.com/nixos/nixpkgs) tree
+This repository expects the NixOS [packages](http://www.github.com/nixos/nixpkgs) tree
 to be derived from the following commit:
 
     commit 08d245eb31a3de0ad73719372190ce84c1bf3aee (HEAD -> nixos-18.03)
