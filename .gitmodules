@@ -1,3 +1,6 @@
 [submodule "tvm"]
 	path = tvm
 	url = https://github.com/grwlf/tvm
+[submodule "nixpkgs"]
+	path = nixpkgs
+	url = https://github.com/grwlf/nixpkgs
