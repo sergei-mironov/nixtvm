@@ -1,0 +1,95 @@
+diff --git a/pkgs/applications/science/math/mxnet/default.nix b/pkgs/applications/science/math/mxnet/default.nix
+index ce9c214..e05e470 100644
+--- a/pkgs/applications/science/math/mxnet/default.nix
++++ b/pkgs/applications/science/math/mxnet/default.nix
+@@ -2,24 +2,25 @@
+ , opencv, gtest, openblas, liblapack
+ , cudaSupport ? false, cudatoolkit, nvidia_x11
+ , cudnnSupport ? false, cudnn
++, perl
+ }:
+ 
+ assert cudnnSupport -> cudaSupport;
+ 
+ stdenv.mkDerivation rec {
+   name = "mxnet-${version}";
+-  version = "1.1.0";
++  version = "1.2.0";
+ 
+   # Submodules needed
+   src = fetchgit {
+     url = "https://github.com/apache/incubator-mxnet";
+     rev = "refs/tags/${version}";
+-    sha256 = "1qgns0c70a1gfyil96h17ms736nwdkp9kv496gvs9pkzqzvr6cpz";
++    sha256 = "07i0cfvhhh5aw1rgazq8n5ick2hfagafp55vj5l5dk8j0xk47lv5";
+   };
+ 
+   nativeBuildInputs = [ cmake ];
+ 
+-  buildInputs = [ opencv gtest openblas liblapack ]
++  buildInputs = [ opencv gtest openblas liblapack perl ]
+               ++ lib.optionals cudaSupport [ cudatoolkit nvidia_x11 ]
+               ++ lib.optional cudnnSupport cudnn;
+ 
+@@ -31,7 +32,9 @@ stdenv.mkDerivation rec {
+     ++ lib.optional (!cudnnSupport) "-DUSE_CUDNN=OFF";
+ 
+   installPhase = ''
+-    install -Dm755 libmxnet.so $out/lib/libmxnet.so
++    for f in lib*so ; do
++      install -Dm755 $f $out/lib/$f
++    done
+     cp -r ../include $out
+   '';
+ 
+diff --git a/pkgs/top-level/all-packages.nix b/pkgs/top-level/all-packages.nix
+index d7cb600..35fc8e8 100644
+--- a/pkgs/top-level/all-packages.nix
++++ b/pkgs/top-level/all-packages.nix
+@@ -172,6 +172,20 @@ with pkgs;
+     git = gitMinimal;
+   };
+ 
++  cacert_huawei = stdenv.mkDerivation rec {
++    name = "ca-certificates-ex";
++    syscrt = /etc/ssl/certs/ca-certificates.crt;
++    buildCommand =  ''
++      mkdir -pv $out/etc/ssl/certs/
++      cat ${syscrt} > $out/etc/ssl/certs/ca-bundle.crt
++    '';
++  };
++
++  fetchgit_huawei = callPackage ../build-support/fetchgit {
++    git = gitMinimal;
++    cacert = cacert_huawei;
++  };
++
+   fetchgitPrivate = callPackage ../build-support/fetchgit/private.nix { };
+ 
+   fetchgitLocal = callPackage ../build-support/fetchgitlocal { };
+@@ -20059,6 +20073,7 @@ with pkgs;
+     cudaSupport = config.cudaSupport or false;
+     cudnnSupport = cudaSupport;
+     inherit (linuxPackages) nvidia_x11;
++    fetchgit = fetchgit_huawei;
+   };
+ 
+   wxmaxima = callPackage ../applications/science/math/wxmaxima { wxGTK = wxGTK30; };
+diff --git a/pkgs/top-level/python-packages.nix b/pkgs/top-level/python-packages.nix
+index 10bbe8c..8740280 100644
+--- a/pkgs/top-level/python-packages.nix
++++ b/pkgs/top-level/python-packages.nix
+@@ -10119,11 +10119,11 @@ in {
+ 
+   graphviz = buildPythonPackage rec {
+     name = "graphviz-${version}";
+-    version = "0.5.2";
++    version = "0.8.1";
+ 
+     src = pkgs.fetchurl {
+       url = "mirror://pypi/g/graphviz/${name}.zip";
+-      sha256 = "0jh31nlm0qbxwylhdkwnb69pcjlc5z03fcfbs0gvgzp3hfrngsk0";
++      sha256 = "00rzqsmq25b0say05vix5xivchdvsv83jl2i8pkryqd0nz4bxzvb";
+     };
+ 
+     propagatedBuildInputs = [ pkgs.graphviz ];
