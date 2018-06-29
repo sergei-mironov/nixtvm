@@ -30,29 +30,30 @@ rec {
   shell = stdenv.mkDerivation {
     name = "shell";
 
-    buildInputs = with pkgs; with pp; [
+    buildInputs = (with pkgs; [
       cmake
-      decorator
-      tornado
-      pp.nose
       ncurses
       zlib
-      scipy
       mktags
+      gdb
+      ctags
+      docker
+      llvm
+      clang
+    ]) ++ (with pp; [
+      tensorflow
+      decorator
+      tornado
+      ipdb
+      nose
+      pyqt5
       numpy
       scikitlearn
       matplotlib
       ipython
-      tensorflow
+      scipy
       mxnet
-      ipdb
-      gdb
-      ctags
-      docker
-      pyqt5
-      llvm
-      clang
-    ] ++ tvmDeps;
+    ]) ++ tvmDeps;
 
     inherit tvmCmakeFlags;
 
@@ -87,6 +88,9 @@ rec {
       export C_INCLUDE_PATH="$TVM/include:$TVM/dmlc-core/include:$TVM/HalideIR/src:$TVM/dlpack/include:$TVM/topi/include:$TVM/nnvm/include"
       export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
       export LIBRARY_PATH=$TVM/build-native
+
+      # Fix g++(v7.3): error: unrecognized command line option ‘-stdlib=libstdc++’; did you mean ‘-static-libstdc++’?
+      unset NIX_CXXSTDLIB_LINK
 
       cdtvm() { cd $TVM ; }
       cdex() { cd $TVM/nnvm/examples; }
