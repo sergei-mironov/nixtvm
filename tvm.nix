@@ -1,4 +1,4 @@
-{ pkgs ?  import <nixpkgs> {}
+{ pkgs ?  import ./nixpkgs {}
 , stdenv ? pkgs.stdenv
 , tvmCmakeFlagsEx ? abort "Use tvm-<mode>.nix"
 , tvmDepsEx ? abort "Use tvm-<mode>.nix"
@@ -52,7 +52,7 @@ rec {
       matplotlib
       ipython
       scipy
-      mxnet
+      mxnet_localssl
     ]) ++ tvmDeps;
 
     inherit tvmCmakeFlags;
