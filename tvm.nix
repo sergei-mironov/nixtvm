@@ -53,6 +53,7 @@ rec {
       ipython
       scipy
       mxnet_localssl
+      onnx
     ]) ++ tvmDeps;
 
     inherit tvmCmakeFlags;
