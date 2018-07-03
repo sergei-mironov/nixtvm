@@ -51,6 +51,7 @@ rec {
       scikitlearn
       matplotlib
       ipython
+      jupyter
       scipy
       mxnet_localssl
       onnx
