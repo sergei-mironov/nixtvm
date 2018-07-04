@@ -19,9 +19,19 @@ Loose list:
        70x faster (CPU), 1250x faster (GPU), 2x bigger (matlab -> C++)
     <br/>
  10. TVM scheduling algorithms
+    <br/>
+     * (CPU,GPU) Loop Transformations
+        * Split
+        * Recorder ???
+     * (CPU, GPU) Thread bindings
+        * Thread axis  (threadIdx, blockIdx)
+     * (CPU) Cache locality
+     * (GPU) Thread cooperation
+     * (GPU) Tensorisation
+     * (GPU) Latency hiding
  20. TVM benchmarks, able to prove the results
-      * https://www.sysml.cc/doc/78.pdf
-      * https://dl.acm.org/citation.cfm?doid=3229762.3229764
+     * https://www.sysml.cc/doc/78.pdf
+        * https://dl.acm.org/citation.cfm?doid=3229762.3229764
  30. NNVM story. Role of NNVM in the TVM/NNVM infrastructure
  40. NNVM compiler pipeline
 
