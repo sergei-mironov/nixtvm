@@ -13,6 +13,8 @@ TVM
 * https://github.com/dmlc/dmlc.github.io/blob/master/\_posts/2016-09-29-build-your-own-tensorflow-with-nnvm-and-torch.markdown
   How about build your own TensorFlow with NNVM and Torch7
 
+* https://github.com/andersy005/tvm-in-action
+
 Competitors
 -----------
 
@@ -21,3 +23,9 @@ Competitors
 
 * https://llvm.org/devmtg/2013-11/slides/Vassilev-Poster.pdf
   clad - Automatic Differentiation using Clang
+
+Related
+-------
+
+* https://arxiv.org/pdf/1805.00907.pdf
+  Glow: Graph Lowering Compiler Techniques for Neural Networks
