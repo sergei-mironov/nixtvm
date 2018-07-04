@@ -44,4 +44,3 @@ RUN pip3 install 'tensorflow<=1.8'
 #RUN apt-get install -y python3-scipy python3-sklearn
 #RUN apt-get install -y python3-pyqt5.qtsvg
 
-

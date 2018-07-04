@@ -165,18 +165,21 @@ related `C_INCLUDE_PATH`, `CPLUS_INCLUDE_PATH` and `LD_LIBRARY_PATH` variables.
 
 
 
-Running TVM code using interactive docker
-=========================================
+Running TVM code from interactive docker
+========================================
 
 The project provides `rundocler.sh` script which can be used to run interactive
 docker session for local development. To run the session, the following command
 must be used:
 
-
     $ ./rundocker.sh dev -it /bin/bash
 
-
-The Dockerfile.dev would be used for building the docker image. One may
+The `Dockerfile.dev` would be used for building the docker image. One may
 adjust/modify/duplicate it as needed.
 
+Inside the docker shell, one may source `dockerenv.sh` file to get access to
+useful helpers `dmake`, `dclean`, `dtest` etc.
+
+    (docker) $ . dockerenv.sh
+    (docker) $ dmake
 
