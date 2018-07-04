@@ -29,10 +29,6 @@ Loose list:
      * (GPU) Latency hiding
  15. TVM fusion
      TODO: Find out info about fusion algorithms
- 20. Available TVM benchmarks. Find out how to check the figures presented in
-     the following articles
-     * https://www.sysml.cc/doc/78.pdf
-     * https://dl.acm.org/citation.cfm?doid=3229762.3229764
  30. NNVM basics
  40. NNVM compiler pipeline
  45. NNVM training / autograd status
