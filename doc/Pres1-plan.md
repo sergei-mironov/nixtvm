@@ -17,6 +17,8 @@ Loose list:
      * Snake image segmentation (Li et all, 2010)
        70x faster (CPU), 1250x faster (GPU), 2x bigger (matlab -> C++)
  05. TVM basics
+     * Model sources (MXnet, ONNX, TF(recently added), Keras, Darknet)
+     * Build targets ( ... FPGA (Verilog), Web(!))
  10. TVM scheduling algorithms (based on `lection7.pdf`)
      * (CPU,GPU) Loop Transformations
         * Split
@@ -36,5 +38,4 @@ Loose list:
      the following articles:
      * https://www.sysml.cc/doc/78.pdf
      * https://dl.acm.org/citation.cfm?doid=3229762.3229764
- 60. Other directions (FPGA,verilog)
 
