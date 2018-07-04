@@ -24,7 +24,7 @@ CONTAINER_TYPE=$( echo "$1" | tr '[:upper:]' '[:lower:]' )
 shift 1
 
 # Dockerfile to be used in docker build
-DOCKERFILE_PATH="${SCRIPT_DIR}/Dockerfile.${CONTAINER_TYPE}"
+DOCKERFILE_PATH="./Dockerfile.${CONTAINER_TYPE}"
 DOCKER_CONTEXT_PATH="${SCRIPT_DIR}"
 
 if [[ "$1" == "--dockerfile" ]]; then
@@ -55,7 +55,7 @@ fi
 COMMAND=("$@")
 
 # Validate command line arguments.
-if [ "$#" -lt 1 ] || [ ! -e "${SCRIPT_DIR}/Dockerfile.${CONTAINER_TYPE}" ]; then
+if [ "$#" -lt 1 ] || [ ! -e "./Dockerfile.${CONTAINER_TYPE}" ]; then
     supported_container_types=$( ls -1 ${SCRIPT_DIR}/Dockerfile.* | \
         sed -n 's/.*Dockerfile\.\([^\/]*\)/\1/p' | tr '\n' ' ' )
       echo "Usage: $(basename $0) CONTAINER_TYPE COMMAND"
