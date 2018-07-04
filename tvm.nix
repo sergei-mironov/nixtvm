@@ -85,7 +85,7 @@ rec {
       fi
 
       export TVM=$CWD/tvm
-      export PYTHONPATH="$CWD/src/tutorials:$TVM/python:$TVM/topi/python:$TVM/nnvm/python:$PYTHONPATH"
+      export PYTHONPATH="$CWD/src/$USER:$TVM/python:$TVM/topi/python:$TVM/nnvm/python:$PYTHONPATH"
       export LD_LIBRARY_PATH="$TVM/build-native:$LD_LIBRARY_PATH"
       export C_INCLUDE_PATH="$TVM/include:$TVM/dmlc-core/include:$TVM/HalideIR/src:$TVM/dlpack/include:$TVM/topi/include:$TVM/nnvm/include"
       export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
