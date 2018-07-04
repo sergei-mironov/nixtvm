@@ -1,0 +1,47 @@
+# For CPU
+FROM ubuntu:16.04
+
+RUN apt-get update --fix-missing
+
+COPY install/ubuntu_install_core.sh /install/ubuntu_install_core.sh
+RUN bash /install/ubuntu_install_core.sh
+
+COPY install/ubuntu_install_python.sh /install/ubuntu_install_python.sh
+RUN bash /install/ubuntu_install_python.sh
+
+#COPY install/ubuntu_install_iverilog.sh /install/ubuntu_install_iverilog.sh
+#RUN bash /install/ubuntu_install_iverilog.sh
+
+COPY install/ubuntu_install_python_package.sh /install/ubuntu_install_python_package.sh
+RUN bash /install/ubuntu_install_python_package.sh
+
+#COPY install/ubuntu_install_java.sh /install/ubuntu_install_java.sh
+#RUN bash /install/ubuntu_install_java.sh
+
+COPY install/ubuntu_install_llvm.sh /install/ubuntu_install_llvm.sh
+RUN bash /install/ubuntu_install_llvm.sh
+
+#COPY install/ubuntu_install_opengl.sh /install/ubuntu_install_opengl.sh
+#RUN bash /install/ubuntu_install_opengl.sh
+
+RUN apt-get install -y ipython ipython3
+
+COPY install/ubuntu_install_mxnet.sh /install/ubuntu_install_mxnet.sh
+RUN bash /install/ubuntu_install_mxnet.sh
+
+#COPY install/ubuntu_install_keras.sh /install/ubuntu_install_keras.sh
+#RUN bash /install/ubuntu_install_keras.sh
+
+#COPY install/ubuntu_install_onnx.sh /install/ubuntu_install_onnx.sh
+#RUN bash /install/ubuntu_install_onnx.sh
+
+RUN pip3 install matplotlib pyqt5
+RUN pip3 install 'tensorboard<=1.8'
+RUN pip3 install 'tensorflow<=1.8'
+
+#RUN pip3 install matplotlib scipy sklearn pyqt5 numpy
+#RUN apt-get build-dep -y python3-matplotlib
+#RUN apt-get install -y python3-scipy python3-sklearn
+#RUN apt-get install -y python3-pyqt5.qtsvg
+
+
