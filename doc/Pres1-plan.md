@@ -2,7 +2,6 @@
 TODO
 ====
 
-
   0. Brief story of [Halide](http://halide-lang.org/), some figures from Halide
      article/video.
 
@@ -20,13 +19,12 @@ TODO
       * Snake image segmentation (Li et all, 2010)
         70x faster (CPU), 1250x faster (GPU), 2x bigger (matlab -> C++)
 
-
-  1. List of scheduling algorithms, supported by TVM
-  2. List of available benchmarks, able to prove the results from TVM article
+  10. TVM scheduling algorithms
+  20. TVM benchmarks, able to prove the results
 
       * https://www.sysml.cc/doc/78.pdf
       * https://dl.acm.org/citation.cfm?doid=3229762.3229764
 
-  3. NNVM story. Role of NNVM in the TVM/NNVM infrastructure
+  30. NNVM story. Role of NNVM in the TVM/NNVM infrastructure
+  40. NNVM compiler pipeline
 
-  
