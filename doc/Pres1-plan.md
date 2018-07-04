@@ -36,4 +36,5 @@ Loose list:
      the following articles:
      * https://www.sysml.cc/doc/78.pdf
      * https://dl.acm.org/citation.cfm?doid=3229762.3229764
+ 60. Other directions (FPGA,verilog)
 
