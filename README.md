@@ -183,3 +183,39 @@ useful helpers `dmake`, `dclean`, `dtest` etc.
     (docker) $ . dockerenv.sh
     (docker) $ dmake
 
+Running Python programs using TVM/NNVM
+--------------------------------------
+Same as native mode, but one should use `ipython3` instead of `ipython`.
+
+    (docker) $ ipython3
+    >> from reduction import *
+    >> lesson1()
+
+
+Running C++ programs using TVM/NNVM
+-----------------------------------
+
+Should be the same as for native mode.
+
+
+Running tensorboard inside docker
+---------------------------------
+
+Docker script maps port 6006 used by the tensorboard to port 6006 of the Host.
+Tensorboard may be run as usual:
+
+    (docker) $ tensorboard --logdir=tvm/logs
+
+After that, a browser is to be used to connect to the Host workstation:
+
+    $ chromium http://10.122.85.190:6006/
+
+
+Running jupyter-notebook from docker
+------------------------------------
+
+Jupyter notebook runs 
+
+
+
+

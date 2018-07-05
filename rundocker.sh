@@ -149,6 +149,7 @@ ${DOCKER_BINARY} $CFG run $RM --pid=host \
     -e "http_proxy=$http_proxy" \
     -e "https_proxy=$https_proxy" \
     -p 0.0.0.0:6006:6006 \
+    -p 0.0.0.0:8888:8888 \
     ${CI_DOCKER_EXTRA_PARAMS[@]} \
     ${DOCKER_IMG_NAME} \
     bash tvm/tests/ci_build/with_the_same_user \

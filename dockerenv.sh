@@ -68,6 +68,14 @@ dtest() {(
   ./tests/scripts/task_python_nnvm.sh
 )}
 
+djupyter() {(
+  jupyter-notebook --ip 0.0.0.0 --port 8888 --no-browser "$@"
+)}
+
+dtensorboard() {(
+  tensorboard --logdir=$CWD/tvm/logs "$@"
+)}
+
 cdc() {(
   cd $CWD
 )}
