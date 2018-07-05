@@ -16,6 +16,8 @@ Loose list:
        5.9x faster (CPU), 2x faster (GPU), 3x less code
      * Snake image segmentation (Li et all, 2010)
        70x faster (CPU), 1250x faster (GPU), 2x bigger (matlab -> C++)
+ 02. TVM Open Source Project
+     * Mostly made by a single person (Tianqi Chen + tqchen ~= 50%)
  05. TVM basics
      * Model sources (MXnet, ONNX, TF(recently added), Keras, Darknet)
      * Build targets ( ... FPGA (Verilog), Web(!))

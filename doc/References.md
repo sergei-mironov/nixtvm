@@ -24,6 +24,10 @@ Competitors
 * https://llvm.org/devmtg/2013-11/slides/Vassilev-Poster.pdf
   clad - Automatic Differentiation using Clang
 
+* https://github.com/plaidml/plaidml
+  PlaidML - PlaidML is the easiest, fastest way to learn and deploy deep
+  learning on any device, especially those running macOS or Windows.
+
 Related
 -------
 
