@@ -21,7 +21,6 @@ RUN bash /install/ubuntu_install_mxnet.sh
 #RUN apt-get install -y ipython ipython3
 
 RUN pip3 install ipython
-RUN pip3 install matplotlib pyqt5
 RUN pip3 install 'tensorboard<=1.8'
 RUN pip3 install 'tensorflow<=1.8'
 RUN pip3 install jupyter
@@ -31,3 +30,5 @@ RUN pip3 install jupyter
 #RUN apt-get install -y python3-scipy python3-sklearn
 #RUN apt-get install -y python3-pyqt5.qtsvg
 
+RUN apt-get install -y qt5-default libgl1-mesa-glx
+RUN pip3 install -U matplotlib PyQt5 PySide2
