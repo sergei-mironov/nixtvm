@@ -1,3 +1,5 @@
 result
 .*
 *pyc
+_tags/*
+tags

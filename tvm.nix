@@ -20,10 +20,15 @@ rec {
 
 
   mktags = pkgs.writeShellScriptBin "mktags" ''
-    find -name '*cc' -or -name '*hpp' -or -name '*h' | \
+    (
+    cd $CWD
+    find tvm -name '*cc' -or -name '*hpp' -or -name '*h' | \
       ctags -L - --c++-kinds=+p --fields=+iaS --extra=+q --language-force=C++
-    find -name '*py' | \
+    find tvm src _tags -name '*py' | \
       ctags --append -L -
+    cat tags | grep -v -w import | grep -v -w _io_ops | grep -v -w 'ops\.' > tags.2
+    mv tags.2 tags
+    )
   '';
 
 
@@ -68,7 +73,7 @@ rec {
         . ~/.display
       fi
 
-      CWD=`pwd`
+      export CWD=`pwd`
       mkdir .ipython-profile 2>/dev/null || true
       cat >.ipython-profile/ipython_config.py <<EOF
       print("Enabling autoreload")
