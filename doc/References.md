@@ -15,8 +15,23 @@ TVM
 
 * https://github.com/andersy005/tvm-in-action
 
+AD
+--
+
+* http://vertex.ai/blog/fully-automatic-differentiation
+
 Competitors
 -----------
+
+* https://github.com/facebookresearch/TensorComprehensions
+  A domain specific language to express machine learning workloads.
+
+  - https://arxiv.org/abs/1802.04730
+    Tensor Comprehensions: Framework-Agnostic High-Performance Machine Learning Abstractions
+
+* https://github.com/plaidml/plaidml
+  PlaidML - PlaidML is the easiest, fastest way to learn and deploy deep
+  learning on any device, especially those running macOS or Windows.
 
 * https://arxiv.org/abs/1711.03016
   DLVM: A modern compiler infrastructure for deep learning systems
@@ -24,12 +39,20 @@ Competitors
 * https://llvm.org/devmtg/2013-11/slides/Vassilev-Poster.pdf
   clad - Automatic Differentiation using Clang
 
-* https://github.com/plaidml/plaidml
-  PlaidML - PlaidML is the easiest, fastest way to learn and deploy deep
-  learning on any device, especially those running macOS or Windows.
+Benchmarks
+----------
+
+* http://vertex.ai/blog/compiler-comparison
+  Comparision between PlaidML, TVM, TensorComprehensions
+
+* https://github.com/plaidml/plaidbench/tree/tensorcomp
+  Benchmarks for Keras kernels, compares TVM and TC
 
 Related
 -------
 
 * https://arxiv.org/pdf/1805.00907.pdf
   Glow: Graph Lowering Compiler Techniques for Neural Networks
+
+* https://en.wikipedia.org/wiki/Polytope\_model
+
