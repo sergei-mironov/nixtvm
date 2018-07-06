@@ -140,6 +140,12 @@ changed:
 `nixtvm/src` folder contains tutorials used as a playground for studying the TVM. For
 example, to test the reduction code in Python, one should run:
 
+Creating tags file
+------------------
+
+Tags may be generated with `mktags` shell function defined in the environment.
+This command indexes `src`, `tvm` folders. Additional sources may be added to the `_tags` folder
+
 
 Running Python programs using TVM/NNVM
 --------------------------------------
@@ -210,6 +216,8 @@ After that, a browser is to be used to connect to the Host workstation:
 
     $ chromium http://10.122.85.190:6006/
 
+TODO: it is unclear how to deal with possible port clashes when more than one
+user are trying to use network service
 
 Running jupyter-notebook from docker
 ------------------------------------
@@ -224,6 +232,8 @@ After that, a browser may be started from the remote workstation.
 
 The connection should be made to port 8888
 
+TODO: it is unclear how to deal with possible port clashes when more than one
+user are trying to use network service
 
 
 
