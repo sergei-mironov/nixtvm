@@ -214,7 +214,16 @@ After that, a browser is to be used to connect to the Host workstation:
 Running jupyter-notebook from docker
 ------------------------------------
 
-Jupyter notebook runs 
+Jupyter notebook may be started by typing `djupyter` command
+
+    (docker) $ djupyter
+
+After that, a browser may be started from the remote workstation.
+
+    $ chromium http://10.122.85.190:8888
+
+The connection should be made to port 8888
+
 
 
 
