@@ -19,6 +19,7 @@ import tensorflow as tf
 # Import MNIST data
 from tensorflow.examples.tutorials.mnist import input_data
 from tensorflow.python.training.session_run_hook import SessionRunHook
+from tensorflow.python.estimator.export.export_output import ExportOutput,PredictOutput
 
 
 
@@ -55,7 +56,8 @@ def model_fn(features, labels, mode):
   if mode == tf.estimator.ModeKeys.PREDICT:
     return tf.estimator.EstimatorSpec(
         mode=mode,
-        predictions=pred_classes,)
+        predictions=pred_classes,
+        export_outputs={"out":PredictOutput(pred_classes)} )
 
   # Define loss and optimizer
   loss_op = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(
@@ -96,7 +98,10 @@ def load(m:Model=None)->Model:
   # Build the Estimator
   m.mnist = input_data.read_data_sets("/tmp/data/", one_hot=False)
   def _hooked_model_fn(features, labels, mode):
-    spec = model_fn(features, labels, mode)._replace(training_hooks=[GraphDefExport(m)])
+    spec = model_fn(features, labels, mode)._replace(
+        training_hooks=[GraphDefExport(m)]
+      , evaluation_hooks=[GraphDefExport(m)]
+      )
     return spec
   m.estimator = tf.estimator.Estimator(_hooked_model_fn)
   return m
