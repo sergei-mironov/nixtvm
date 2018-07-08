@@ -1,8 +1,6 @@
 TODO
 ====
 
-Loose list:
-
  1. Brief story of [Halide](http://halide-lang.org/), some figures from Halide
     article/video.
      * [Halide video](https://youtu.be/3uiEyEKji0M)
@@ -16,12 +14,12 @@ Loose list:
        5.9x faster (CPU), 2x faster (GPU), 3x less code
      * Snake image segmentation (Li et all, 2010)
        70x faster (CPU), 1250x faster (GPU), 2x bigger (matlab -> C++)
- 02. TVM Open Source Project
+ 1. TVM Open Source Project
      * Mostly made by a single person (Tianqi Chen + tqchen ~= 50%)
- 05. TVM basics
+ 1. TVM basics
      * Model sources (MXnet, ONNX, TF(recently added), Keras, Darknet)
      * Build targets ( ... FPGA (Verilog), Web(!))
- 10. TVM scheduling algorithms (based on `lection7.pdf`)
+ 1. TVM scheduling algorithms (based on `lection7.pdf`)
      * (CPU,GPU) Loop Transformations
         * Split
         * Recorder ???
@@ -31,13 +29,19 @@ Loose list:
      * (GPU) Thread cooperation
      * (GPU) Tensorisation
      * (GPU) Latency hiding
- 15. TVM fusion
-     TODO: Find out info about fusion algorithms
- 30. NNVM basics
- 40. NNVM compiler pipeline
- 45. NNVM training / autograd status
- 50. Benchmarks available. Find out how to reproduce the results presented in
-     the following articles:
+ 1. TVM fusion
+     * TODO: Find out info about fusion algorithms
+ 1. NNVM basics
+ 1. NNVM compiler pipeline
+ 1. NNVM training / autograd status ???
+ 1. Competitors
+     * TensorComprehensions (Genetic algorithms)
+     * PlaidML (non-NVidia orientation, Tile language)
+     * DLVM (IR-backed differentiation)
+     * clad
+ 1. Benchmarks available. Find out how to reproduce the results presented in
+    the following articles:
      * https://www.sysml.cc/doc/78.pdf
      * https://dl.acm.org/citation.cfm?doid=3229762.3229764
+ 1. Development plans
 
