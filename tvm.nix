@@ -41,7 +41,7 @@ rec {
       zlib
       mktags
       gdb
-      ctags
+      universal-ctags
       docker
       llvm
       clang
@@ -136,8 +136,6 @@ rec {
       cdc() {(
         cd $CWD
       )}
-
-      cdtvm
     '';
   };
 

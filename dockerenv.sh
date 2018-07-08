@@ -15,6 +15,12 @@ if test -n "$DISPLAY"; then
   alias ipython3='ipython3 --profile-dir=$HOME/.ipython-profile'
 fi
 
+# User Aliasing
+case $USER in
+  grwlf) USER=mironov ;;
+  *) ;;
+esac
+
 export TVM=$CWD/tvm
 export PYTHONPATH="$CWD/src/$USER:$TVM/python:$TVM/topi/python:$TVM/nnvm/python:$PYTHONPATH"
 export LD_LIBRARY_PATH="$TVM/build-docker:$LD_LIBRARY_PATH"
