@@ -20,9 +20,7 @@ import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 from tensorflow.python.training.session_run_hook import SessionRunHook
 from tensorflow.python.estimator.export.export_output import ExportOutput,PredictOutput
-
-
-
+from tensorflow.python.saved_model.tag_constants import TRAINING,SERVING
 
 
 # Parameters
@@ -132,11 +130,14 @@ def eval(m:Model):
   print("Testing Accuracy:", e['accuracy'])
 
 def save(m:Model):
-  """ FIXME: SavedModel method is not working yet """
   fspec={}
   fspec['images'] = tf.placeholder(tf.float32, shape=[1,784], name='images')
   feat=tf.estimator.export.build_raw_serving_input_receiver_fn(fspec)
   m.estimator.export_savedmodel('data', feat, strip_default_attrs=True)
 
-
+def restore(m:Model):
+  export_dir = 'data/1531047190'
+  with tf.Session(graph=tf.Graph()) as sess:
+    tf.saved_model.loader.load(sess, [SERVING], export_dir)
+    print(sess.graph_def)
 
