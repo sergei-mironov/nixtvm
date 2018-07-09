@@ -45,6 +45,7 @@ rec {
       docker
       llvm
       clang
+      gtest
     ]) ++ (with pp; [
       tensorflow
       decorator
