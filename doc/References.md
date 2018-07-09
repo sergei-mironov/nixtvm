@@ -23,9 +23,13 @@ AD
 Competitors
 -----------
 
+* https://www.tensorflow.org/performance/xla/
+  XLA (Accelerated Linear Algebra) is a domain-specific compiler for linear
+  algebra that optimizes TensorFlow computations.
+  - https://haosdent.gitbooks.io/tensorflow-document/content/resources/xla_prerelease.html
+
 * https://github.com/facebookresearch/TensorComprehensions
   A domain specific language to express machine learning workloads.
-
   - https://arxiv.org/abs/1802.04730
     Tensor Comprehensions: Framework-Agnostic High-Performance Machine Learning Abstractions
 
@@ -33,20 +37,25 @@ Competitors
   PlaidML - PlaidML is the easiest, fastest way to learn and deploy deep
   learning on any device, especially those running macOS or Windows.
 
-* https://arxiv.org/abs/1711.03016
-  DLVM: A modern compiler infrastructure for deep learning systems
+* http://dlvm.org/
+  - https://arxiv.org/abs/1711.03016
+    DLVM: A modern compiler infrastructure for deep learning systems
 
-* https://llvm.org/devmtg/2013-11/slides/Vassilev-Poster.pdf
-  clad - Automatic Differentiation using Clang
+* https://github.com/vgvassilev/clad
+  - https://llvm.org/devmtg/2013-11/slides/Vassilev-Poster.pdf
+    clad - Automatic Differentiation using Clang
 
 Benchmarks
 ----------
 
 * http://vertex.ai/blog/compiler-comparison
-  Comparision between PlaidML, TVM, TensorComprehensions
+  [By PlaidML] Comparision between PlaidML, TVM, TensorComprehensions
+
 
 * https://github.com/plaidml/plaidbench/tree/tensorcomp
-  Benchmarks for Keras kernels, compares TVM and TC
+  [By PlaidML] Benchmarks for Keras kernels, compares TVM and TC
+
+* https://github.com/u39kun/deep-learning-benchmark
 
 Related
 -------
