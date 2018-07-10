@@ -4,10 +4,10 @@ Useful articles
 TVM
 ---
 
-* https://arxiv.org/abs/1805.08166
+* https://arxiv.org/pdf/1805.08166.pdf
   Learning to Optimize Tensor Programs
 
-* https://arxiv.org/abs/1802.04799
+* https://arxiv.org/pdf/1802.04799.pdf
   TVM: An Automated End-to-End Optimizing Compiler for Deep Learning
 
 * https://github.com/dmlc/dmlc.github.io/blob/master/\_posts/2016-09-29-build-your-own-tensorflow-with-nnvm-and-torch.markdown
@@ -51,11 +51,13 @@ Benchmarks
 * http://vertex.ai/blog/compiler-comparison
   [By PlaidML] Comparision between PlaidML, TVM, TensorComprehensions
 
-
 * https://github.com/plaidml/plaidbench/tree/tensorcomp
   [By PlaidML] Benchmarks for Keras kernels, compares TVM and TC
 
 * https://github.com/u39kun/deep-learning-benchmark
+
+* https://knowm.org/deep-learning-frameworks-hands-on-review/
+  General ML frameworks Review
 
 Related
 -------
