@@ -75,7 +75,7 @@ dtest() {(
 )}
 
 djupyter() {(
-  jupyter-notebook --ip 0.0.0.0 --port 8888 --no-browser "$@"
+  jupyter-notebook --ip 0.0.0.0 --port 8888 --NotebookApp.token='' --NotebookApp.password='' "$@" --no-browser
 )}
 
 dtensorboard() {(
@@ -85,4 +85,3 @@ dtensorboard() {(
 cdc() {(
   cd $CWD
 )}
-

@@ -176,11 +176,11 @@ Running TVM code from interactive docker
 
 The project provides `rundocler.sh` script which can be used to run interactive
 docker session for local development. To run the session, the following command
-must be used:
+is to be invoked:
 
-    $ ./rundocker.sh dev -it /bin/bash
+    $ ./rundocker.sh
 
-The `Dockerfile.dev` would be used for building the docker image. One may
+The `Dockerfile.dev` will be used for building the docker image. One may
 adjust/modify/duplicate it as needed.
 
 Inside the docker shell, one may source `dockerenv.sh` file to get access to
@@ -207,17 +207,27 @@ Should be the same as for native mode.
 Running tensorboard inside docker
 ---------------------------------
 
-Docker script maps port 6006 used by the tensorboard to port 6006 of the Host.
-Tensorboard may be run as usual:
+`rundocker.sh` script maps port equal to `6000 + USER_ID - 1000` to port 6006
+of the Host. The exact values are printed during `rundocker.sh` execution.  It
+looks like this:
 
-    (docker) $ tensorboard --logdir=tvm/logs
+    *****************************
+    Your Jupyter port: XXXX
+    Your Tensorboard port: YYYY
+    *****************************
+
+Tensorboard may then be run with a helper (one may invoke `type dtensorboard`
+to review its code):
+
+    (docker) $ dtensorboard
 
 After that, a browser is to be used to connect to the Host workstation:
 
-    $ chromium http://10.122.85.190:6006/
+    $ chromium http://10.122.85.190:YYYY/
 
-TODO: it is unclear how to deal with possible port clashes when more than one
-user are trying to use network service
+The connection should be made to port YYYY of the Host machine, which redirect
+the trafic to port 6006 of the Docker
+
 
 Running jupyter-notebook from docker
 ------------------------------------
@@ -228,9 +238,11 @@ Jupyter notebook may be started by typing `djupyter` command
 
 After that, a browser may be started from the remote workstation.
 
-    $ chromium http://10.122.85.190:8888
+    $ chromium http://10.122.85.190:XXXX
 
-The connection should be made to port 8888
+Mind the exact value of XXXX from the report of the Docker script. The
+connection should be made to port XXXX of the Host machine, which redirect the
+trafic to port 8888 of the Docker
 
 TODO: it is unclear how to deal with possible port clashes when more than one
 user are trying to use network service

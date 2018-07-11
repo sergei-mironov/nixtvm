@@ -1,69 +1,17 @@
 #!/usr/bin/env bash
-#
-# Execute command within a docker container
-#
-# Usage: ci_build.sh <CONTAINER_TYPE> [--dockerfile <DOCKERFILE_PATH>] [-it]
-#                    <COMMAND>
-#
-# CONTAINER_TYPE: Type of the docker container used the run the build: e.g.,
-#                 (cpu | gpu)
-#
-# DOCKERFILE_PATH: (Optional) Path to the Dockerfile used for docker build.  If
-#                  this optional value is not supplied (via the --dockerfile
-#                  flag), will use Dockerfile.CONTAINER_TYPE in default
-#
-# COMMAND: Command to be executed in the docker container
-#
 
-set -x
+# Uncomment to debug
+# set -x
 
-SCRIPT_DIR=tvm/tests/ci_build
-
-# Get the command line arguments.
-CONTAINER_TYPE=$( echo "$1" | tr '[:upper:]' '[:lower:]' )
-shift 1
-
-# Dockerfile to be used in docker build
+UID=`id --user`
+DOCKER_CONTEXT_PATH="./tvm/tests/ci_build"
+CI_DOCKER_EXTRA_PARAMS+=('-it')
+CONTAINER_TYPE="dev"
 DOCKERFILE_PATH="./Dockerfile.${CONTAINER_TYPE}"
-DOCKER_CONTEXT_PATH="${SCRIPT_DIR}"
-
-if [[ "$1" == "--dockerfile" ]]; then
-    DOCKERFILE_PATH="$2"
-    DOCKER_CONTEXT_PATH=$(dirname "${DOCKERFILE_PATH}")
-    echo "Using custom Dockerfile path: ${DOCKERFILE_PATH}"
-    echo "Using custom docker build context path: ${DOCKER_CONTEXT_PATH}"
-    shift 2
-fi
-
-if [[ "$1" == "-it" ]]; then
-    CI_DOCKER_EXTRA_PARAMS+=('-it')
-    shift 1
-fi
-
-if [[ "$1" == "-K" ]]; then
-    shift 1
-    RM=""
-else
-    RM="--rm"
-fi
-
-if [[ ! -f "${DOCKERFILE_PATH}" ]]; then
-    echo "Invalid Dockerfile path: \"${DOCKERFILE_PATH}\""
-    exit 1
-fi
-
-COMMAND=("$@")
-
-# Validate command line arguments.
-if [ "$#" -lt 1 ] || [ ! -e "./Dockerfile.${CONTAINER_TYPE}" ]; then
-    supported_container_types=$( ls -1 ${SCRIPT_DIR}/Dockerfile.* | \
-        sed -n 's/.*Dockerfile\.\([^\/]*\)/\1/p' | tr '\n' ' ' )
-      echo "Usage: $(basename $0) CONTAINER_TYPE COMMAND"
-      echo "       CONTAINER_TYPE can be one of [${supported_container_types}]"
-      echo "       COMMAND is a command (with arguments) to run inside"
-      echo "               the container."
-      exit 1
-fi
+COMMAND="/bin/bash"
+PORT_JUPYTER=`expr 6000 + $UID - 1000`
+PORT_TENSORBOARD=`expr 8000 + $UID - 1000`
+RM="" # Set "--rm" to remove image after use
 
 # Use nvidia-docker if the container is GPU.
 if [[ "${CONTAINER_TYPE}" == *"gpu"* ]]; then
@@ -71,13 +19,6 @@ if [[ "${CONTAINER_TYPE}" == *"gpu"* ]]; then
 else
     DOCKER_BINARY="docker"
 fi
-
-# Helper function to traverse directories up until given file is found.
-function upsearch () {
-    test / == "$PWD" && return || \
-        test -e "$1" && echo "$PWD" && return || \
-        cd .. && upsearch "$1"
-}
 
 # Set up WORKSPACE and BUILD_TAG. Jenkins will set them for you or we pick
 # reasonable defaults if you run it outside of Jenkins.
@@ -102,22 +43,13 @@ else
   PROXY=""
 fi
 
-# Print arguments.
-echo "WORKSPACE: ${WORKSPACE}"
-echo "CI_DOCKER_EXTRA_PARAMS: ${CI_DOCKER_EXTRA_PARAMS[@]}"
-echo "COMMAND: ${COMMAND[@]}"
-echo "CONTAINER_TYPE: ${CONTAINER_TYPE}"
-echo "BUILD_TAG: ${BUILD_TAG}"
-echo "DOCKER_IMG_NAME: ${DOCKER_IMG_NAME}"
-echo "PROXY: ${PROXY}"
-echo ""
 
 # HACK: Remap detach to Ctrl+e,e
-mkdir /tmp/docker || true
-cat >/tmp/docker/config.json <<EOF
+mkdir /tmp/docker-$UID || true
+cat >/tmp/docker-$UID/config.json <<EOF
 { "detachKeys": "ctrl-e,e" }
 EOF
-CFG="--config /tmp/docker"
+CFG="--config /tmp/docker-$UID"
 
 # Build the docker container.
 echo "Building container (${DOCKER_IMG_NAME})..."
@@ -130,13 +62,19 @@ if [[ $? != "0" ]]; then
     exit 1
 fi
 
-# Run the command inside the container.
-echo "Running '${COMMAND[@]}' inside ${DOCKER_IMG_NAME}..."
+echo "PROXY: ${PROXY}"
+echo "WORKSPACE: ${WORKSPACE}"
+echo "CI_DOCKER_EXTRA_PARAMS: ${CI_DOCKER_EXTRA_PARAMS[@]}"
+echo "COMMAND: ${COMMAND[@]}"
+echo "CONTAINER_TYPE: ${CONTAINER_TYPE}"
+echo "BUILD_TAG: ${BUILD_TAG}"
+echo "DOCKER_IMG_NAME: ${DOCKER_IMG_NAME}"
+echo
+echo "*****************************"
+echo "Your Jupyter port: ${PORT_JUPYTER}"
+echo "Your Tensorboard port: ${PORT_TENSORBOARD}"
+echo "*****************************"
 
-# By default we cleanup - remove the container once it finish running (--rm)
-# and share the PID namespace (--pid=host) so the process inside does not have
-# pid 1 and SIGKILL is propagated to the process inside (jenkins can kill it).
-echo ${DOCKER_BINARY}
 ${DOCKER_BINARY} $CFG run $RM --pid=host \
     -v ${WORKSPACE}:/workspace \
     -w /workspace \
@@ -148,8 +86,8 @@ ${DOCKER_BINARY} $CFG run $RM --pid=host \
     -e "DISPLAY=$DISPLAY" \
     -e "http_proxy=$http_proxy" \
     -e "https_proxy=$https_proxy" \
-    -p 0.0.0.0:6006:6006 \
-    -p 0.0.0.0:8888:8888 \
+    -p 0.0.0.0:$PORT_TENSORBOARD:6006 \
+    -p 0.0.0.0:$PORT_JUPYTER:8888 \
     ${CI_DOCKER_EXTRA_PARAMS[@]} \
     ${DOCKER_IMG_NAME} \
     bash tvm/tests/ci_build/with_the_same_user \
