@@ -204,7 +204,7 @@ Running C++ programs using TVM/NNVM
 Should be the same as for native mode.
 
 
-Running tensorboard inside docker
+Running tensorboard within docker
 ---------------------------------
 
 `rundocker.sh` script maps port equal to `6000 + USER_ID - 1000` to port 6006
@@ -219,18 +219,23 @@ looks like this:
 Tensorboard may then be run with a helper (one may invoke `type dtensorboard`
 to review its code):
 
-    (docker) $ dtensorboard
+    (docker) $ dtensorboard &
 
-After that, a browser is to be used to connect to the Host workstation:
+Tensorboard will run in a background. After that, browser may be used to
+connect to Tensorboard webserver:
 
-    $ chromium http://10.122.85.190:YYYY/
+    $ chromium http://10.122.85.190:YYYY
 
-The connection should be made to port YYYY of the Host machine, which redirect
-the trafic to port 6006 of the Docker
+The connection should be made to port YYYY of the Host machine, the traffic
+should be redirected to port 8008 of the Docker container
+
+`dtensorboard` creates and selects `./_logs` as a directory to search for logs.
+Tensorflow models should be set up accordingly to save the logs into this
+directory.
 
 
-Running jupyter-notebook from docker
-------------------------------------
+Running jupyter-notebook within docker
+--------------------------------------
 
 Jupyter notebook may be started by typing `djupyter` command
 
@@ -240,13 +245,7 @@ After that, a browser may be started from the remote workstation.
 
     $ chromium http://10.122.85.190:XXXX
 
-Mind the exact value of XXXX from the report of the Docker script. The
-connection should be made to port XXXX of the Host machine, which redirect the
-trafic to port 8888 of the Docker
-
-TODO: it is unclear how to deal with possible port clashes when more than one
-user are trying to use network service
-
-
-
+Mind the exact value of XXXX from the output of `./rundocker.sh` script. The
+connection should be made to port XXXX of the Host machine, which redirects the
+traffic to port 8888 of the Docker
 

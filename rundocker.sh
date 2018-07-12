@@ -9,8 +9,8 @@ CI_DOCKER_EXTRA_PARAMS+=('-it')
 CONTAINER_TYPE="dev"
 DOCKERFILE_PATH="./Dockerfile.${CONTAINER_TYPE}"
 COMMAND="/bin/bash"
-PORT_JUPYTER=`expr 6000 + $UID - 1000`
-PORT_TENSORBOARD=`expr 8000 + $UID - 1000`
+PORT_JUPYTER=`expr 8000 + $UID - 1000`
+PORT_TENSORBOARD=`expr 6000 + $UID - 1000`
 RM="" # Set "--rm" to remove image after use
 
 # Use nvidia-docker if the container is GPU.

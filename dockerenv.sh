@@ -79,7 +79,8 @@ djupyter() {(
 )}
 
 dtensorboard() {(
-  tensorboard --logdir=$CWD/tvm/logs "$@"
+  mkdir $CWD/_logs 2>/dev/null
+  tensorboard --logdir=$CWD/_logs "$@"
 )}
 
 cdc() {(

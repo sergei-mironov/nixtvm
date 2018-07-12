@@ -5,10 +5,11 @@ References:
 """
 
 import nnvm
-import tvm
+import tvm as tvm
 import tensorflow as tf
 
 from tf.mnist import Model, load
+from tensorflow.python.saved_model.tag_constants import TRAINING,SERVING
 
 
 def compile(m:Model):
@@ -20,3 +21,8 @@ def compile(m:Model):
           ['out'],
           )
 
+def restore(path:str):
+  export_dir = path
+  with tf.Session(graph=tf.Graph()) as sess:
+    tf.saved_model.loader.load(sess, [SERVING], export_dir)
+    print(sess.graph_def)

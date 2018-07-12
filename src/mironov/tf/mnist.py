@@ -1,24 +1,32 @@
-""" Neural Network.
+"""
+This example is aimed at studying Model saving/loading issues.
 
-A 2-Hidden Layers Fully Connected Neural Network (a.k.a Multilayer Perceptron)
-implementation with TensorFlow. This example is using the MNIST database
-of handwritten digits (http://yann.lecun.com/exdb/mnist/).
+References:
 
-This example is using TensorFlow layers, see 'neural_network_raw' example for
-a raw implementation with variables.
+  * MNIST dataset
+    http://yann.lecun.com/exdb/mnist/
 
-Links:
-    [MNIST Dataset](http://yann.lecun.com/exdb/mnist/).
+  * Original source location
+    https://github.com/aymericdamien/TensorFlow-Examples/
 
-Author: Aymeric Damien
-Project: https://github.com/aymericdamien/TensorFlow-Examples/
+  * TensorBoard tutorial
+    https://www.tensorflow.org/guide/summaries_and_tensorboard
+
 """
 
 import tensorflow as tf
 
-# Import MNIST data
+from time import strftime
+
+
+from tensorflow import GraphDef
+from tensorflow.core.protobuf import saved_model_pb2
+from tensorflow.python.util import compat
+from tensorflow.python.platform import gfile
 from tensorflow.examples.tutorials.mnist import input_data
+from tensorflow.python.training.monitored_session import Scaffold
 from tensorflow.python.training.session_run_hook import SessionRunHook
+from tensorflow.python.training.basic_session_run_hooks import SummarySaverHook
 from tensorflow.python.estimator.export.export_output import ExportOutput,PredictOutput
 from tensorflow.python.saved_model.tag_constants import TRAINING,SERVING
 
@@ -79,7 +87,10 @@ def model_fn(features, labels, mode):
 
 class Model:
   def __init__(self):
+    self.log_dir='./_logs'
     pass
+  def get_log_dir(self, tag:str=""):
+    return self.log_dir+"/"+ (str(tag)+'-' if len(tag)>0 else '') +strftime("%c")
 
 class GraphDefExport(SessionRunHook):
   def __init__(self,m:Model):
@@ -97,8 +108,10 @@ def load(m:Model=None)->Model:
   m.mnist = input_data.read_data_sets("/tmp/data/", one_hot=False)
   def _hooked_model_fn(features, labels, mode):
     spec = model_fn(features, labels, mode)._replace(
-        training_hooks=[GraphDefExport(m)]
-      , evaluation_hooks=[GraphDefExport(m)]
+        training_hooks=[
+            GraphDefExport(m)
+          , SummarySaverHook(50, output_dir=m.get_log_dir('mnist'), scaffold=Scaffold())
+          ]
       )
     return spec
   m.estimator = tf.estimator.Estimator(_hooked_model_fn)
@@ -124,7 +137,6 @@ def eval(m:Model):
   input_fn=tf.estimator.inputs.numpy_input_fn(
       x={'images': mnist.test.images}, y=mnist.test.labels,
       batch_size=batch_size, shuffle=False)
-
   # Use the Estimator 'evaluate' method
   e = m.estimator.evaluate(input_fn)
   print("Testing Accuracy:", e['accuracy'])
@@ -135,9 +147,45 @@ def save(m:Model):
   feat=tf.estimator.export.build_raw_serving_input_receiver_fn(fspec)
   m.estimator.export_savedmodel('data', feat, strip_default_attrs=True)
 
-def restore(m:Model):
-  export_dir = 'data/1531047190'
+def restore(m:Model, path:str, freezed:bool=True, dump:bool=False)->GraphDef:
+  export_dir=path
   with tf.Session(graph=tf.Graph()) as sess:
     tf.saved_model.loader.load(sess, [SERVING], export_dir)
-    print(sess.graph_def)
+    if dump:
+      with open('graphdef_restored.txt', "w") as f:
+        f.write(str(sess.graph_def))
+    graphdef=sess.graph.as_graph_def(add_shapes=True)
+    if freezed:
+      return tf.graph_util.convert_variables_to_constants(sess,graphdef,['pred_classes'])
+    else:
+      return graphdef
+
+def log(m:Model, graphdef:GraphDef)->None:
+  """ FIXME: unhardcode `pred_classes` """
+  with tf.Session(graph=tf.Graph()) as sess:
+    tf.import_graph_def(graphdef,name='')
+    writer=tf.summary.FileWriter(m.get_log_dir('freezed'))
+    writer.add_graph(sess.graph)
+
+
+def view(m, path:str, freeze_constants:bool=True):
+  """ Restore saved model and show it in the Tensorboard """
+
+  with tf.Session(graph=tf.Graph()) as sess:
+    model_filename = path + '/saved_model.pb'
+    with gfile.FastGFile(model_filename, 'rb') as f:
+      data=compat.as_bytes(f.read())
+      sm=saved_model_pb2.SavedModel()
+      sm.ParseFromString(data)
+      assert 1==len(sm.meta_graphs), 'More than one graph found. Not sure which to write'
+      tf.import_graph_def(sm.meta_graphs[0].graph_def)
+
+      if freeze_constants:
+        graph_def=tf.graph_util.convert_variables_to_constants(sess, sess.graph.as_graph_def(add_shapes=True),
+          ['import/pred_classes'])
+        tf.import_graph_def(graph_def)
+
+    train_writer=tf.summary.FileWriter(m.get_log_dir('view'))
+    train_writer.add_graph(sess.graph)
+
 

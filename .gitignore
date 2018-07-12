@@ -2,4 +2,5 @@ result
 .*
 *pyc
 _tags/*
+_logs/*
 tags
