@@ -40,31 +40,36 @@ dclean() {(
 )}
 
 dmake() {(
+
+  if ! test -f build-docker/config.cmake ; then
+    cat >build-docker/config.cmake <<EOF
+      set(USE_CUDA OFF)
+      set(USE_ROCM OFF)
+      set(USE_OPENCL OFF)
+      set(USE_METAL OFF)
+      set(USE_VULKAN OFF)
+      set(USE_OPENGL OFF)
+      set(USE_RPC ON)
+      set(USE_GRAPH_RUNTIME ON)
+      set(USE_GRAPH_RUNTIME_DEBUG OFF)
+      set(USE_LLVM ON)
+      set(USE_BLAS openblas)
+      set(USE_RANDOM OFF)
+      set(USE_NNPACK OFF)
+      set(USE_CUDNN OFF)
+      set(USE_CUBLAS OFF)
+      set(USE_MIOPEN OFF)
+      set(USE_MPS OFF)
+      set(USE_ROCBLAS OFF)
+      set(USE_SORT ON)
+EOF
+    echo "Generating 'build-docker/config.cmake'"
+  else
+    echo "Re-using config 'build-docker/config.cmake'"
+  fi
   cdtvm
   mkdir build-docker 2>/dev/null
-  cat >build/config.cmake <<EOF
-    set(USE_CUDA OFF)
-    set(USE_ROCM OFF)
-    set(USE_OPENCL OFF)
-    set(USE_METAL OFF)
-    set(USE_VULKAN OFF)
-    set(USE_OPENGL OFF)
-    set(USE_RPC ON)
-    set(USE_GRAPH_RUNTIME ON)
-    set(USE_GRAPH_RUNTIME_DEBUG OFF)
-    set(USE_LLVM ON)
-    set(USE_BLAS openblas)
-    set(USE_RANDOM OFF)
-    set(USE_NNPACK OFF)
-    set(USE_CUDNN OFF)
-    set(USE_CUBLAS OFF)
-    set(USE_MIOPEN OFF)
-    set(USE_MPS OFF)
-    set(USE_ROCBLAS OFF)
-    set(USE_SORT ON)
-EOF
-  cdtvm
-  ./tests/scripts/task_build.sh build-docker -j6
+  ./tests/scripts/task_build.sh build-docker -j6 "$@"
 )}
 
 alias build="dmake"
