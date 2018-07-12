@@ -19,6 +19,8 @@ AD
 --
 
 * http://vertex.ai/blog/fully-automatic-differentiation
+* Automatic differentiation for tensor algebras, tech.report, 2017
+  https://arxiv.org/pdf/1711.01348
 
 Competitors
 -----------
@@ -38,7 +40,7 @@ Competitors
   learning on any device, especially those running macOS or Windows.
 
 * http://dlvm.org/
-  - https://arxiv.org/abs/1711.03016
+  - https://arxiv.org/pdf/1711.03016
     DLVM: A modern compiler infrastructure for deep learning systems
 
 * https://github.com/vgvassilev/clad
