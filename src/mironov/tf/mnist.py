@@ -147,16 +147,20 @@ def save(m:Model):
   feat=tf.estimator.export.build_raw_serving_input_receiver_fn(fspec)
   m.estimator.export_savedmodel('data', feat, strip_default_attrs=True)
 
-def restore(m:Model, path:str, freezed:bool=True, dump:bool=False)->GraphDef:
+def dump(graphdef:GraphDef, suffix:str='restored')->None:
+  with open('graphdef%s' %('_'+suffix if len(suffix)>0 else '',)+'.txt', "w") as f:
+    f.write(str(graphdef))
+
+def restore(path:str, frozen:bool=True)->GraphDef:
   export_dir=path
   with tf.Session(graph=tf.Graph()) as sess:
     tf.saved_model.loader.load(sess, [SERVING], export_dir)
-    if dump:
-      with open('graphdef_restored.txt', "w") as f:
-        f.write(str(sess.graph_def))
     graphdef=sess.graph.as_graph_def(add_shapes=True)
-    if freezed:
-      return tf.graph_util.convert_variables_to_constants(sess,graphdef,['pred_classes'])
+    dump(graphdef,'restored')
+    if frozen:
+      graphdef_f=tf.graph_util.convert_variables_to_constants(sess,graphdef,['pred_classes'])
+      dump(graphdef_f,'frozen')
+      return graphdef_f
     else:
       return graphdef
 
