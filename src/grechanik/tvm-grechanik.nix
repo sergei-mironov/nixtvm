@@ -58,6 +58,8 @@ rec {
 
       # Fix g++(v7.3): error: unrecognized command line option ‘-stdlib=libstdc++’; did you mean ‘-static-libstdc++’?
       unset NIX_CXXSTDLIB_LINK
+
+      export PYTHONPATH="$PYTHONPATH:$HOME/.local/lib/python3.6/site-packages" 
     '';
   };
 
