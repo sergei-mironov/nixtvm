@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Usage: withtvm buildpath stufftorun
+
+TVMBUILD="$(realpath "$1")"
+shift
+
+
+PYTHONPATH="$TVMBUILD/../python:$TVMBUILD/../topi/python:$TVMBUILD/../nnvm/python:$PYTHONPATH" \
+LD_LIBRARY_PATH="$TVMBUILD:$LD_LIBRARY_PATH" \
+C_INCLUDE_PATH="$TVMBUILD/../include:$TVMBUILD/../dmlc-core/include:$TVMBUILD/../HalideIR/src:$TVMBUILD/../dlpack/include:$TVMBUILD/../topi/include:$TVMBUILD/../nnvm/include:$C_INCLUDE_PATH" \
+CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH" \
+LIBRARY_PATH="$TVMBUILD:$LIBRARY_PATH" \
+"$@"
+
