@@ -1,17 +1,17 @@
-"""
-This example is aimed at studying Model saving/loading issues.
+""" Neural Network.
 
-References:
+A 2-Hidden Layers Fully Connected Neural Network (a.k.a Multilayer Perceptron)
+implementation with TensorFlow. This example is using the MNIST database
+of handwritten digits (http://yann.lecun.com/exdb/mnist/).
 
-  * MNIST dataset
-    http://yann.lecun.com/exdb/mnist/
+This example is using TensorFlow layers, see 'neural_network_raw' example for
+a raw implementation with variables.
 
-  * Original source location
-    https://github.com/aymericdamien/TensorFlow-Examples/
+Links:
+    [MNIST Dataset](http://yann.lecun.com/exdb/mnist/).
 
-  * TensorBoard tutorial
-    https://www.tensorflow.org/guide/summaries_and_tensorboard
-
+Author: Aymeric Damien
+Project: https://github.com/aymericdamien/TensorFlow-Examples/
 """
 
 import tensorflow as tf
@@ -145,51 +145,6 @@ def save(m:Model):
   fspec={}
   fspec['images'] = tf.placeholder(tf.float32, shape=[1,784], name='images')
   feat=tf.estimator.export.build_raw_serving_input_receiver_fn(fspec)
-  m.estimator.export_savedmodel('data', feat, strip_default_attrs=True)
-
-def dump(graphdef:GraphDef, suffix:str='restored')->None:
-  with open('graphdef%s' %('_'+suffix if len(suffix)>0 else '',)+'.txt', "w") as f:
-    f.write(str(graphdef))
-
-def restore(path:str, frozen:bool=True)->GraphDef:
-  export_dir=path
-  with tf.Session(graph=tf.Graph()) as sess:
-    tf.saved_model.loader.load(sess, [SERVING], export_dir)
-    graphdef=sess.graph.as_graph_def(add_shapes=True)
-    dump(graphdef,'restored')
-    if frozen:
-      graphdef_f=tf.graph_util.convert_variables_to_constants(sess,graphdef,['pred_classes'])
-      dump(graphdef_f,'frozen')
-      return graphdef_f
-    else:
-      return graphdef
-
-def log(m:Model, graphdef:GraphDef)->None:
-  """ FIXME: unhardcode `pred_classes` """
-  with tf.Session(graph=tf.Graph()) as sess:
-    tf.import_graph_def(graphdef,name='')
-    writer=tf.summary.FileWriter(m.get_log_dir('freezed'))
-    writer.add_graph(sess.graph)
-
-
-def view(m, path:str, freeze_constants:bool=True):
-  """ Restore saved model and show it in the Tensorboard """
-
-  with tf.Session(graph=tf.Graph()) as sess:
-    model_filename = path + '/saved_model.pb'
-    with gfile.FastGFile(model_filename, 'rb') as f:
-      data=compat.as_bytes(f.read())
-      sm=saved_model_pb2.SavedModel()
-      sm.ParseFromString(data)
-      assert 1==len(sm.meta_graphs), 'More than one graph found. Not sure which to write'
-      tf.import_graph_def(sm.meta_graphs[0].graph_def)
-
-      if freeze_constants:
-        graph_def=tf.graph_util.convert_variables_to_constants(sess, sess.graph.as_graph_def(add_shapes=True),
-          ['import/pred_classes'])
-        tf.import_graph_def(graph_def)
-
-    train_writer=tf.summary.FileWriter(m.get_log_dir('view'))
-    train_writer.add_graph(sess.graph)
+  m.estimator.export_savedmodel('./data', feat, strip_default_attrs=True)
 
 
