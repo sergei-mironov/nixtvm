@@ -88,6 +88,13 @@ dtensorboard() {(
   tensorboard --logdir=$CWD/_logs "$@"
 )}
 
+ipython() {(
+  # FIXME: One should figure out how to setup non-file backend on Ubuntu
+  ipython3 -i -c "import matplotlib; matplotlib.use('agg'); import matplotlib.pyplot; matplotlib.pyplot.ioff()" "$@"
+)}
+
 cdc() {(
   cd $CWD
 )}
+
+
