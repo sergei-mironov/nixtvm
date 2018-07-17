@@ -4,7 +4,7 @@
 # set -x
 
 UID=`id --user`
-DOCKER_CONTEXT_PATH="./tvm/tests/ci_build"
+DOCKER_CONTEXT_PATH="./tvm/docker"
 CI_DOCKER_EXTRA_PARAMS+=('-it')
 CONTAINER_TYPE="dev"
 DOCKERFILE_PATH="./Dockerfile.${CONTAINER_TYPE}"
@@ -90,6 +90,6 @@ ${DOCKER_BINARY} $CFG run $RM --pid=host \
     -p 0.0.0.0:$PORT_JUPYTER:8888 \
     ${CI_DOCKER_EXTRA_PARAMS[@]} \
     ${DOCKER_IMG_NAME} \
-    bash tvm/tests/ci_build/with_the_same_user \
+    bash tvm/docker/with_the_same_user \
     ${COMMAND[@]}
 

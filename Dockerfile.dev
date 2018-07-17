@@ -32,3 +32,5 @@ RUN pip3 install jupyter
 
 RUN apt-get install -y qt5-default libgl1-mesa-glx
 RUN pip3 install -U matplotlib PyQt5 PySide2
+
+RUN pip3 install Pillow

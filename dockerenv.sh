@@ -40,9 +40,10 @@ dclean() {(
 )}
 
 dmake() {(
-
-  if ! test -f build-docker/config.cmake ; then
-    cat >build-docker/config.cmake <<EOF
+  cdtvm
+  mkdir build-docker 2>/dev/null
+  if ! test -f $TVM/build-docker/config.cmake ; then
+    cat >$TVM/build-docker/config.cmake <<EOF
       set(USE_CUDA OFF)
       set(USE_ROCM OFF)
       set(USE_OPENCL OFF)
@@ -67,8 +68,6 @@ EOF
   else
     echo "Re-using config 'build-docker/config.cmake'"
   fi
-  cdtvm
-  mkdir build-docker 2>/dev/null
   ./tests/scripts/task_build.sh build-docker -j6 "$@"
 )}
 
