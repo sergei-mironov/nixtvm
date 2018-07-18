@@ -9,9 +9,14 @@ CI_DOCKER_EXTRA_PARAMS+=('-it')
 CONTAINER_TYPE="dev"
 DOCKERFILE_PATH="./Dockerfile.${CONTAINER_TYPE}"
 COMMAND="/bin/bash"
-PORT_JUPYTER=`expr 8000 + $UID - 1000`
-PORT_TENSORBOARD=`expr 6000 + $UID - 1000`
-RM="" # Set "--rm" to remove image after use
+if test -z "$NOPORT" ; then
+  PORT_JUPYTER=`expr 8000 + $UID - 1000`
+  PORT_TENSORBOARD=`expr 6000 + $UID - 1000`
+  CI_PORT_ARGS=\
+    -p 0.0.0.0:$PORT_TENSORBOARD:6006 \
+    -p 0.0.0.0:$PORT_JUPYTER:8888
+fi
+RM="--rm" # remove image after use
 
 # Use nvidia-docker if the container is GPU.
 if [[ "${CONTAINER_TYPE}" == *"gpu"* ]]; then
@@ -69,11 +74,13 @@ echo "COMMAND: ${COMMAND[@]}"
 echo "CONTAINER_TYPE: ${CONTAINER_TYPE}"
 echo "BUILD_TAG: ${BUILD_TAG}"
 echo "DOCKER_IMG_NAME: ${DOCKER_IMG_NAME}"
+if test -z "$NOPORT"; then
 echo
 echo "*****************************"
 echo "Your Jupyter port: ${PORT_JUPYTER}"
 echo "Your Tensorboard port: ${PORT_TENSORBOARD}"
 echo "*****************************"
+fi
 
 ${DOCKER_BINARY} $CFG run $RM --pid=host \
     -v ${WORKSPACE}:/workspace \
@@ -86,8 +93,7 @@ ${DOCKER_BINARY} $CFG run $RM --pid=host \
     -e "DISPLAY=$DISPLAY" \
     -e "http_proxy=$http_proxy" \
     -e "https_proxy=$https_proxy" \
-    -p 0.0.0.0:$PORT_TENSORBOARD:6006 \
-    -p 0.0.0.0:$PORT_JUPYTER:8888 \
+    ${CI_PORT_ARGS} \
     ${CI_DOCKER_EXTRA_PARAMS[@]} \
     ${DOCKER_IMG_NAME} \
     bash tvm/docker/with_the_same_user \

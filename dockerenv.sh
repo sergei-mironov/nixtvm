@@ -69,6 +69,7 @@ EOF
     echo "Re-using config 'build-docker/config.cmake'"
   fi
   ./tests/scripts/task_build.sh build-docker -j6 "$@"
+  ln -f -s build-docker build # FIXME: Python uses 'build' name
 )}
 
 alias build="dmake"
