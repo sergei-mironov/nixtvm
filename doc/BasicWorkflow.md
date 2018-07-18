@@ -92,7 +92,7 @@ standard output.
 In order to compile to obtain the dynamic library, we should first obtain the
 generator. In order to do this, we compile the `gen.cc` file above using `gcc`.
 
-    $ gcc -ltvm gen.cc -o gen
+    $ g++ -std=c++11  gen.cc -ltvm -o gen
 
 Next, we run the generator to obtain the LLVM IR code on its standard output
 
@@ -175,7 +175,7 @@ input data. This operations is demonstrated by the following C++ program:
 
 We link this program using GCC compiler with a following command:
 
-    $ gcc -ltvm_runtime main.cc -o main
+    $ g++ -std=c+=11 main.cc -ltvm_runtime -o main
 
 ##### Stage 1. Loading the library
 
