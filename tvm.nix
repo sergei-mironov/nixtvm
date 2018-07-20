@@ -91,11 +91,12 @@ rec {
       fi
 
       export TVM=$CWD/tvm
+      export BUILD=build-native-5
       export PYTHONPATH="$CWD/src/$USER:$TVM/python:$TVM/topi/python:$TVM/nnvm/python:$PYTHONPATH"
-      export LD_LIBRARY_PATH="$TVM/build-native:$LD_LIBRARY_PATH"
+      export LD_LIBRARY_PATH="$TVM/$BUILD:$LD_LIBRARY_PATH"
       export C_INCLUDE_PATH="$TVM/include:$TVM/dmlc-core/include:$TVM/HalideIR/src:$TVM/dlpack/include:$TVM/topi/include:$TVM/nnvm/include"
       export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
-      export LIBRARY_PATH=$TVM/build-native
+      export LIBRARY_PATH=$TVM/$BUILD
 
       # Fix g++(v7.3): error: unrecognized command line option ‘-stdlib=libstdc++’; did you mean ‘-static-libstdc++’?
       unset NIX_CXXSTDLIB_LINK
@@ -105,31 +106,23 @@ rec {
 
       nmake() {(
         cdtvm
-        mkdir build-native 2>/dev/null
-        cat ${writeText "cfg" tvmCmakeConfig} >build-native/config.cmake
-        cd build-native
-        cmake ..
-        make -j6 "$@" && ln --verbose -f -s build-native build # FIXME: Python uses 'build' name
+        mkdir $BUILD 2>/dev/null
+        cat ${writeText "cfg" tvmCmakeConfig} >$BUILD/config.cmake
+        ( cd $BUILD
+          cmake ..
+          make -j6 "$@"
+        ) && ln --verbose -f -s $BUILD ./build # FIXME: Python uses 'build' name
       )}
 
       nclean() {(
         cdtvm
-        cd build-native
+        cd $BUILD
         make clean
         rm CMakeCache.txt
         rm -rf CMakeFiles
       )}
 
-      dmake() {(
-        cdtvm
-        mkdir build 2>/dev/null
-        cat ${writeText "cfg" tvmCmakeConfig} >build/config.cmake
-        sh ./tests/ci_build/ci_build.sh cpu ./tests/scripts/task_build.sh build -j6 "$@";
-      )}
-
-      alias build="dmake"
-
-      dtest() {(
+      ntest() {(
         cdtvm
         sh ./tests/ci_build/ci_build.sh cpu ./tests/scripts/task_python_nnvm.sh
       )}
