@@ -33,7 +33,7 @@ int main()
 	auto args = tvm::Array<tvm::Tensor>({A, B, C});
 	auto lowered = tvm::lower(s, args, "vecadd", binds, config);
 
-  cerr << lowered << endl;
+  cerr << lowered[0]->body << endl;
 
 	auto target = tvm::Target::create("llvm");
 	auto target_host = tvm::Target::create("llvm");
