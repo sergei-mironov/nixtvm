@@ -1,5 +1,5 @@
-{ pkgs ?  import ./nixpkgs {}
-, stdenv ? pkgs.stdenv
+{ pkgs
+, stdenv
 , tvmCmakeFlagsEx ? abort "Use tvm-<mode>.nix"
 , tvmDepsEx ? abort "Use tvm-<mode>.nix"
 , tvmCmakeConfig ? ""
@@ -43,8 +43,6 @@ rec {
       gdb
       universal-ctags
       docker
-      llvm
-      clang
       gtest
     ]) ++ (with pp; [
       tensorflow
@@ -111,7 +109,7 @@ rec {
         ( cd $BUILD
           cmake ..
           make -j6 "$@"
-        ) && ln --verbose -f -s $BUILD ./build # FIXME: Python uses 'build' name
+        ) && ln --verbose -f -s --no-dereference $BUILD ./build
       )}
 
       nclean() {(
@@ -134,4 +132,3 @@ rec {
   };
 
 }
-

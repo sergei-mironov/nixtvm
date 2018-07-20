@@ -1,10 +1,11 @@
-{ pkgs ?  import <nixpkgs> {}
+{ pkgs ?  import ./nixpkgs {}
 , stdenv ? pkgs.stdenv
 } :
 
 import ./tvm.nix {
+  inherit pkgs stdenv;
   tvmCmakeFlagsEx = "-DUSE_LLVM=ON";
-  tvmDepsEx = with pkgs; [ llvm_5 openblas ];
+  tvmDepsEx = with pkgs; [ llvm_5 clang_5 openblas ];
   tvmCmakeConfig = ''
     set(USE_CUDA OFF)
     set(USE_ROCM OFF)
