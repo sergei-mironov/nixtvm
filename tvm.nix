@@ -109,7 +109,7 @@ rec {
         cat ${writeText "cfg" tvmCmakeConfig} >build-native/config.cmake
         cd build-native
         cmake ..
-        make -j6 "$@"
+        make -j6 "$@" && ln --verbose -f -s build-native build # FIXME: Python uses 'build' name
       )}
 
       nclean() {(

@@ -34,3 +34,8 @@ RUN apt-get install -y qt5-default libgl1-mesa-glx
 RUN pip3 install -U matplotlib PyQt5 PySide2
 
 RUN pip3 install Pillow
+RUN apt-get install -y gdb
+RUN apt-get install -y apport
+RUN apt-get install -y llvm-5.0
+RUN apt-get install -y libedit-dev
+RUN pip install cpplint

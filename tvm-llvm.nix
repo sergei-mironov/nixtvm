@@ -14,7 +14,7 @@ import ./tvm.nix {
     set(USE_OPENGL OFF)
     set(USE_RPC ON)
     set(USE_GRAPH_RUNTIME ON)
-    set(USE_GRAPH_RUNTIME_DEBUG OFF)
+    set(USE_GRAPH_RUNTIME_DEBUG ON)
     set(USE_LLVM ON)
     set(USE_BLAS openblas)
     set(USE_RANDOM OFF)
