@@ -22,7 +22,7 @@ rec {
   mktags = pkgs.writeShellScriptBin "mktags" ''
     (
     cd $CWD
-    find tvm -name '*cc' -or -name '*hpp' -or -name '*h' | \
+    find tvm -name '*cc' -or -name '*hpp' -or -name '*h' -or -name '*\.c' -or -name '*cpp' | \
       ctags -L - --c++-kinds=+p --fields=+iaS --extra=+q --language-force=C++
     find tvm src _tags -name '*py' | \
       ctags --append -L -
