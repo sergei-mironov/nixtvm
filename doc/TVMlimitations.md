@@ -40,3 +40,5 @@ This document lists known limitations of TVM/NNVM
 
       return 0;
     }
+
+  * Axis parameter convention differs from numpy in corner cases.
