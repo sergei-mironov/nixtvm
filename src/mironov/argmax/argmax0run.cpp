@@ -11,24 +11,30 @@ using namespace tvm;
 int main(void) {
 
   DLTensor* a;
-  int ndim = 1;
+  int ndim = 2;
   int dtype_code = kDLFloat;
   int dtype_bits = 32;
   int dtype_lanes = 1;
   int device_type = kDLCPU;
   int device_id = 0;
-  int64_t shape[1] = {10};
+  int64_t shape[2] = {10,10};
   TVMArrayAlloc(shape, ndim, dtype_code, dtype_bits, dtype_lanes,
                 device_type, device_id, &a);
 
   for (int i = 0; i < shape[0]; ++i) {
-    static_cast<float*>(a->data)[i] = i;
+    for (int j = 0; j < shape[0]; ++j) {
+      if(i==5 && j==5)
+        static_cast<float*>(a->data)[i*10+j] = 100500;
+      else
+        static_cast<float*>(a->data)[i*10+j] = i*10+j;
+    }
   }
 
   DLTensor* c;
+  int ondim = 1;
   int odtype_code = kDLInt;
   int64_t oshape[1] = {1};
-  TVMArrayAlloc(oshape, ndim, odtype_code, dtype_bits, dtype_lanes,
+  TVMArrayAlloc(oshape, ondim, odtype_code, dtype_bits, dtype_lanes,
                 device_type, device_id, &c);
 
   tvm::runtime::Module mod = tvm::runtime::Module::LoadFromFile("argmax0.so");

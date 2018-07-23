@@ -13,3 +13,7 @@ g++ -c -o $NM.o $NM.s
 
 g++ -shared -fPIC -o $NM.so $NM.o
 
+g++ -std=c++11 ${NM}run.cpp -ltvm -o run
+
+./run
+

@@ -9,8 +9,8 @@ using namespace tvm;
 
 int main()
 {
-  Var row("row");
-  Tensor A = placeholder({row}, Float(32), "A");
+  Var row("row"), col("col");
+  Tensor A = placeholder({row,col}, Float(32), "A");
   Tensor C = topi::argmax(A, {}, false);
 
 	tvm::Schedule s = tvm::create_schedule({C->op});
