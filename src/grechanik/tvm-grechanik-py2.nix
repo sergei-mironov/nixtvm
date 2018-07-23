@@ -7,7 +7,7 @@ let
   inherit (builtins) filterSource;
   inherit (pkgs.lib.sources) cleanSourceFilter;
 
-  pp = pkgs.python36Packages;
+  pp = pkgs.python27Packages;
 in
 
 rec {
@@ -17,6 +17,7 @@ rec {
     name = "shell";
 
     buildInputs = (with pkgs; [
+      python2
       cmake
       ncurses
       zlib
@@ -28,7 +29,6 @@ rec {
       gtest
       openblas
     ]) ++ (with pp; [
-      tensorflow
       decorator
       tornado
       ipdb
