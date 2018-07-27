@@ -19,8 +19,12 @@ AD
 --
 
 * http://vertex.ai/blog/fully-automatic-differentiation
+
 * Automatic differentiation for tensor algebras, tech.report, 2017
   https://arxiv.org/pdf/1711.01348
+
+* http://conal.net/papers/beautiful-differentiation/
+  Forward-mode AD in Haskell, vector spaces
 
 Competitors
 -----------
