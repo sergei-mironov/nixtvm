@@ -10,11 +10,9 @@ CONTAINER_TYPE="dev"
 DOCKERFILE_PATH="./Dockerfile.${CONTAINER_TYPE}"
 COMMAND="/bin/bash"
 if test -z "$NOPORT" ; then
-  PORT_JUPYTER=`expr 8000 + $UID - 1000`
   PORT_TENSORBOARD=`expr 6000 + $UID - 1000`
-  CI_PORT_ARGS=\
-    -p 0.0.0.0:$PORT_TENSORBOARD:6006 \
-    -p 0.0.0.0:$PORT_JUPYTER:8888
+  PORT_JUPYTER=`expr 8000 + $UID - 1000`
+  CI_PORT_ARGS="-p 0.0.0.0:$PORT_TENSORBOARD:6006 -p 0.0.0.0:$PORT_JUPYTER:8888"
 fi
 RM="--rm" # remove image after use
 
@@ -81,6 +79,8 @@ echo "Your Jupyter port: ${PORT_JUPYTER}"
 echo "Your Tensorboard port: ${PORT_TENSORBOARD}"
 echo "*****************************"
 fi
+
+set -x
 
 ${DOCKER_BINARY} $CFG run $RM --pid=host \
     -v ${WORKSPACE}:/workspace \
