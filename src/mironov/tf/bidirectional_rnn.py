@@ -1,7 +1,8 @@
-""" Recurrent Neural Network.
+""" Bi-directional Recurrent Neural Network.
 
-A Recurrent Neural Network (LSTM) implementation example using TensorFlow library.
-This example is using the MNIST database of handwritten digits (http://yann.lecun.com/exdb/mnist/)
+A Bi-directional Recurrent Neural Network (LSTM) implementation example using 
+TensorFlow library. This example is using the MNIST database of handwritten 
+digits (http://yann.lecun.com/exdb/mnist/)
 
 Links:
     [Long Short Term Memory](http://deeplearning.cs.cmu.edu/pdfs/Hochreiter97_lstm.pdf)
@@ -15,21 +16,23 @@ from __future__ import print_function
 
 import tensorflow as tf
 from tensorflow.contrib import rnn
+import numpy as np
 from tensorflow.python.saved_model.simple_save import simple_save
+from tensorflow.python.saved_model import tag_constants
 
 # Import MNIST data
 from tensorflow.examples.tutorials.mnist import input_data
 mnist = input_data.read_data_sets("/tmp/data/", one_hot=True)
 
 '''
-To classify images using a recurrent neural network, we consider every image
-row as a sequence of pixels. Because MNIST image shape is 28*28px, we will then
-handle 28 sequences of 28 steps for every sample.
+To classify images using a bidirectional recurrent neural network, we consider
+every image row as a sequence of pixels. Because MNIST image shape is 28*28px,
+we will then handle 28 sequences of 28 steps for every sample.
 '''
 
 # Training Parameters
 learning_rate = 0.001
-training_steps = 200 # FIXME: was 10000
+training_steps = 1000 # FIXME 10000 (?)
 batch_size = 128
 display_step = 200
 
@@ -45,32 +48,41 @@ Y = tf.placeholder("float", [None, num_classes])
 
 # Define weights
 weights = {
-    'out': tf.Variable(tf.random_normal([num_hidden, num_classes]))
+    # Hidden layer weights => 2*n_hidden because of forward + backward cells
+    'out': tf.Variable(tf.random_normal([2*num_hidden, num_classes]), name='weights')
 }
 biases = {
-    'out': tf.Variable(tf.random_normal([num_classes]))
+    'out': tf.Variable(tf.random_normal([num_classes]), name='biases')
 }
 
 
-def RNN(x, weights, biases):
+def BiRNN(x, weights, biases):
 
     # Prepare data shape to match `rnn` function requirements
     # Current data input shape: (batch_size, timesteps, n_input)
-    # Required shape: 'timesteps' tensors list of shape (batch_size, n_input)
+    # Required shape: 'timesteps' tensors list of shape (batch_size, num_input)
 
-    # Unstack to get a list of 'timesteps' tensors of shape (batch_size, n_input)
+    # Unstack to get a list of 'timesteps' tensors of shape (batch_size, num_input)
     x = tf.unstack(x, timesteps, 1)
 
-    # Define a lstm cell with tensorflow
-    lstm_cell = rnn.BasicLSTMCell(num_hidden, forget_bias=1.0)
+    # Define lstm cells with tensorflow
+    # Forward direction cell
+    lstm_fw_cell = rnn.BasicLSTMCell(num_hidden, forget_bias=1.0)
+    # Backward direction cell
+    lstm_bw_cell = rnn.BasicLSTMCell(num_hidden, forget_bias=1.0)
 
     # Get lstm cell output
-    outputs, states = rnn.static_rnn(lstm_cell, x, dtype=tf.float32)
+    try:
+        outputs, _, _ = rnn.static_bidirectional_rnn(lstm_fw_cell, lstm_bw_cell, x,
+                                              dtype=tf.float32)
+    except Exception: # Old TensorFlow version only returns outputs not states
+        outputs = rnn.static_bidirectional_rnn(lstm_fw_cell, lstm_bw_cell, x,
+                                        dtype=tf.float32)
 
     # Linear activation, using rnn inner loop last output
     return tf.matmul(outputs[-1], weights['out']) + biases['out']
 
-logits = RNN(X, weights, biases)
+logits = BiRNN(X, weights, biases)
 prediction = tf.nn.softmax(logits, name='prediction')
 
 # Define loss and optimizer
@@ -85,6 +97,11 @@ accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 
 # Initialize the variables (i.e. assign their default value)
 init = tf.global_variables_initializer()
+
+saver = tf.train.Saver()
+
+tf.add_to_collection(tag_constants.SERVING, biases['out'])
+tf.add_to_collection(tag_constants.SERVING, weights['out'])
 
 # Start training
 with tf.Session() as sess:
@@ -116,5 +133,6 @@ with tf.Session() as sess:
         sess.run(accuracy, feed_dict={X: test_data, Y: test_label}))
 
     print("Saving the model")
-    simple_save(sess, export_dir='./saved_recurrent_network', inputs={"images":X}, outputs={"out":prediction})
+    simple_save(sess, export_dir='./saved_bidirectional_rnn', inputs={"inp":X},
+            outputs={"out":prediction})
 

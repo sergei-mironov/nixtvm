@@ -9,14 +9,14 @@ from nnvm.testing.config import ctx_list
 # from ipdb import set_trace
 
 def test_argmax():
-    dshape = (2,)
-    oshape = (1,)
+    dshape = (4,4)
+    oshape = (4,1)
 
     dtype = "float32"
     x = sym.Variable("x", shape=dshape, dtype=dtype)
     # y = sym.min(x)
     # y = sym.argmax(x, axis=[0], exclude=True)
-    y = sym.argmax(x+1)
+    y = sym.argmax(x+1, axis=0, keepdims=True)
 
     # graph = nnvm.graph.create(y)
     # graph = graph.apply("InferShape")
@@ -29,13 +29,13 @@ def test_argmax():
             # print(graph.ir(join_node_attrs=['shape']))
         m = graph_runtime.create(graph, lib, ctx)
         # set input
-        # data = np.random.uniform(size=dshape).astype(dtype)
+        data = np.random.uniform(size=dshape).astype(dtype)
         # data = np.full(shape=dshape, fill_value=33, dtype=dtype)
-        data = np.array([33,42], dtype=dtype)
+        # data = np.array([33,42], dtype=dtype)
         print('data', data)
-        print('numpy', np.argmax(data+1))
+        print('numpy', np.argmax(data+1, axis=0))
         m.run(x=data)
-        out = m.get_output(0, tvm.nd.empty(oshape))
+        out = m.get_output(0, tvm.nd.empty(shape=oshape, dtype='int32'))
         print('out',out)
         return out
 

@@ -145,5 +145,5 @@ with tf.Session() as sess:
     plt.show()
 
     print("Saving the model")
-    simple_save(sess, export_dir='./data/autoencoder', inputs={"images":X}, outputs={"out":decoder_op})
+    simple_save(sess, export_dir='./saved_autoencoder', inputs={"images":X}, outputs={"out":decoder_op})
 

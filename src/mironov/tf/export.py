@@ -9,6 +9,8 @@ import tvm as tvm
 import tensorflow as tf
 
 from typing import List,Tuple
+from time import strftime
+from os.path import split
 
 from tensorflow import GraphDef
 from tensorflow.core.protobuf import saved_model_pb2
@@ -24,16 +26,15 @@ from tensorflow.python.saved_model.tag_constants import TRAINING,SERVING
 
 DEF_LOG_DIR='./_logs'
 
-
-def _get_log_dir(self, tag:str=""):
-  return DEF_LOG_DIR+"/"+ (str(tag)+'-' if len(tag)>0 else '') +strftime("%c")
-
+def get_log_dir(tag:str=""):
+  return DEF_LOG_DIR+"/"+((str(tag)+'-') if len(tag)>0 else '')+strftime("%Y%m%d-%H:%M:%S")
 
 def dump(graphdef:GraphDef, suffix:str='restored')->None:
   with open('graphdef%s' %('_'+suffix if len(suffix)>0 else '',)+'.txt', "w") as f:
     f.write(str(graphdef))
 
 def restore(path:str, output_node_names:List[str], frozen:bool=True)->GraphDef:
+  """ Restore the model, optionally freeze variables """
   export_dir=path
   with tf.Session(graph=tf.Graph()) as sess:
     tf.saved_model.loader.load(sess, [SERVING], export_dir)
@@ -46,40 +47,14 @@ def restore(path:str, output_node_names:List[str], frozen:bool=True)->GraphDef:
     else:
       return graphdef
 
-def log(graphdef:GraphDef)->None:
-  """ FIXME: unhardcode `pred_classes` """
-  with tf.Session(graph=tf.Graph()) as sess:
-    tf.import_graph_def(graphdef,name='')
-    writer=tf.summary.FileWriter(_get_log_dir('freezed'))
-    writer.add_graph(sess.graph)
+def view(export_dir:str, output_node_names:List[str], frozen:bool):
+  """ Restore saved model and show it in the Tensorboard """
+  writer=tf.summary.FileWriter(get_log_dir(split(export_dir)[-1]+('-f' if frozen else '')))
+  g=restore(export_dir, output_node_names, frozen)
+  writer.add_graph(g)
 
-
-def view(path:str, output_node_names:List[str], freeze_constants:bool=True):
-  """ Restore saved model and show it in the Tensorboard
-
-  FIXME: output_node_names was ['import/pred_classes']
-  """
-
-  with tf.Session(graph=tf.Graph()) as sess:
-    model_filename = path + '/saved_model.pb'
-    with gfile.FastGFile(model_filename, 'rb') as f:
-      data=compat.as_bytes(f.read())
-      sm=saved_model_pb2.SavedModel()
-      sm.ParseFromString(data)
-      assert 1==len(sm.meta_graphs), 'More than one graph found. Not sure which to write'
-      tf.import_graph_def(sm.meta_graphs[0].graph_def)
-
-      if freeze_constants:
-        graph_def=tf.graph_util.convert_variables_to_constants(sess, sess.graph.as_graph_def(add_shapes=True),
-          output_node_names)
-        tf.import_graph_def(graph_def)
-
-    train_writer=tf.summary.FileWriter(_get_log_dir('view'))
-    train_writer.add_graph(sess.graph)
-
-
-def export(path:str, **kwargs):
-  graphdef=restore(path,frozen=True,**kwargs)
+def export(path:str, output_node_names, **kwargs):
+  graphdef=restore(path,output_node_names,frozen=True,**kwargs)
   dump(graphdef)
   sym,params=nnvm.frontend.from_tensorflow(graphdef)
   print(sym)
@@ -94,5 +69,26 @@ def export_convolutional():
 def export_autoencoder():
   export('data/autoencoder', output_node_names=['decoder_op'])
 
-def export_rnn():
-  export('data/rnn', output_node_names=['prediction'])
+def export_recurrent_network():
+  export('data/saved_recurrent_network', ['prediction'])
+def view_recurrent_network():
+  view('data/saved_recurrent_network', ['prediction'], frozen=False)
+  view('data/saved_recurrent_network', ['prediction'], frozen=True)
+
+def export_bidirectional_rnn():
+  export('data/saved_bidirectional_rnn', ['prediction'])
+def view_bidirectional_rnn():
+  view('data/saved_bidirectional_rnn', ['prediction'], frozen=False)
+  view('data/saved_bidirectional_rnn', ['prediction'], frozen=True)
+
+def export_dynamic_rnn():
+  export('data/saved_dynamic_rnn', ['prediction'])
+def view_dynamic_rnn():
+  view('data/saved_dynamic_rnn', ['prediction'], frozen=False)
+  view('data/saved_dynamic_rnn', ['prediction'], frozen=True)
+
+def export_variational_autoencoder():
+  export('data/saved_variational_autoencoder', ['decoder'])
+def view_variational_autoencoder():
+  view('data/saved_variational_autoencoder', ['decoder'], frozen=False)
+  view('data/saved_variational_autoencoder', ['decoder'], frozen=True)
