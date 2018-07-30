@@ -63,3 +63,5 @@ This document lists known limitations of TVM/NNVM
        - `tvm/topi/include/topi/reduction.h`
 
 
+ * Exporting models from TF/ONNX/Others should reaaly be done on the TVM level,
+   but not on the NNVM level
