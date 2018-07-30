@@ -21,6 +21,13 @@ AD
 * http://vertex.ai/blog/fully-automatic-differentiation
 * Automatic differentiation for tensor algebras, tech.report, 2017
   https://arxiv.org/pdf/1711.01348
+* http://www.columbia.edu/~ahd2125/post/2015/12/5/
+  Automatic Differentiation or Mathemagically Finding Derivatives (blog, 2015).
+  Contains errors
+* https://alexey.radul.name/ideas/2013/introduction-to-automatic-differentiation/
+  Introduction to Automatic Differentiation (blog, 2013)
+* http://www.autodiff.org/?module=Introduction&submenu=Sele
+  Collection of textbooks on AD
 
 Competitors
 -----------
