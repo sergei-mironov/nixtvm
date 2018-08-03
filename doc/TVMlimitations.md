@@ -1,4 +1,5 @@
-This document lists known limitations of TVM/NNVM
+This document describes TVM/NNVM issues, that were not reported to upstream yet.
+
 
  * https://discuss.tvm.ai/t/use-tvm-for-shufflenet-onnx-model/427
    For now conv2d in TVM does not support multiple groups
@@ -62,6 +63,19 @@ This document lists known limitations of TVM/NNVM
        - `tvm/topi/python/topi/reduction.py` vs
        - `tvm/topi/include/topi/reduction.h`
 
+    3. Strided slice primitive
+       - `nnvm/python/nnvm/frontend.md` vs
+       - NNVM: strided_slice vs
+       - TOPI
 
  * Exporting models from TF/ONNX/Others should reaaly be done on the TVM level,
    but not on the NNVM level
+
+ * Variable-length shape support is missing from TVM, at least when exporting
+   Tensorflow models. E.g. `ReshapeInferShape` doesn't support input shapes of
+   (-1,x) form
+
+ * `TShape::Size()` returns `size_t`, while its fields are all `int64_t`.
+
+
+

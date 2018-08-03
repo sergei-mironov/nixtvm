@@ -15,11 +15,21 @@ TVM
 
 * https://github.com/andersy005/tvm-in-action
 
+ML
+--
+
+* https://github.com/janishar/mit-deep-learning-book-pdf
+  Deep Learning book, updated version, has a chapter about Recurrent Networks
+* https://arxiv.org/pdf/1409.2329.pdf
+  2015, Zaremba, Recurrent Neural Network Regularization
+* https://colah.github.io/posts/2015-08-Understanding-LSTMs/
+  2015, Tensorflow Tutorial
+
+
 AD
 --
 
 * http://vertex.ai/blog/fully-automatic-differentiation
-
 * Automatic differentiation for tensor algebras, tech.report, 2017
   https://arxiv.org/pdf/1711.01348
 * http://www.columbia.edu/~ahd2125/post/2015/12/5/
@@ -27,11 +37,13 @@ AD
   Contains errors
 * https://alexey.radul.name/ideas/2013/introduction-to-automatic-differentiation/
   Introduction to Automatic Differentiation (blog, 2013)
-* http://www.autodiff.org/?module=Introduction&submenu=Sele
+* http://www.autodiff.org/?module=Introduction&submenu=Selected%20Books
   Collection of textbooks on AD
-
 * http://conal.net/papers/beautiful-differentiation/
   Forward-mode AD in Haskell, vector spaces
+* http://www.bcl.hamilton.ie/~qobi/stalingrad/
+  Reverse-Mode AD in a Functional Framework: Lambda the Ultimate Backpropagator
+  Stalingrad (~2005)
 
 Competitors
 -----------
