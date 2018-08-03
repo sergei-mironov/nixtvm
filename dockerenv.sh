@@ -1,7 +1,7 @@
 #!/bin/sh
 # This file is intended to be sourced from Docker container's interactive shell
 
-CWD=`pwd`
+export CWD=`pwd`
 mkdir $HOME/.ipython-profile 2>/dev/null || true
 cat >$HOME/.ipython-profile/ipython_config.py <<EOF
 print("Enabling autoreload")
