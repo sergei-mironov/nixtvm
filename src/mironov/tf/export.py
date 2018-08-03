@@ -11,6 +11,7 @@ import tensorflow as tf
 from typing import List,Tuple
 from time import strftime
 from os.path import split
+from os import environ
 
 from tensorflow import GraphDef
 from tensorflow.core.protobuf import saved_model_pb2
@@ -57,38 +58,52 @@ def export(path:str, output_node_names, **kwargs):
   graphdef=restore(path,output_node_names,frozen=True,**kwargs)
   dump(graphdef)
   sym,params=nnvm.frontend.from_tensorflow(graphdef)
-  print(sym)
-  print(params)
+  return sym,params
+  # print(sym)
+  # print(params)
 
+PATH_FC=environ['CWD']+'/data/saved_fully_connected_network/1533038462'
 def export_fully_connected():
-  export('data/1531399643', output_node_names=['pred_classes'])
+  export(PATH_FC, output_node_names=['pred_classes'])
+def view_fully_connected():
+  view(PATH_FC, output_node_names=['pred_classes'], frozen=False)
+  view(PATH_FC, output_node_names=['pred_classes'], frozen=True)
 
+PATH_CONV=environ['CWD']+'/data/saved_convolutional_network/1533295789'
 def export_convolutional():
-  export('data/1531490880', output_node_names=['pred_classes'])
+  export(PATH_CONV, output_node_names=['pred_classes'])
+def restore_convolutional():
+  pass
 
+PATH_AUTOENC=environ['CWD']+'/data/saved_autoencoder'
 def export_autoencoder():
-  export('data/autoencoder', output_node_names=['decoder_op'])
+  export(PATH_AUTOENC, output_node_names=['decoder_op'])
 
+PATH_RNN=environ['CWD']+'/data/saved_recurrent_network'
 def export_recurrent_network():
-  export('data/saved_recurrent_network', ['prediction'])
+  export(PATH_RNN, ['prediction'])
 def view_recurrent_network():
-  view('data/saved_recurrent_network', ['prediction'], frozen=False)
-  view('data/saved_recurrent_network', ['prediction'], frozen=True)
+  view(PATH_RNN, ['prediction'], frozen=False)
+  view(PATH_RNN, ['prediction'], frozen=True)
 
+PATH_BIRNN=environ['CWD']+'/data/saved_bidirectional_rnn'
 def export_bidirectional_rnn():
-  export('data/saved_bidirectional_rnn', ['prediction'])
+  export(PATH_BIRNN, ['prediction'])
 def view_bidirectional_rnn():
-  view('data/saved_bidirectional_rnn', ['prediction'], frozen=False)
-  view('data/saved_bidirectional_rnn', ['prediction'], frozen=True)
+  view(PATH_BIRNN, ['prediction'], frozen=False)
+  view(PATH_BIRNN, ['prediction'], frozen=True)
 
+PATH_DYRNN=environ['CWD']+'/data/saved_dynamic_rnn'
 def export_dynamic_rnn():
-  export('data/saved_dynamic_rnn', ['prediction'])
+  export(PATH_DYRNN, ['prediction'])
 def view_dynamic_rnn():
-  view('data/saved_dynamic_rnn', ['prediction'], frozen=False)
-  view('data/saved_dynamic_rnn', ['prediction'], frozen=True)
+  view(PATH_DYRNN, ['prediction'], frozen=False)
+  view(PATH_DYRNN, ['prediction'], frozen=True)
 
+PATH_VARENC=environ['CWD']+'/data/saved_variational_autoencoder'
 def export_variational_autoencoder():
-  export('data/saved_variational_autoencoder', ['decoder'])
+  export(PATH_VARENC, ['decoder'])
 def view_variational_autoencoder():
-  view('data/saved_variational_autoencoder', ['decoder'], frozen=False)
-  view('data/saved_variational_autoencoder', ['decoder'], frozen=True)
+  view(PATH_VARENC, ['decoder'], frozen=False)
+  view(PATH_VARENC, ['decoder'], frozen=True)
+

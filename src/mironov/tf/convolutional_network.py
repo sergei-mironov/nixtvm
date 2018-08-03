@@ -128,7 +128,8 @@ e = model.evaluate(input_fn)
 print("Testing Accuracy:", e['accuracy'])
 
 model.export_savedmodel('./saved_convolutional_network', strip_default_attrs=True,
-    serving_input_receiver_fn=tf.estimator.export.build_raw_serving_input_receiver_fn({
-        'images':tf.placeholder(tf.float32, shape=[1,784], name='images')
-    }))
+    serving_input_receiver_fn=tf.estimator.export.build_raw_serving_input_receiver_fn(
+        { 'images':tf.placeholder(tf.float32, shape=[1,784], name='images') },
+        default_batch_size = 1
+    ))
 
