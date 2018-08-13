@@ -44,6 +44,12 @@ AD
 * http://www.bcl.hamilton.ie/~qobi/stalingrad/
   Reverse-Mode AD in a Functional Framework: Lambda the Ultimate Backpropagator
   Stalingrad (~2005)
+* https://arxiv.org/pdf/1806.02136.pdf
+  Efficient Differentiable Programming in a Functional
+  Array-Processing Language
+* https://people.csail.mit.edu/tzumao/gradient_halide/gradient_halide.pdf
+  Differentiable Programming for
+  Image Processing and Deep Learning in Halide
 
 Competitors
 -----------
@@ -72,6 +78,9 @@ Competitors
 
 Benchmarks
 ----------
+
+* https://github.com/dmlc/tvm/wiki/Benchmark
+  TVM Benchmarking WIKI (remote devices for now)
 
 * http://vertex.ai/blog/compiler-comparison
   [By PlaidML] Comparision between PlaidML, TVM, TensorComprehensions
