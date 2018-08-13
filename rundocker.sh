@@ -5,14 +5,18 @@
 
 UID=`id --user`
 DOCKER_CONTEXT_PATH="./tvm/docker"
-CI_DOCKER_EXTRA_PARAMS+=('-it')
-CONTAINER_TYPE="dev"
+DOCKER_EXTRA_PARAMS+=('-it')
+if test -n "$1"; then
+  CONTAINER_TYPE="$1"
+else
+  CONTAINER_TYPE="dev"
+fi
 DOCKERFILE_PATH="./Dockerfile.${CONTAINER_TYPE}"
 COMMAND="/bin/bash"
 if test -z "$NOPORT" ; then
   PORT_TENSORBOARD=`expr 6000 + $UID - 1000`
   PORT_JUPYTER=`expr 8000 + $UID - 1000`
-  CI_PORT_ARGS="-p 0.0.0.0:$PORT_TENSORBOARD:6006 -p 0.0.0.0:$PORT_JUPYTER:8888"
+  DOCKER_PORT_ARGS="-p 0.0.0.0:$PORT_TENSORBOARD:6006 -p 0.0.0.0:$PORT_JUPYTER:8888"
 fi
 RM="--rm" # remove image after use
 
@@ -46,13 +50,17 @@ else
   PROXY=""
 fi
 
-
 # HACK: Remap detach to Ctrl+e,e
 mkdir /tmp/docker-$UID || true
 cat >/tmp/docker-$UID/config.json <<EOF
 { "detachKeys": "ctrl-e,e" }
 EOF
 CFG="--config /tmp/docker-$UID"
+
+for f in _dist/* ; do
+  echo "$DOCKER_CONTEXT_PATH/`basename $f` -> $f"
+  ln $f $DOCKER_CONTEXT_PATH
+done
 
 # Build the docker container.
 echo "Building container (${DOCKER_IMG_NAME})..."
@@ -67,7 +75,7 @@ fi
 
 echo "PROXY: ${PROXY}"
 echo "WORKSPACE: ${WORKSPACE}"
-echo "CI_DOCKER_EXTRA_PARAMS: ${CI_DOCKER_EXTRA_PARAMS[@]}"
+echo "DOCKER_EXTRA_PARAMS: ${DOCKER_EXTRA_PARAMS[@]}"
 echo "COMMAND: ${COMMAND[@]}"
 echo "CONTAINER_TYPE: ${CONTAINER_TYPE}"
 echo "BUILD_TAG: ${BUILD_TAG}"
@@ -93,8 +101,8 @@ ${DOCKER_BINARY} $CFG run $RM --pid=host \
     -e "DISPLAY=$DISPLAY" \
     -e "http_proxy=$http_proxy" \
     -e "https_proxy=$https_proxy" \
-    ${CI_PORT_ARGS} \
-    ${CI_DOCKER_EXTRA_PARAMS[@]} \
+    ${DOCKER_PORT_ARGS} \
+    ${DOCKER_EXTRA_PARAMS[@]} \
     ${DOCKER_IMG_NAME} \
     bash tvm/docker/with_the_same_user \
     ${COMMAND[@]}
