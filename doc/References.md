@@ -24,6 +24,9 @@ ML
   2015, Zaremba, Recurrent Neural Network Regularization
 * https://colah.github.io/posts/2015-08-Understanding-LSTMs/
   2015, Tensorflow Tutorial
+* https://arxiv.org/pdf/1706.02021.pdf
+  Network Sketching: Exploiting Binary Structure in Deep CNNs
+  (Note: especially section 4)
 
 
 AD
