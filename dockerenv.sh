@@ -42,33 +42,9 @@ dclean() {(
 dmake() {(
   cdtvm
   mkdir build-docker 2>/dev/null
-  if ! test -f $TVM/build-docker/config.cmake ; then
-    cat >$TVM/build-docker/config.cmake <<EOF
-      set(USE_CUDA OFF)
-      set(USE_ROCM OFF)
-      set(USE_OPENCL OFF)
-      set(USE_METAL OFF)
-      set(USE_VULKAN OFF)
-      set(USE_OPENGL OFF)
-      set(USE_RPC ON)
-      set(USE_GRAPH_RUNTIME ON)
-      set(USE_GRAPH_RUNTIME_DEBUG OFF)
-      set(USE_LLVM ON)
-      set(USE_BLAS openblas)
-      set(USE_RANDOM OFF)
-      set(USE_NNPACK OFF)
-      set(USE_CUDNN OFF)
-      set(USE_CUBLAS OFF)
-      set(USE_MIOPEN OFF)
-      set(USE_MPS OFF)
-      set(USE_ROCBLAS OFF)
-      set(USE_SORT ON)
-EOF
-    echo "Generating 'build-docker/config.cmake'"
-  else
-    echo "Re-using config 'build-docker/config.cmake'"
-  fi
-  ./tests/scripts/task_build.sh build-docker -j6 "$@"
+  cp $TVM/cmake/config.cmake $TVM/build-docker/config.cmake
+  sed -i 's/USE_LLVM OFF/USE_LLVM ON/g' $TVM/build-docker/config.cmake
+  ./tests/scripts/task_build.sh build-docker "$@" -j6
   ln -f -s build-docker build # FIXME: Python uses 'build' name
 )}
 
