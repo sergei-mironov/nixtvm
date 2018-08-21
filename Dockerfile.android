@@ -1,0 +1,59 @@
+FROM ubuntu:16.04
+
+RUN apt-get update --fix-missing
+
+RUN apt-get install -y unzip
+
+COPY install/ubuntu_install_core.sh /install/ubuntu_install_core.sh
+RUN bash /install/ubuntu_install_core.sh
+
+COPY install/ubuntu_install_java.sh /install/ubuntu_install_java.sh
+RUN bash /install/ubuntu_install_java.sh
+
+COPY install/ubuntu_install_python.sh /install/ubuntu_install_python.sh
+RUN bash /install/ubuntu_install_python.sh
+
+COPY install/ubuntu_install_python_package.sh /install/ubuntu_install_python_package.sh
+RUN bash /install/ubuntu_install_python_package.sh
+
+COPY install/ubuntu_install_keras.sh /install/ubuntu_install_keras.sh
+RUN bash /install/ubuntu_install_keras.sh
+
+COPY install/ubuntu_install_llvm.sh /install/ubuntu_install_llvm.sh
+RUN bash /install/ubuntu_install_llvm.sh
+
+COPY android-ndk-r17b-linux-x86_64.zip /install/android-ndk-zip
+RUN unzip /install/android-ndk-zip -d /opt
+
+# Custom part
+
+RUN pip3 install ipython jupyter
+RUN pip3 install 'tensorboard<=1.8'
+RUN pip3 install keras tensorflow h5py
+RUN apt-get install -y curl vim
+
+ENV GRADLE_HOME /opt/gradle
+ENV GRADLE_VERSION 4.9
+
+ARG GRADLE_DOWNLOAD_SHA256=e66e69dce8173dd2004b39ba93586a184628bc6c28461bc771d6835f7f9b0d28
+RUN set -o errexit -o nounset \
+    && echo "Downloading Gradle" \
+    && wget --no-verbose --no-check-certificate --output-document=gradle.zip "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" \
+    \
+    && echo "Checking download hash" \
+    && echo "${GRADLE_DOWNLOAD_SHA256} *gradle.zip" | sha256sum --check - \
+    \
+    && echo "Installing Gradle" \
+    && unzip gradle.zip \
+    && rm gradle.zip \
+    && mv "gradle-${GRADLE_VERSION}" "${GRADLE_HOME}/" \
+    && ln --symbolic "${GRADLE_HOME}/bin/gradle" /usr/bin/gradle
+
+# Proxy tweaks
+
+ADD Huawei.crt /usr/local/share/ca-certificates/Huawei.crt
+RUN update-ca-certificates
+RUN echo ca_certificate=/etc/ssl/certs/ca-certificates.crt >> /etc/wgetrc
+RUN openssl x509 -in /usr/local/share/ca-certificates/Huawei.crt -out /root/Huawei.der -outform DER
+RUN keytool -noprompt -import -file /root/Huawei.der -storepass changeit -keystore /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/cacerts -alias Huawei
+
