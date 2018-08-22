@@ -92,6 +92,7 @@ ${DOCKER_BINARY} $DOCKER_CFG run --rm --pid=host \
   -e "https_proxy=$https_proxy" \
   ${DOCKER_PORT_ARGS} \
   -it \
+  --cap-add SYS_PTRACE \
   ${DOCKER_IMG_NAME} \
   bash tvm/docker/with_the_same_user \
   ${DOCKER_COMMAND}
