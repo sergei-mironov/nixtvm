@@ -3,4 +3,7 @@ result
 *pyc
 _tags/*
 _logs/*
+_dist/*
+_jupyter/*
 tags
+data/*
