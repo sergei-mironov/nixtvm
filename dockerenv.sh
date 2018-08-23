@@ -28,6 +28,34 @@ export C_INCLUDE_PATH="$TVM/include:$TVM/dmlc-core/include:$TVM/HalideIR/src:$TV
 export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
 export LIBRARY_PATH=$TVM/build-docker
 
+if test -n "$https_proxy" ; then
+export PROXY_HOST=`echo $https_proxy | sed 's@.*//\(.*\):.*@\1@'`
+export PROXY_PORT=`echo $https_proxy | sed 's@.*//.*:\(.*\)@\1@'`
+cat >$HOME/.gradle/gradle.properties <<EOF
+systemProp.http.proxyHost=$PROXY_HOST
+systemProp.http.proxyPort=$PROXY_PORT
+systemProp.http.nonProxyHosts=localhost|127.0.0.1|10.10.1.*
+systemProp.https.proxyHost=$PROXY_HOST
+systemProp.https.proxyPort=$PROXY_PORT
+systemProp.https.nonProxyHosts=localhost|127.0.0.1|10.10.1.*
+
+systemProp.javax.net.ssl.trustStore=/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/cacerts
+systemProp.javax.net.ssl.trustStorePassword=changeit
+EOF
+
+cat >$HOME/.android/androidtool.cfg <<EOF
+http.proxyHost=$PROXY_HOST
+http.proxyPort=$PROXY_PORT
+https.proxyHost=$PROXY_HOST
+https.proxyPort=$PROXY_PORT
+EOF
+
+export GRADLE_OPTS="-Dorg.gradle.daemon=false -Dandroid.builder.sdkDownload=true -Dorg.gradle.jvmargs=-Xmx2048M -Dhttp.proxyHost=$PROXY_HOST -Dhttp.proxyPort=$PROXY_PORT -Dhttps.proxyHost=$PROXY_HOST -Dhttps.proxyPort=$PROXY_PORT"
+export HTTPS_PROXY=$https_proxy
+export HTTP_PROXY=$http_proxy
+export _JAVA_OPTIONS="-Dhttp.proxyHost=$PROXY_HOST -Dhttp.proxyPort=$PROXY_PORT -Dhttps.proxyHost=$PROXY_HOST -Dhttps.proxyPort=$PROXY_PORT"
+fi
+
 cdtvm() { cd $TVM ; }
 cdex() { cd $TVM/nnvm/examples; }
 

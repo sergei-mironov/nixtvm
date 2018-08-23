@@ -46,7 +46,7 @@ if test -z "$DOCKER_PROXY_ARGS" ; then
 fi
 
 # Copy additional files to context
-cp -f Huawei.crt "$DOCKER_CONTEXT_PATH"
+cp huawei_proxy.sh "$DOCKER_CONTEXT_PATH/install/"
 for f in _dist/* ; do
   echo "$DOCKER_CONTEXT_PATH/`basename $f` -> $f"
   ln $f $DOCKER_CONTEXT_PATH 2>/dev/null

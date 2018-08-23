@@ -1,3 +1,19 @@
+. /etc/profile
+
+if test -z "$https_proxy" ; then
+  echo "http_proxy and https_proxy should be set via docker build-args or by ENV" >&2
+  exit 1
+fi
+
+if ! test -d "$JAVA_HOME" ; then
+  echo "JAVA_HOME is not set" >&2
+  exit 1
+fi
+
+cacerts=/usr/local/share/ca-certificates/Huawei.crt
+
+#{{{
+cat >$cacerts <<EOF
 -----BEGIN CERTIFICATE-----
 MIICjDCCAjagAwIBAgIQYX5k+7Hpv5NBWIbUDYLKszANBgkqhkiG9w0BAQUFADCB
 ijEiMCAGCSqGSIb3DQEJARYTZmFuZnV5b3VAaHVhd2VpLmNvbTELMAkGA1UEBhMC
@@ -114,3 +130,43 @@ rRab4gVi14x+bUgTb6HCvDH99PhADvXOuI1mk6Kb/JhCNbhRAHezyfLrvimxI0Ky
 2KZWitN+M1UWvSYG8jmtDm+/FuA93V1yErRjKj92egCgMlu67lliddt7zzzzqW+U
 QLU0ewUmUHQsV5mk62v1e8sRViHBlB2HJ3DU5gE=
 -----END CERTIFICATE-----
+EOF
+# }}}
+
+update-ca-certificates
+
+keystore=$JAVA_HOME/lib/security/cacerts
+pems_dir=/tmp/pems
+rm -rf "$pems_dir" 2>/dev/null || true
+mkdir "$pems_dir"
+(
+cd "$pems_dir"
+awk 'BEGIN {c=0;doPrint=0;} /END CERT/ {print > "cert." c ".pem";doPrint=0;} /BEGIN CERT/{c++;doPrint=1;} { if(doPrint == 1) {print > "cert." c ".pem"} }' < $cacerts
+for f in `ls cert.*.pem`; do
+  keytool -import -trustcacerts -noprompt -keystore "$keystore" -alias "`basename $f`" -file "$f" -storepass changeit;
+done
+)
+rm -rf "$pems_dir"
+
+PROXY_HOST=`echo $https_proxy | sed 's@.*//\(.*\):.*@\1@'`
+PROXY_PORT=`echo $https_proxy | sed 's@.*//.*:\(.*\)@\1@'`
+{
+echo "export PROXY_HOST=$PROXY_HOST"
+echo "export PROXY_PORT=$PROXY_PORT"
+echo "export http_proxy=$http_proxy"
+echo "export https_proxy=$https_proxy"
+echo "export HTTP_PROXY=$http_proxy"
+echo "export HTTPS_PROXY=$https_proxy"
+echo "export GRADLE_OPTS='-Dorg.gradle.daemon=false -Dandroid.builder.sdkDownload=true -Dorg.gradle.jvmargs=-Xmx2048M -Dhttp.proxyHost=$PROXY_HOST -Dhttp.proxyPort=$PROXY_PORT -Dhttps.proxyHost=$PROXY_HOST -Dhttps.proxyPort=$PROXY_PORT'"
+} >>/etc/profile
+
+echo ca_certificate=/etc/ssl/certs/ca-certificates.crt >> /etc/wgetrc
+
+mkdir /root/.android/
+cat >/root/.android/androidtool.cfg <<EOF
+http.proxyHost=$PROXY_HOST
+http.proxyPort=$PROXY_PORT
+https.proxyHost=$PROXY_HOST
+https.proxyPort=$PROXY_PORT
+EOF
+
