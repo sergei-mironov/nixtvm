@@ -1,22 +1,10 @@
 Useful articles
 ===============
 
-TVM
----
-
-* https://arxiv.org/pdf/1805.08166.pdf
-  Learning to Optimize Tensor Programs
-
-* https://arxiv.org/pdf/1802.04799.pdf
-  TVM: An Automated End-to-End Optimizing Compiler for Deep Learning
-
-* https://github.com/dmlc/dmlc.github.io/blob/master/\_posts/2016-09-29-build-your-own-tensorflow-with-nnvm-and-torch.markdown
-  How about build your own TensorFlow with NNVM and Torch7
-
-* https://github.com/andersy005/tvm-in-action
-
 ML
 --
+
+### General
 
 * https://github.com/janishar/mit-deep-learning-book-pdf
   Deep Learning book, updated version, has a chapter about Recurrent Networks
@@ -28,8 +16,7 @@ ML
   Network Sketching: Exploiting Binary Structure in Deep CNNs
   (Note: especially section 4)
 
-NLP
-===
+### NLP
 
 * https://pdfs.semanticscholar.org/presentation/51d9/81c1b28818fd0ee94dd3e607e1004874dfef.pdf
   2015, Research on Deep Learning for Natural Language Processing at Huawei Noah’s Ark Lab
@@ -38,8 +25,7 @@ NLP
 * http://www.aclweb.org/anthology/N16-4004
   Noah ark document
 
-AD
---
+### AD
 
 * http://vertex.ai/blog/fully-automatic-differentiation
 * Automatic differentiation for tensor algebras, tech.report, 2017
@@ -63,8 +49,24 @@ AD
   Differentiable Programming for
   Image Processing and Deep Learning in Halide
 
-Competitors
------------
+
+TVM
+---
+
+### General
+
+* https://arxiv.org/pdf/1805.08166.pdf
+  Learning to Optimize Tensor Programs
+
+* https://arxiv.org/pdf/1802.04799.pdf
+  TVM: An Automated End-to-End Optimizing Compiler for Deep Learning
+
+* https://github.com/dmlc/dmlc.github.io/blob/master/\_posts/2016-09-29-build-your-own-tensorflow-with-nnvm-and-torch.markdown
+  How about build your own TensorFlow with NNVM and Torch7
+
+* https://github.com/andersy005/tvm-in-action
+
+### Competitors
 
 * https://www.tensorflow.org/performance/xla/
   XLA (Accelerated Linear Algebra) is a domain-specific compiler for linear
@@ -88,8 +90,7 @@ Competitors
   - https://llvm.org/devmtg/2013-11/slides/Vassilev-Poster.pdf
     clad - Automatic Differentiation using Clang
 
-Benchmarks
-----------
+### Benchmarks
 
 * https://github.com/dmlc/tvm/wiki/Benchmark
   TVM Benchmarking WIKI (remote devices for now)
@@ -105,8 +106,7 @@ Benchmarks
 * https://knowm.org/deep-learning-frameworks-hands-on-review/
   General ML frameworks Review
 
-Related
--------
+### Related
 
 * https://arxiv.org/pdf/1805.00907.pdf
   Glow: Graph Lowering Compiler Techniques for Neural Networks
