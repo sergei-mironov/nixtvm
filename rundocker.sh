@@ -86,14 +86,14 @@ ${DOCKER_BINARY} $DOCKER_CFG run --rm --pid=host \
   -e "CI_BUILD_UID=$(id -u)" \
   -e "CI_BUILD_GROUP=$(id -g -n)" \
   -e "CI_BUILD_GID=$(id -g)" \
-  -e "MAVEN_OPTS=-Dhttps.proxyHost=$PROXY_HOST -Dhttps.proxyPort=$PROXY_PORT -Dmaven.wagon.http.ssl.insecure=true" \
   -e "DISPLAY=$DISPLAY" \
-  -e "http_proxy=$http_proxy" \
-  -e "https_proxy=$https_proxy" \
   ${DOCKER_PORT_ARGS} \
   -it \
   --cap-add SYS_PTRACE \
   ${DOCKER_IMG_NAME} \
-  bash tvm/docker/with_the_same_user \
+  bash --login tvm/docker/with_the_same_user \
   ${DOCKER_COMMAND}
 
+  # -e "MAVEN_OPTS=-Dhttps.proxyHost=$PROXY_HOST -Dhttps.proxyPort=$PROXY_PORT -Dmaven.wagon.http.ssl.insecure=true" \
+  # -e "http_proxy=$http_proxy" \
+  # -e "https_proxy=$https_proxy" \

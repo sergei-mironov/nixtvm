@@ -151,13 +151,12 @@ rm -rf "$pems_dir"
 PROXY_HOST=`echo $https_proxy | sed 's@.*//\(.*\):.*@\1@'`
 PROXY_PORT=`echo $https_proxy | sed 's@.*//.*:\(.*\)@\1@'`
 {
-echo "export PROXY_HOST=$PROXY_HOST"
-echo "export PROXY_PORT=$PROXY_PORT"
 echo "export http_proxy=$http_proxy"
 echo "export https_proxy=$https_proxy"
 echo "export HTTP_PROXY=$http_proxy"
 echo "export HTTPS_PROXY=$https_proxy"
 echo "export GRADLE_OPTS='-Dorg.gradle.daemon=false -Dandroid.builder.sdkDownload=true -Dorg.gradle.jvmargs=-Xmx2048M -Dhttp.proxyHost=$PROXY_HOST -Dhttp.proxyPort=$PROXY_PORT -Dhttps.proxyHost=$PROXY_HOST -Dhttps.proxyPort=$PROXY_PORT'"
+echo "export MAVEN_OPTS='-Dhttps.proxyHost=$PROXY_HOST -Dhttps.proxyPort=$PROXY_PORT -Dmaven.wagon.http.ssl.insecure=true'"
 } >>/etc/profile
 
 echo ca_certificate=/etc/ssl/certs/ca-certificates.crt >> /etc/wgetrc

@@ -22,9 +22,6 @@ RUN bash /install/ubuntu_install_keras.sh
 COPY install/ubuntu_install_llvm.sh /install/ubuntu_install_llvm.sh
 RUN bash /install/ubuntu_install_llvm.sh
 
-#COPY android-ndk-r17b-linux-x86_64.zip /install/android-ndk-zip
-#RUN unzip /install/android-ndk-zip -d /opt
-
 COPY install/huawei_proxy.sh /install/huawei_proxy.sh
 RUN bash /install/huawei_proxy.sh
 
