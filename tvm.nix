@@ -1,8 +1,5 @@
-{ pkgs
-, stdenv
-, tvmCmakeFlagsEx ? abort "Use tvm-<mode>.nix"
-, tvmDepsEx ? abort "Use tvm-<mode>.nix"
-, tvmCmakeConfig ? ""
+{ pkgs ?  import ./nixpkgs {}
+, stdenv ? pkgs.stdenv
 } :
 
 let
@@ -10,10 +7,7 @@ let
   inherit (builtins) filterSource;
   inherit (pkgs.lib.sources) cleanSourceFilter;
 
-  pp = pkgs.python36Packages;
-
-  tvmCmakeFlags = "-DINSTALL_DEV=ON " + tvmCmakeFlagsEx;
-  tvmDeps = [ pp.pillow ] ++ tvmDepsEx;
+  pypkgs = pkgs.python36Packages;
 in
 
 rec {
@@ -32,8 +26,8 @@ rec {
   '';
 
 
-  shell = stdenv.mkDerivation {
-    name = "shell";
+  tvm-env = stdenv.mkDerivation {
+    name = "tvm-env";
 
     buildInputs = (with pkgs; [
       cmake
@@ -44,7 +38,10 @@ rec {
       universal-ctags
       docker
       gtest
-    ]) ++ (with pp; [
+      llvm_6
+      clang_6
+      openblas
+    ]) ++ (with pypkgs; [
       tensorflow
       decorator
       tornado
@@ -57,11 +54,10 @@ rec {
       ipython
       jupyter
       scipy
-      mxnet_localssl
-      onnx
-    ]) ++ tvmDeps;
-
-    inherit tvmCmakeFlags;
+      # mxnet_localssl
+      # onnx
+      pillow
+    ]);
 
     shellHook = ''
       if test -f /etc/myprofile ; then
@@ -89,7 +85,7 @@ rec {
       fi
 
       export TVM=$CWD/tvm
-      export BUILD=build-native-5
+      export BUILD=build-native
       export PYTHONPATH="$CWD/src/$USER:$TVM/python:$TVM/topi/python:$TVM/nnvm/python:$PYTHONPATH"
       export LD_LIBRARY_PATH="$TVM/$BUILD:$LD_LIBRARY_PATH"
       export C_INCLUDE_PATH="$TVM/include:$TVM/dmlc-core/include:$TVM/HalideIR/src:$TVM/dlpack/include:$TVM/topi/include:$TVM/nnvm/include"
@@ -100,16 +96,17 @@ rec {
       unset NIX_CXXSTDLIB_LINK
 
       cdtvm() { cd $TVM ; }
-      cdex() { cd $TVM/nnvm/examples; }
 
       nmake() {(
         cdtvm
-        mkdir $BUILD 2>/dev/null
-        cat ${writeText "cfg" tvmCmakeConfig} >$BUILD/config.cmake
-        ( cd $BUILD
+        mkdir $"BUILD" 2>/dev/null
+        cp $TVM/cmake/config.cmake $TVM/build-docker/config.cmake
+        sed -i 's/USE_LLVM OFF/USE_LLVM ON/g' $TVM/$BUILD/config.cmake
+        (
+          cd "$BUILD"
           cmake ..
-          make -j6 "$@"
-        ) && ln --verbose -f -s --no-dereference $BUILD ./build
+          make "$@" -j6
+        ) && ln -f -s "$BUILD" build # FIXME: Python uses 'build' name
       )}
 
       nclean() {(
@@ -131,4 +128,4 @@ rec {
     '';
   };
 
-}
+}.tvm-env
