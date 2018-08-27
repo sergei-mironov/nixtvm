@@ -5,7 +5,7 @@ if test -z "$https_proxy" ; then
   exit 1
 fi
 
-cacerts=/usr/local/share/ca-certificates/Huawei.crt
+cacerts=/usr/local/share/ca-certificates/Custom.crt
 
 #{{{
 cat >$cacerts <<EOF

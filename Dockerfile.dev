@@ -24,8 +24,8 @@ RUN bash /install/ubuntu_install_keras.sh
 RUN pip3 install ipython jupyter
 RUN pip3 install 'tensorboard<=1.8'
 
-COPY install/huawei_proxy.sh /install/huawei_proxy.sh
-RUN bash /install/huawei_proxy.sh
+COPY install/proxy.sh /install/proxy.sh
+RUN bash /install/proxy.sh
 
 RUN apt-get install -y qt5-default libgl1-mesa-glx
 RUN pip3 install -U matplotlib PyQt5 PySide2 Pillow

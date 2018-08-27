@@ -42,11 +42,15 @@ if test -z "$DOCKER_PROXY_ARGS" ; then
     PROXY_HOST=`echo $https_proxy | sed 's@.*//\(.*\):.*@\1@'`
     PROXY_PORT=`echo $https_proxy | sed 's@.*//.*:\(.*\)@\1@'`
     DOCKER_PROXY_ARGS="--build-arg=http_proxy=$https_proxy --build-arg=https_proxy=$https_proxy --build-arg=ftp_proxy=$https_proxy"
+
+    echo "Setting up proxy.sh"
+    cp proxy.sh "$DOCKER_CONTEXT_PATH/install/"
+  else
+    echo "Using empty proxy.sh"
+    touch "$DOCKER_CONTEXT_PATH/install/proxy.sh"
   fi
 fi
 
-# Copy additional files to context
-cp huawei_proxy.sh "$DOCKER_CONTEXT_PATH/install/"
 for f in _dist/* ; do
   echo "$DOCKER_CONTEXT_PATH/`basename $f` -> $f"
   ln $f $DOCKER_CONTEXT_PATH 2>/dev/null

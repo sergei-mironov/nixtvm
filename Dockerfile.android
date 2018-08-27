@@ -22,8 +22,8 @@ RUN bash /install/ubuntu_install_keras.sh
 COPY install/ubuntu_install_llvm.sh /install/ubuntu_install_llvm.sh
 RUN bash /install/ubuntu_install_llvm.sh
 
-COPY install/huawei_proxy.sh /install/huawei_proxy.sh
-RUN bash /install/huawei_proxy.sh
+COPY install/proxy.sh /install/proxy.sh
+RUN bash /install/proxy.sh
 
 COPY install/ubuntu_install_gradle.sh /install/ubuntu_install_gradle.sh
 RUN bash /install/ubuntu_install_gradle.sh
