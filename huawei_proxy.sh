@@ -5,11 +5,6 @@ if test -z "$https_proxy" ; then
   exit 1
 fi
 
-if ! test -d "$JAVA_HOME" ; then
-  echo "JAVA_HOME is not set" >&2
-  exit 1
-fi
-
 cacerts=/usr/local/share/ca-certificates/Huawei.crt
 
 #{{{
@@ -135,18 +130,23 @@ EOF
 
 update-ca-certificates
 
-keystore=$JAVA_HOME/lib/security/cacerts
-pems_dir=/tmp/pems
-rm -rf "$pems_dir" 2>/dev/null || true
-mkdir "$pems_dir"
-(
-cd "$pems_dir"
-awk 'BEGIN {c=0;doPrint=0;} /END CERT/ {print > "cert." c ".pem";doPrint=0;} /BEGIN CERT/{c++;doPrint=1;} { if(doPrint == 1) {print > "cert." c ".pem"} }' < $cacerts
-for f in `ls cert.*.pem`; do
-  keytool -import -trustcacerts -noprompt -keystore "$keystore" -alias "`basename $f`" -file "$f" -storepass changeit;
-done
-)
-rm -rf "$pems_dir"
+if test -d "$JAVA_HOME" ; then
+
+  keystore=$JAVA_HOME/lib/security/cacerts
+  pems_dir=/tmp/pems
+  rm -rf "$pems_dir" 2>/dev/null || true
+  mkdir "$pems_dir"
+  (
+  cd "$pems_dir"
+  awk 'BEGIN {c=0;doPrint=0;} /END CERT/ {print > "cert." c ".pem";doPrint=0;} /BEGIN CERT/{c++;doPrint=1;} { if(doPrint == 1) {print > "cert." c ".pem"} }' < $cacerts
+  for f in `ls cert.*.pem`; do
+    keytool -import -trustcacerts -noprompt -keystore "$keystore" -alias "`basename $f`" -file "$f" -storepass changeit;
+  done
+  )
+  rm -rf "$pems_dir"
+else
+  echo "JAVA_HOME is not set" >&2
+fi
 
 PROXY_HOST=`echo $https_proxy | sed 's@.*//\(.*\):.*@\1@'`
 PROXY_PORT=`echo $https_proxy | sed 's@.*//.*:\(.*\)@\1@'`

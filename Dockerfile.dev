@@ -23,13 +23,9 @@ RUN bash /install/ubuntu_install_keras.sh
 
 RUN pip3 install ipython jupyter
 RUN pip3 install 'tensorboard<=1.8'
-# RUN pip3 install 'tensorflow<=1.8'
-# RUN pip3 install jupyter
 
-#RUN pip3 install matplotlib scipy sklearn pyqt5 numpy
-#RUN apt-get build-dep -y python3-matplotlib
-#RUN apt-get install -y python3-scipy python3-sklearn
-#RUN apt-get install -y python3-pyqt5.qtsvg
+COPY install/huawei_proxy.sh /install/huawei_proxy.sh
+RUN bash /install/huawei_proxy.sh
 
 RUN apt-get install -y qt5-default libgl1-mesa-glx
 RUN pip3 install -U matplotlib PyQt5 PySide2 Pillow
