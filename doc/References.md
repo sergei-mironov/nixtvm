@@ -32,6 +32,17 @@ Occurences in mdeia:
 * http://www.aclweb.org/anthology/N16-4004
   Noah ark document
 
+### OCR
+
+* https://hackernoon.com/latest-deep-learning-ocr-with-keras-and-supervisely-in-15-minutes-34aecd630ed8
+  2017, some Optical Character Recognition state-of-the-art article.
+* https://arxiv.org/pdf/1805.09441.pdf
+  2018, Implicit Language Model in LSTM for OCR
+* https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6628705
+  2013, High-Performance OCR for Printed English and Fraktur using LSTM Networks
+  - https://sourceforge.net/projects/rnnl/
+    RNNLib - OpenSource library which was used by the authors.
+
 
 ### AD
 
