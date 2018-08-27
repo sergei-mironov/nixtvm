@@ -18,12 +18,20 @@ ML
 
 ### NLP
 
+Generic articles:
+
+* https://arxiv.org/pdf/1708.02709.pdf
+  Recent Trends in Deep Learning Based Natural Language Processing
+
+Occurences in mdeia:
+
 * https://pdfs.semanticscholar.org/presentation/51d9/81c1b28818fd0ee94dd3e607e1004874dfef.pdf
   2015, Research on Deep Learning for Natural Language Processing at Huawei Noah’s Ark Lab
 * https://www.huawei.com/en/about-huawei/publications/winwin-magazine/AI/intelligent-agents-tomorrow-digital-valets
   2016, Nuawei NLP news
 * http://www.aclweb.org/anthology/N16-4004
   Noah ark document
+
 
 ### AD
 
