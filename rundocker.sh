@@ -12,6 +12,9 @@ while test -n "$1" ; do
     --noport)
       NOPORT=y
       ;;
+    --noproxy)
+      NOPROXY=y
+      ;;
     *)
       SUFFIX="$1"
       ;;

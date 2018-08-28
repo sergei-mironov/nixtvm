@@ -18,10 +18,22 @@ rec {
     cd $CWD
     find tvm -name '*cc' -or -name '*hpp' -or -name '*h' -or -name '*\.c' -or -name '*cpp' | \
       ctags -L - --c++-kinds=+p --fields=+iaS --extra=+q --language-force=C++
-    find tvm src _tags -name '*py' | \
-      ctags --append -L -
-    cat tags | grep -v -w import | grep -v -w _io_ops | grep -v -w 'ops\.' > tags.2
-    mv tags.2 tags
+    find tvm src -name '*py' | ctags --append -L -
+
+    while test -n "$1" ; do
+      case "$1" in
+        tf)
+          echo "Building Tensorflow tags" >&2
+          find _tags/tensorflow -name '*py' | ctags --append -L -
+          cat tags | grep -v -w import | grep -v -w _io_ops | grep -v -w 'ops\.' > tags.2
+          mv tags.2 tags
+          ;;
+        *)
+          echo "Unknown tag task: $1" >&2
+          ;;
+      esac
+      shift
+    done
     )
   '';
 
@@ -99,8 +111,8 @@ rec {
 
       nmake() {(
         cdtvm
-        mkdir $"BUILD" 2>/dev/null
-        cp $TVM/cmake/config.cmake $TVM/build-docker/config.cmake
+        mkdir "$BUILD" 2>/dev/null
+        cp $TVM/cmake/config.cmake $TVM/$BUILD/config.cmake
         sed -i 's/USE_LLVM OFF/USE_LLVM ON/g' $TVM/$BUILD/config.cmake
         (
           cd "$BUILD"
