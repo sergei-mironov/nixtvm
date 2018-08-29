@@ -6,22 +6,24 @@ ML
 
 ### General
 
-* https://github.com/janishar/mit-deep-learning-book-pdf
-  Deep Learning book, updated version, has a chapter about Recurrent Networks
 * https://arxiv.org/pdf/1409.2329.pdf
   2015, Zaremba, Recurrent Neural Network Regularization
-* https://colah.github.io/posts/2015-08-Understanding-LSTMs/
-  2015, Tensorflow Tutorial
-* https://arxiv.org/pdf/1706.02021.pdf
-  Network Sketching: Exploiting Binary Structure in Deep CNNs
-  (Note: especially section 4)
 
-### NLP
+### Examples and tutorials
 
-Generic articles:
+* https://github.com/chiphuyen/stanford-tensorflow-tutorials
+* https://github.com/aymericdamien/TensorFlow-Examples/
+* https://github.com/adventuresinML/adventures-in-ml-code
+* https://github.com/philipperemy/tensorflow-multi-dimensional-lstm
+
+### General NLP
+
+General articles:
 
 * https://arxiv.org/pdf/1708.02709.pdf
   Recent Trends in Deep Learning Based Natural Language Processing
+* http://adventuresinmachinelearning.com/recurrent-neural-networks-lstm-tutorial-tensorflow/
+  LSTM tutorial
 
 Occurences in mdeia:
 
@@ -34,39 +36,54 @@ Occurences in mdeia:
 
 ### OCR
 
-* https://hackernoon.com/latest-deep-learning-ocr-with-keras-and-supervisely-in-15-minutes-34aecd630ed8
-  2017, some Optical Character Recognition state-of-the-art article.
-* https://arxiv.org/pdf/1805.09441.pdf
-  2018, Implicit Language Model in LSTM for OCR
+* https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=726791
+  1998, LeCun, Gradient-Based Learning Applied to Document Recognition
 * https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6628705
   2013, High-Performance OCR for Printed English and Fraktur using LSTM Networks
   - https://sourceforge.net/projects/rnnl/
     RNNLib - OpenSource library which was used by the authors.
+* https://arxiv.org/pdf/1508.02774.pdf
+  2015, Bruel, Benchmarking of LSTM Networks
+* https://hackernoon.com/latest-deep-learning-ocr-with-keras-and-supervisely-in-15-minutes-34aecd630ed8
+  2017, some Optical Character Recognition state-of-the-art article.
+* https://arxiv.org/pdf/1805.09441.pdf
+  2018, Implicit Language Model in LSTM for OCR
+
+
+### ASR
+
+* http://proceedings.mlr.press/v32/graves14.pdf
+  2014, Graves, Towards End-to-End Speech Recognition with Recurrent Neural Networks
+* http://homepages.inf.ed.ac.uk/llu/pdf/llu_icassp16.pdf
+  2016, Lu, On training the recurrent neural network encoder-decoder for large vocabulary end-to-end speech recognition
+* https://arxiv.org/pdf/1610.09975.pdf
+  2016, Soltau, Neural Speech Recognizer: Acoustic-to-Word LSTM Model for Large Vocabulary Speech Recognition
 
 
 ### AD
 
+Media
+
 * http://vertex.ai/blog/fully-automatic-differentiation
-* Automatic differentiation for tensor algebras, tech.report, 2017
-  https://arxiv.org/pdf/1711.01348
-* http://www.columbia.edu/~ahd2125/post/2015/12/5/
-  Automatic Differentiation or Mathemagically Finding Derivatives (blog, 2015).
-  Contains errors
 * https://alexey.radul.name/ideas/2013/introduction-to-automatic-differentiation/
-  Introduction to Automatic Differentiation (blog, 2013)
+  2013, Introduction to Automatic Differentiation
+* http://www.columbia.edu/~ahd2125/post/2015/12/5/
+  2015, Automatic Differentiation or Mathemagically Finding Derivatives (blog, 2015). Contains errors
 * http://www.autodiff.org/?module=Introduction&submenu=Selected%20Books
   Collection of textbooks on AD
+
+Articles
+
+* http://www.bcl.hamilton.ie/~qobi/stalingrad/
+  2005, Reverse-Mode AD in a Functional Framework: Lambda the Ultimate Backpropagator
 * http://conal.net/papers/beautiful-differentiation/
   Forward-mode AD in Haskell, vector spaces
-* http://www.bcl.hamilton.ie/~qobi/stalingrad/
-  Reverse-Mode AD in a Functional Framework: Lambda the Ultimate Backpropagator
-  Stalingrad (~2005)
+* https://arxiv.org/pdf/1711.01348
+  2017, Automatic differentiation for tensor algebras, tech.report
 * https://arxiv.org/pdf/1806.02136.pdf
-  Efficient Differentiable Programming in a Functional
-  Array-Processing Language
+  2018, Efficient Differentiable Programming in a Functional Array-Processing Language
 * https://people.csail.mit.edu/tzumao/gradient_halide/gradient_halide.pdf
-  Differentiable Programming for
-  Image Processing and Deep Learning in Halide
+  2018, Differentiable Programming for Image Processing and Deep Learning in Halide
 
 
 TVM
