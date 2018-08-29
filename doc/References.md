@@ -52,6 +52,13 @@ Occurences in Huawei mdeia:
 
 ### ASR
 
+Media
+
+* https://www.slideshare.net/ssusercd5833/sequence-learning-with-ctc-technique
+  Chun Hao Wang, Slides with lots of formuals
+
+Articles
+
 * https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/CNN_ASLPTrans2-14.pdf
   2014, Abdel-Hamid, Convolutional Neural Networks for Speech Recognition
 * http://proceedings.mlr.press/v32/graves14.pdf
