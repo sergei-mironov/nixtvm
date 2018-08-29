@@ -25,7 +25,7 @@ General articles:
 * http://adventuresinmachinelearning.com/recurrent-neural-networks-lstm-tutorial-tensorflow/
   LSTM tutorial
 
-Occurences in mdeia:
+Occurences in Huawei mdeia:
 
 * https://pdfs.semanticscholar.org/presentation/51d9/81c1b28818fd0ee94dd3e607e1004874dfef.pdf
   2015, Research on Deep Learning for Natural Language Processing at Huawei Noah’s Ark Lab
@@ -52,12 +52,16 @@ Occurences in mdeia:
 
 ### ASR
 
+* https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/CNN_ASLPTrans2-14.pdf
+  2014, Abdel-Hamid, Convolutional Neural Networks for Speech Recognition
 * http://proceedings.mlr.press/v32/graves14.pdf
   2014, Graves, Towards End-to-End Speech Recognition with Recurrent Neural Networks
 * http://homepages.inf.ed.ac.uk/llu/pdf/llu_icassp16.pdf
   2016, Lu, On training the recurrent neural network encoder-decoder for large vocabulary end-to-end speech recognition
 * https://arxiv.org/pdf/1610.09975.pdf
   2016, Soltau, Neural Speech Recognizer: Acoustic-to-Word LSTM Model for Large Vocabulary Speech Recognition
+* https://arxiv.org/pdf/1705.10874.pdf
+  2017, Zhang, Deep Learning for Environmentally Robust Speech Recognition: An Overview of Recent Developments
 
 
 ### AD
@@ -68,7 +72,7 @@ Media
 * https://alexey.radul.name/ideas/2013/introduction-to-automatic-differentiation/
   2013, Introduction to Automatic Differentiation
 * http://www.columbia.edu/~ahd2125/post/2015/12/5/
-  2015, Automatic Differentiation or Mathemagically Finding Derivatives (blog, 2015). Contains errors
+  2015, Automatic Differentiation or Mathemagically Finding Derivatives (blog, 2015). !Errors
 * http://www.autodiff.org/?module=Introduction&submenu=Selected%20Books
   Collection of textbooks on AD
 
