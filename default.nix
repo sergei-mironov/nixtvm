@@ -54,6 +54,7 @@ rec {
       clang_6
       openblas
     ]) ++ (with pypkgs; [
+      Keras
       tensorflow
       decorator
       tornado
