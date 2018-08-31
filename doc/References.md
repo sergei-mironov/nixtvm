@@ -92,7 +92,7 @@ Articles
 * https://arxiv.org/pdf/1711.01348
   2017, Automatic differentiation for tensor algebras, tech.report
 * https://arxiv.org/pdf/1806.02136.pdf
-  2018, Efficient Differentiable Programming in a Functional Array-Processing Language
+  2018, Peyton Jones, Efficient Differentiable Programming in a Functional Array-Processing Language
 * https://people.csail.mit.edu/tzumao/gradient_halide/gradient_halide.pdf
   2018, Differentiable Programming for Image Processing and Deep Learning in Halide
 
