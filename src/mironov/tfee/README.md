@@ -1,5 +1,5 @@
-This folder contains TensorFlow Examples, being ported to the TVM.
-
+TensorFlow examples exporting
+=============================
 
 References
 ----------
