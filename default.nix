@@ -24,9 +24,10 @@ rec {
       case "$1" in
         tf)
           echo "Building Tensorflow tags" >&2
-          find _tags/tensorflow -name '*py' | ctags --append -L -
+          find -L _tags/tensorflow -name '*py' | ctags --append -L -
           cat tags | grep -v -w import | grep -v -w _io_ops | grep -v -w 'ops\.' > tags.2
           mv tags.2 tags
+          find -L _tags/tensorflow -name '*cc' -or -name '*h' | ctags --append --language-force=C++ -L -
           ;;
         *)
           echo "Unknown tag task: $1" >&2

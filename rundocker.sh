@@ -9,8 +9,8 @@ while test -n "$1" ; do
       echo "Usage: $0 [--noport] [SUFFIX]" >&2
       exit 1
       ;;
-    --noport)
-      NOPORT=y
+    --map-sockets)
+      MAPSOCKETS=y
       ;;
     --noproxy)
       NOPROXY=y
@@ -74,7 +74,7 @@ cat >/tmp/docker-$UID/config.json <<EOF
 EOF
 DOCKER_CFG="--config /tmp/docker-$UID"
 
-if test "$NOPORT" = "y"; then
+if test "$MAPSOCKETS" = "y"; then
   PORT_TENSORBOARD=`expr 6000 + $UID - 1000`
   PORT_JUPYTER=`expr 8000 + $UID - 1000`
   DOCKER_PORT_ARGS="-p 0.0.0.0:$PORT_TENSORBOARD:6006 -p 0.0.0.0:$PORT_JUPYTER:8888"
@@ -98,7 +98,7 @@ ${DOCKER_BINARY} $DOCKER_CFG run --rm --pid=host \
   -it \
   --cap-add SYS_PTRACE \
   ${DOCKER_IMG_NAME} \
-  bash --login tvm/docker/with_the_same_user \
+  bash --login ./tvm/docker/with_the_same_user \
   ${DOCKER_COMMAND}
 
   # -e "MAVEN_OPTS=-Dhttps.proxyHost=$PROXY_HOST -Dhttps.proxyPort=$PROXY_PORT -Dmaven.wagon.http.ssl.insecure=true" \
