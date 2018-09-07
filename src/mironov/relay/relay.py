@@ -10,6 +10,7 @@ lib.test_dispatch()
 
 
 from tvm import relay
+from tvm._ffi.function import list_global_func_names, get_global_func
 
 def test1():
   x=relay.Var('x')
@@ -24,3 +25,9 @@ def test1():
   print('done')
 
 
+def test2():
+  f=get_global_func("test2")
+  print(f)
+  x=relay.Var('x')
+  y=relay.exp(x)
+  f(y)
