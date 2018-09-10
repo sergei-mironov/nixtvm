@@ -95,6 +95,8 @@ Articles
   2018, Peyton Jones, Efficient Differentiable Programming in a Functional Array-Processing Language
 * https://people.csail.mit.edu/tzumao/gradient_halide/gradient_halide.pdf
   2018, Differentiable Programming for Image Processing and Deep Learning in Halide
+* https://arxiv.org/pdf/1803.10228.pdf
+  2018, Demystifying Differentiable Programming: Shift/Reset the Penultimate Backpropagator
 
 
 TVM
