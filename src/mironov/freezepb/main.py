@@ -2,7 +2,7 @@
 from os import environ
 from os.path import isfile, join
 from typing import List,Tuple
-from time import strftime
+from time import strftime, perf_counter
 
 from tensorflow.gfile import FastGFile
 from tensorflow.summary import FileWriter
@@ -19,8 +19,8 @@ import nnvm
 import tvm
 
 MODEL_PB=join(environ['CWD'], "data/freeze.pb")
-MODEL_INPUTS='Rcnn_ctcV3/Inputs:0'
-MODEL_OUTPUTS='Rcnn_ctcV3/conv2d_116/BiasAdd:0'
+MODEL_INPUTS='Rcnn_ctcV3/Inputs'
+MODEL_OUTPUTS='Rcnn_ctcV3/conv2d_116/BiasAdd'
 
 DEF_LOG_DIR='./_logs'
 
@@ -55,41 +55,92 @@ def run():
   print(sym)
 
 
-def tf_run()->np.array:
-  """ Run the model using tensorflow with zero inputs """
+class Result:
+  def __init__(s):
+    s.perfs:float=None
+    s.last_data:np.array=None
+    pass
+
+def common_init(init_method, shape, dtype):
+  if init_method=='zeros':
+    return np.zeros(shape=shape, dtype=dtype)
+  elif init_method=='std':
+    return np.random.uniform(low=-50, high=51, size=shape).astype(dtype=dtype)
+  else:
+    raise ValueError("invalid 'init' argument")
+
+
+def tf_run(init_method='std', nwarmup:int=10, nloops:int=100)->Result:
+  """ Run the model on tensorflow with zero inputs """
   with tf.Session(graph=tf.Graph()) as sess:
     with FastGFile(MODEL_PB, 'rb') as f:
       graph_def = tf.GraphDef()
       graph_def.ParseFromString(f.read())
-      tf.import_graph_def(graph_def, name="")
-      sess.run(variables.global_variables_initializer())
-      g=tf.get_default_graph()
-      i=g.get_tensor_by_name(MODEL_INPUTS)
-      print("Input node:",type(i), i.name, i.dtype, i)
-      o=g.get_tensor_by_name(MODEL_OUTPUTS)
-      print("Output node:",type(o), o.name, o.dtype, o)
-      i_dict={i: np.zeros(shape=i.shape, dtype=i.dtype.as_numpy_dtype()) }
-      o_data=sess.run(o, i_dict)
-      return o_data
+    tf.import_graph_def(graph_def, name="")
+    sess.run(variables.global_variables_initializer())
+    g=tf.get_default_graph()
+    i=g.get_tensor_by_name(MODEL_INPUTS+':0')
+    print("Input node:",type(i), i.name, i.dtype, i)
+    o=g.get_tensor_by_name(MODEL_OUTPUTS+':0')
+    print("Output node:",type(o), o.name, o.dtype, o)
 
-def tvm_run()->np.array:
-  """ Run the model using TVM with zero input """
+    perfs:List[float]=[]
+    for it in range(nwarmup+nloops):
+      i_dict={i: common_init(init_method, i.shape, i.dtype.as_numpy_dtype())}
+
+      b=perf_counter()
+      o_data=sess.run(o, i_dict)
+      e=perf_counter()
+      print('tf', e-b)
+
+      if it>=nwarmup:
+        perfs.append(e-b)
+
+    r=Result()
+    r.perfs=perfs
+    r.last_data=o_data
+    return r
+
+def tvm_run(init_method='std', nwarmup:int=10, nloops:int=100)->Result:
   g,gd=fropen()
   sym,params=nnvm.frontend.from_tensorflow(gd)
-  i=g.get_tensor_by_name(MODEL_INPUTS)
-  o=g.get_tensor_by_name(MODEL_OUTPUTS)
-  i_shape_dict={MODEL_INPUTS: i.shape.as_list()}
-  i_dtype_dict={MODEL_INPUTS: i.dtype.as_numpy_dtype()}
+  i=g.get_tensor_by_name(MODEL_INPUTS+':0')
+  o=g.get_tensor_by_name(MODEL_OUTPUTS+':0')
+  i_shape_dict={MODEL_INPUTS+':0': i.shape.as_list()}
+  i_dtype_dict={MODEL_INPUTS+':0': i.dtype.as_numpy_dtype()}
   graph,lib,params=nnvm.compiler.build(graph=sym, target='llvm', shape=i_shape_dict, dtype=i_dtype_dict, params=params)
   m=graph_runtime.create(graph, lib, ctx=tvm.cpu(0))
 
-  i_data=np.zeros(shape=i.shape.as_list(), dtype=i.dtype.as_numpy_dtype())
-  m.set_input(MODEL_INPUTS, tvm.nd.array(i_data))
-  m.set_input(**params)
-  m.run()
-  o_data = m.get_output(0, tvm.nd.empty(o.shape.as_list(), o.dtype.name))
-  return o_data.asnumpy()
+  print('compiled')
+
+  perfs:List[float]=[]
+  for it in range(nwarmup+nloops):
+    i_data=common_init(init_method, shape=i.shape.as_list(), dtype=i.dtype.as_numpy_dtype())
+    m.set_input(MODEL_INPUTS, tvm.nd.array(i_data))
+    m.set_input(**params)
+
+    b=perf_counter()
+    m.run()
+    e=perf_counter()
+    o_data = m.get_output(0, tvm.nd.empty(o.shape.as_list(), o.dtype.name))
+    print('tvm', e-b)
+
+    if it>=nwarmup:
+      perfs.append(e-b)
+
+  r=Result()
+  r.perfs=perfs
+  r.last_data=o_data
+  return r
 
 
+def meanerr():
+  args={'init_method':'std', 'nwarmup':0, 'nloops':20}
+  print('Running TF')
+  rtf=tf_run(**args)
+  print('Running TVM')
+  rtvm=tvm_run(**args)
+  print('tf running time  :', np.mean(rtf.perfs),'+-', np.std(rtf.perfs))
+  print('tvm running time :', np.mean(rtvm.perfs),'+-', np.std(rtvm.perfs))
 
 
