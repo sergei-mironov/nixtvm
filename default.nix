@@ -16,12 +16,14 @@ rec {
   mktags = pkgs.writeShellScriptBin "mktags" ''
     (
     cd $CWD
-    find tvm -name '*cc' -or -name '*hpp' -or -name '*h' -or -name '*\.c' -or -name '*cpp' | \
+    find src tvm -name '*cc' -or -name '*hpp' -or -name '*h' -or -name '*\.c' -or -name '*cpp' | \
       ctags -L - --c++-kinds=+p --fields=+iaS --extra=+q --language-force=C++
-    find tvm src -name '*py' | ctags --append -L -
 
     while test -n "$1" ; do
       case "$1" in
+        py)
+          find tvm src -name '*py' | ctags --append -L -
+          ;;
         tf)
           echo "Building Tensorflow tags" >&2
           find -L _tags/tensorflow -name '*py' | ctags --append -L -
