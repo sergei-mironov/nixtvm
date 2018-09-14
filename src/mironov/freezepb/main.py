@@ -110,7 +110,6 @@ def tvm_run(init_method='std', nwarmup:int=10, nloops:int=100)->Result:
   i_dtype_dict={MODEL_INPUTS+':0': i.dtype.as_numpy_dtype()}
   graph,lib,params=nnvm.compiler.build(graph=sym, target='llvm', shape=i_shape_dict, dtype=i_dtype_dict, params=params)
   m=graph_runtime.create(graph, lib, ctx=tvm.cpu(0))
-
   print('compiled')
 
   perfs:List[float]=[]
@@ -122,7 +121,7 @@ def tvm_run(init_method='std', nwarmup:int=10, nloops:int=100)->Result:
     b=perf_counter()
     m.run()
     e=perf_counter()
-    o_data = m.get_output(0, tvm.nd.empty(o.shape.as_list(), o.dtype.name))
+    o_data=m.get_output(0, tvm.nd.empty(o.shape.as_list(), o.dtype.name))
     print('tvm', e-b)
 
     if it>=nwarmup:
@@ -133,13 +132,13 @@ def tvm_run(init_method='std', nwarmup:int=10, nloops:int=100)->Result:
   r.last_data=o_data
   return r
 
+RUN_ARGS={'init_method':'std', 'nwarmup':3, 'nloops':50}
 
 def meanerr():
-  args={'init_method':'std', 'nwarmup':0, 'nloops':20}
   print('Running TF')
-  rtf=tf_run(**args)
+  rtf=tf_run(**RUN_ARGS)
   print('Running TVM')
-  rtvm=tvm_run(**args)
+  rtvm=tvm_run(**RUN_ARGS)
   print('tf running time  :', np.mean(rtf.perfs),'+-', np.std(rtf.perfs))
   print('tvm running time :', np.mean(rtvm.perfs),'+-', np.std(rtvm.perfs))
 
