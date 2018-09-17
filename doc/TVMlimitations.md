@@ -43,6 +43,8 @@ This document describes TVM/NNVM issues, that were not reported to upstream yet.
       return 0;
     }
 
+   Probably, thats because of Reduce limitation, see below.
+
  * Axis parameter convention differs from numpy in corner cases.
 
  * In NNVM, axis=None is not supported by the parsers (reduce operations)
@@ -77,5 +79,8 @@ This document describes TVM/NNVM issues, that were not reported to upstream yet.
 
  * `TShape::Size()` returns `size_t`, while its fields are all `int64_t`.
 
+ * In TVM, Reduce IR operation looks artificial. TVM do require Reduce to be
+   top-level tensor operation.
 
+ * Mysterious Scan primitive, didn't write about it yet.
 
