@@ -17,12 +17,12 @@ rec {
     (
     cd $CWD
     find src tvm -name '*cc' -or -name '*hpp' -or -name '*h' -or -name '*\.c' -or -name '*cpp' | \
-      ctags -L - --c++-kinds=+p --fields=+iaS --extra=+q --language-force=C++
+      ctags -L - --excmd=number --c++-kinds=+p --fields=+iaS --extra=+q --language-force=C++
 
     while test -n "$1" ; do
       case "$1" in
         py)
-          find tvm src -name '*py' | ctags --append -L -
+          find tvm src -name '*py' | ctags --excmd=number --append -L -
           ;;
         tf)
           echo "Building Tensorflow tags" >&2
