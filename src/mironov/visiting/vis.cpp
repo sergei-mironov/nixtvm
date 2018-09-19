@@ -47,7 +47,6 @@ int main()
 
   cout << mod->GetSource("asm") << endl;
 
-  using namespace tvm;
   TestVisitor v;
   v.Visit(C);
 

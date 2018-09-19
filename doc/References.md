@@ -142,6 +142,12 @@ TVM
   - https://llvm.org/devmtg/2013-11/slides/Vassilev-Poster.pdf
     clad - Automatic Differentiation using Clang
 
+* http://ngraph.nervanasys.com/docs/latest/
+  nGraph (Intel, business with PlaidML)
+
+* https://software.intel.com/en-us/openvino-toolkit
+  OpenVINO (Intel)
+
 ### Benchmarks
 
 * https://github.com/dmlc/tvm/wiki/Benchmark
