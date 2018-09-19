@@ -16,16 +16,19 @@ ML
 * https://github.com/adventuresinML/adventures-in-ml-code
 * https://github.com/philipperemy/tensorflow-multi-dimensional-lstm
 
+### Datasets
+
+* https://catalog.ldc.upenn.edu/ldc99t42
+  Penn Treebank v3
+
 ### General NLP
 
-General articles:
+General Media:
 
-* https://arxiv.org/pdf/1708.02709.pdf
-  Recent Trends in Deep Learning Based Natural Language Processing
 * http://adventuresinmachinelearning.com/recurrent-neural-networks-lstm-tutorial-tensorflow/
   LSTM tutorial
 
-Occurences in Huawei mdeia:
+Huawei Mdeia:
 
 * https://pdfs.semanticscholar.org/presentation/51d9/81c1b28818fd0ee94dd3e607e1004874dfef.pdf
   2015, Research on Deep Learning for Natural Language Processing at Huawei Noah’s Ark Lab
@@ -33,6 +36,14 @@ Occurences in Huawei mdeia:
   2016, Nuawei NLP news
 * http://www.aclweb.org/anthology/N16-4004
   Noah ark document
+
+Articles:
+
+* https://arxiv.org/pdf/1506.02078.pdf
+  2015, Visualizing and Understanding recurrent Networks
+* https://arxiv.org/pdf/1708.02709.pdf
+  2018, Recent Trends in Deep Learning Based Natural Language Processing
+
 
 ### OCR
 
