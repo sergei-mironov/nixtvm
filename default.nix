@@ -17,7 +17,7 @@ rec {
     (
     cd $CWD
     find src tvm -name '*cc' -or -name '*hpp' -or -name '*h' -or -name '*\.c' -or -name '*cpp' | \
-      ctags -L - --excmd=number --c++-kinds=+p --fields=+iaS --extra=+q --language-force=C++
+      ctags -L - --excmd=number --c++-kinds=+p --fields=+iaS --extras=+q --language-force=C++
 
     while test -n "$1" ; do
       case "$1" in
