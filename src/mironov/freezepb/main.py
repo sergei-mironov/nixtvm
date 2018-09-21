@@ -180,7 +180,7 @@ def tvm_run(opt_level:int=2, nthreads:int=40, iname=MODEL_INPUT, oname=MODEL_OUT
 
   return r
 
-RUN_ARGS={'init_method':'std', 'nwarmup':3, 'nloops':10}
+RUN_ARGS={'init_method':'zeros', 'nwarmup':3, 'nloops':10}
 
 
 def meanerr():
@@ -190,7 +190,7 @@ def meanerr():
   print('Running TVM')
   rtvm=tvm_run(**RUN_ARGS)
   print(result_print(rtvm))
-  print(np.abs(rtvm.last_data - rtf.last_data))
+  np.testing.assert_allclose(rtvm.last_data, rtf.last_data, rtol=5e-1)
   return rtf,rtvm
 
 # FIXME: tvm doesn't work with intermediate outputs
@@ -209,6 +209,8 @@ def dumbsearch():
           args.update({'opt_level':opt_level})
           print('TVM',args)
           res_tvm=tvm_run(**args)
+
+          np.testing.assert_allclose(res_tvm.last_data, res_tf.last_data, rtol=1e-1)
 
           # print(res_tvm.last_data - res_tf.last_data)
           # return -1
