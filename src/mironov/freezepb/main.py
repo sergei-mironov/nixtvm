@@ -124,7 +124,7 @@ def tf_run(iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, init_method='std', nwa
           perfs.append(e-b)
 
       r.perfs=perfs
-      # r.last_data=o_data
+      r.last_data=o_data
   except KeyboardInterrupt:
     raise
   except Exception as e:
@@ -132,7 +132,7 @@ def tf_run(iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, init_method='std', nwa
 
   return r
 
-def tvm_import(opt_level:int=2,iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUTS)->Tuple[TVM_Graph,str,Params,TF_Tensor,TF_Tensor]:
+def tvm_import(opt_level:int=2, iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT) -> Tuple[TVM_Graph,str,Params,TF_Tensor,TF_Tensor]:
   g,gd=fropen()
   sym,params=nnvm.frontend.from_tensorflow(gd)
 
@@ -165,14 +165,14 @@ def tvm_run(opt_level:int=2, nthreads:int=40, iname=MODEL_INPUT, oname=MODEL_OUT
       b=perf_counter()
       m.run()
       e=perf_counter()
-      o_data=m.get_output(0, tvm.nd.empty(o.shape.as_list(), o.dtype.name))
+      o_data=m.get_output(0, tvm.nd.empty(o.shape.as_list(), o.dtype.name)).asnumpy()
       print('tvm', e-b)
 
       if it>=nwarmup:
         perfs.append(e-b)
 
     r.perfs=perfs
-    # r.last_data=o_data
+    r.last_data=o_data
   except KeyboardInterrupt:
     raise
   except Exception as e:
@@ -180,7 +180,7 @@ def tvm_run(opt_level:int=2, nthreads:int=40, iname=MODEL_INPUT, oname=MODEL_OUT
 
   return r
 
-RUN_ARGS={'init_method':'std', 'nwarmup':3, 'nloops':50}
+RUN_ARGS={'init_method':'std', 'nwarmup':3, 'nloops':10}
 
 
 def meanerr():
@@ -190,6 +190,8 @@ def meanerr():
   print('Running TVM')
   rtvm=tvm_run(**RUN_ARGS)
   print(result_print(rtvm))
+  print(np.abs(rtvm.last_data - rtf.last_data))
+  return rtf,rtvm
 
 # FIXME: tvm doesn't work with intermediate outputs
 
@@ -207,9 +209,12 @@ def dumbsearch():
           args.update({'opt_level':opt_level})
           print('TVM',args)
           res_tvm=tvm_run(**args)
-          res.update({str(args):(res_tf.__dict__,result_print(res_tf),res_tvm.__dict__,result_print(res_tvm))})
-          print(res)
-          f.write(json.dumps(res))
+
+          # print(res_tvm.last_data - res_tf.last_data)
+          # return -1
+          # res.update({str(args):(res_tf.__dict__,result_print(res_tf),res_tvm.__dict__,result_print(res_tvm))})
+          # print(res)
+          # f.write(json.dumps(res))
   return res
 
 
