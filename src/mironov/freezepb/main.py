@@ -13,7 +13,7 @@ from tensorflow.python.ops import variables
 
 from tvm.contrib import graph_runtime
 from tvm._ffi.function import get_global_func
-from nnvm.frontend import from_tensorflow
+from nnvm.staging import stage_tensorflow
 from nnvm.compiler import build
 from nnvm.symbol import Symbol
 from nnvm.graph import Graph as TVM_Graph
@@ -67,7 +67,7 @@ def run():
   g,gd=fropen()
   print(g)
   # totb(g)
-  sym,params=nnvm.frontend.from_tensorflow(gd)
+  sym,params=stage_tensorflow(gd)
   print(sym)
 
 
@@ -134,7 +134,7 @@ def tf_run(iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, init_method='std', nwa
 
 def tvm_import(opt_level:int=2, iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT) -> Tuple[TVM_Graph,str,Params,TF_Tensor,TF_Tensor]:
   g,gd=fropen()
-  sym,params=nnvm.frontend.from_tensorflow(gd)
+  sym,params=stage_tensorflow(gd)
 
   i=g.get_tensor_by_name(iname+':0')
   o=g.get_tensor_by_name(oname+':0')
