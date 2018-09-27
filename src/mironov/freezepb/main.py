@@ -1,3 +1,8 @@
+import tensorflow as tf
+import numpy as np
+import nnvm
+import tvm
+import json
 
 from os import environ
 from os.path import isfile, join
@@ -14,15 +19,12 @@ from tensorflow.python.ops import variables
 from tvm.contrib import graph_runtime
 from tvm._ffi.function import get_global_func
 from nnvm.staging import stage_tensorflow
+from nnvm.frontend import from_tensorflow
 from nnvm.compiler import build
 from nnvm.symbol import Symbol
 from nnvm.graph import Graph as TVM_Graph
 
-import tensorflow as tf
-import numpy as np
-import nnvm
-import tvm
-import json
+from freezepb.model import staged_model
 
 # Type of nnvm params
 Params = Dict[str,Any]
@@ -39,6 +41,15 @@ MODEL_OUTPUTS=[
 MODEL_OUTPUT=MODEL_OUTPUTS[-1]
 
 DEF_LOG_DIR='./_logs'
+
+
+def common_init(init_method, shape, dtype):
+  if init_method=='zeros':
+    return np.zeros(shape=shape, dtype=dtype)
+  elif init_method=='std':
+    return np.random.uniform(low=-50, high=51, size=shape).astype(dtype=dtype)
+  else:
+    raise ValueError("invalid 'init' argument")
 
 def get_log_dir(tag:str=""):
   return join(DEF_LOG_DIR,((str(tag)+'-') if len(tag)>0 else '')+strftime("%Y%m%d-%H:%M:%S"))
@@ -67,7 +78,7 @@ def run():
   g,gd=fropen()
   print(g)
   # totb(g)
-  sym,params=stage_tensorflow(gd)
+  sym,params=from_tensorflow(gd)
   print(sym)
 
 
@@ -79,19 +90,12 @@ class Result:
     s.err=None
     pass
 
+
 def result_print(r:Result)->None:
   if r.perfs:
     return r.desc+':'+str(np.mean(r.perfs))+'+-'+str(np.std(r.perfs))
   else:
     return r.desc+': no results'
-
-def common_init(init_method, shape, dtype):
-  if init_method=='zeros':
-    return np.zeros(shape=shape, dtype=dtype)
-  elif init_method=='std':
-    return np.random.uniform(low=-50, high=51, size=shape).astype(dtype=dtype)
-  else:
-    raise ValueError("invalid 'init' argument")
 
 
 def tf_run(iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, init_method='std', nwarmup:int=10, nloops:int=100)->Result:
@@ -129,12 +133,17 @@ def tf_run(iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, init_method='std', nwa
     raise
   except Exception as e:
     r.err=e
-
   return r
+
+def tvm_stage_test():
+  g,gd=fropen()
+  print(g)
+  sym,params=stage_tensorflow(gd,"out.py")
+  return sym,params
 
 def tvm_import(opt_level:int=2, iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT) -> Tuple[TVM_Graph,str,Params,TF_Tensor,TF_Tensor]:
   g,gd=fropen()
-  sym,params=stage_tensorflow(gd)
+  sym,params=from_tensorflow(gd)
 
   i=g.get_tensor_by_name(iname+':0')
   o=g.get_tensor_by_name(oname+':0')
@@ -146,7 +155,10 @@ def tvm_import(opt_level:int=2, iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT) -
     # print(graph.ir())
   return graph,lib,params,i,o
 
+
+
 def tvm_run(opt_level:int=2, nthreads:int=40, iname=MODEL_INPUT, oname=MODEL_OUTPUT, init_method='std', nwarmup:int=10, nloops:int=100)->Result:
+  """ Compile Model using TVM and run it multiple times """
   r=Result()
   r.desc='tvm running time'
   try:
@@ -180,6 +192,57 @@ def tvm_run(opt_level:int=2, nthreads:int=40, iname=MODEL_INPUT, oname=MODEL_OUT
 
   return r
 
+
+def tvmS_run1(iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, init_method='std', **kwargs)->Result:
+  """ Staged TVM model runner """
+  r=Result()
+  print("Warning: unused args:", kwargs) if kwargs != {} else None
+  try:
+    g,gd=fropen()
+    _,params=from_tensorflow(gd) # We still need from_tensorflow to get the parameters
+    mo=staged_model()
+    print('synthesized')
+    nnvm_graph=nnvm.graph.create(mo)
+
+    i=g.get_tensor_by_name(iname+':0')
+    o=g.get_tensor_by_name(oname+':0')
+    i_shape_dict={iname+':0': i.shape.as_list()}
+    i_dtype_dict={iname+':0': i.dtype.as_numpy_dtype()}
+
+    with nnvm.compiler.build_config(opt_level=2):
+      graph,lib,params=nnvm.compiler.build(graph=nnvm_graph, target='llvm', shape=i_shape_dict, dtype=i_dtype_dict, params=params)
+      # print(graph.ir())
+
+    m=graph_runtime.create(graph,lib,ctx=tvm.cpu(0))
+    print('compiled')
+
+    i_data=common_init(init_method, shape=i.shape.as_list(), dtype=i.dtype.as_numpy_dtype())
+    m.set_input(iname, tvm.nd.array(i_data))
+    m.set_input(**params)
+    m.run()
+    o_data=m.get_output(0, tvm.nd.empty(o.shape.as_list(), o.dtype.name)).asnumpy()
+    r.last_data=o_data
+  except KeyboardInterrupt:
+    raise
+  except Exception as e:
+    r.err=e
+  return r
+
+
+
+def correctness():
+  run_args={'init_method':'zeros', 'nwarmup':0, 'nloops':1}
+  print('Running TF')
+  rtf=tf_run(**run_args)
+  print('Running TVM')
+  rtvm=tvm_run(**run_args)
+  np.testing.assert_allclose(rtvm.last_data, rtf.last_data, rtol=5e-1)
+  print('Running Staged TVM')
+  rtvms=tvmS_run1(**run_args)
+  np.testing.assert_allclose(rtvms.last_data, rtf.last_data, rtol=5e-1)
+  return rtf
+
+
 RUN_ARGS={'init_method':'zeros', 'nwarmup':3, 'nloops':10}
 
 
@@ -190,7 +253,7 @@ def meanerr():
   print('Running TVM')
   rtvm=tvm_run(**RUN_ARGS)
   print(result_print(rtvm))
-  np.testing.assert_allclose(rtvm.last_data, rtf.last_data, rtol=5e-1)
+  np.testing.assert_allclose(rtvm.last_data, rtf.last_data, rtol=1e-1)
   return rtf,rtvm
 
 # FIXME: tvm doesn't work with intermediate outputs
