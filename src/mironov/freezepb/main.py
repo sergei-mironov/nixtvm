@@ -9,6 +9,7 @@ from os.path import isfile, join
 from typing import List,Tuple,Dict,Any
 from time import strftime, perf_counter
 from copy import copy
+from warnings import warn
 
 from tensorflow import Tensor as TF_Tensor
 from tensorflow.gfile import FastGFile
@@ -85,25 +86,38 @@ def run():
 class Result:
   def __init__(s):
     s.perfs:List[float]=None
+    s.perf_mean:float=0.0
+    s.perf_std:float=0.0
     s.last_data:np.array=None
     s.desc:str=''
     s.err=None
+    s.mismatch=None
     pass
+  def set_perfs(s,perfs):
+    s.perfs=perfs
+    s.perf_mean=np.mean(perfs)
+    s.perf_std=np.std(perfs)
 
 
 def result_print(r:Result)->None:
   if r.perfs:
-    return r.desc+':'+str(np.mean(r.perfs))+'+-'+str(np.std(r.perfs))
+    return r.desc+':'+str(r.perf_mean)+'+-'+str(r.perf_std)
   else:
     return r.desc+': no results'
 
 
-def tf_run(iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, init_method='std', nwarmup:int=10, nloops:int=100)->Result:
+def tf_run(nthreads:int=None, iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, init_method='std', nwarmup:int=10, nloops:int=100, **kwargs)->Result:
   """ Run the model on tensorflow with zero inputs """
+  print("Warning: unused args:", kwargs) if kwargs != {} else None
   r=Result()
   r.desc='tf running time'
+
+  sargs={'graph':tf.Graph()}
+  if not nthreads is None:
+    sargs['intra_op_parallelism_threads']=nthreads
+
   try:
-    with tf.Session(graph=tf.Graph()) as sess:
+    with tf.Session(**sargs) as sess:
       with FastGFile(MODEL_PB, 'rb') as f:
         graph_def = tf.GraphDef()
         graph_def.ParseFromString(f.read())
@@ -127,7 +141,7 @@ def tf_run(iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, init_method='std', nwa
         if it>=nwarmup:
           perfs.append(e-b)
 
-      r.perfs=perfs
+      r.set_perfs(perfs)
       r.last_data=o_data
   except KeyboardInterrupt:
     raise
@@ -138,6 +152,7 @@ def tf_run(iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, init_method='std', nwa
 def tvm_stage_test():
   g,gd=fropen()
   print(g)
+  dump(gd,'staged')
   sym,params=stage_tensorflow(gd,"out.py")
   return sym,params
 
@@ -157,12 +172,15 @@ def tvm_import(opt_level:int=2, iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT) -
 
 
 
-def tvm_run(opt_level:int=2, nthreads:int=40, iname=MODEL_INPUT, oname=MODEL_OUTPUT, init_method='std', nwarmup:int=10, nloops:int=100)->Result:
+def tvm_run(opt_level:int=2, nthreads:int=None, iname=MODEL_INPUT, oname=MODEL_OUTPUT, init_method='std', nwarmup:int=10, nloops:int=100)->Result:
   """ Compile Model using TVM and run it multiple times """
   r=Result()
   r.desc='tvm running time'
   try:
     graph,lib,params,i,o=tvm_import(opt_level, iname, oname)
+
+    if nthreads is None:
+      nthread=20
 
     get_global_func('runtime.config_threadpool')(1,nthreads)
     m=graph_runtime.create(graph, lib, ctx=tvm.cpu(0))
@@ -183,7 +201,7 @@ def tvm_run(opt_level:int=2, nthreads:int=40, iname=MODEL_INPUT, oname=MODEL_OUT
       if it>=nwarmup:
         perfs.append(e-b)
 
-    r.perfs=perfs
+    r.set_perfs(perfs)
     r.last_data=o_data
   except KeyboardInterrupt:
     raise
@@ -193,16 +211,16 @@ def tvm_run(opt_level:int=2, nthreads:int=40, iname=MODEL_INPUT, oname=MODEL_OUT
   return r
 
 
-def tvmS_run1(iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, init_method='std', **kwargs)->Result:
+def tvmS_run(nthreads:int=None, iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, init_method='std', nwarmup:int=0, nloops:int=1, **kwargs)->Result:
   """ Staged TVM model runner """
   r=Result()
   print("Warning: unused args:", kwargs) if kwargs != {} else None
   try:
     g,gd=fropen()
     _,params=from_tensorflow(gd) # We still need from_tensorflow to get the parameters
-    mo=staged_model()
+    mo,savepoints=staged_model()
+    nnvm_graph=nnvm.graph.create(savepoints[oname])
     print('synthesized')
-    nnvm_graph=nnvm.graph.create(mo)
 
     i=g.get_tensor_by_name(iname+':0')
     o=g.get_tensor_by_name(oname+':0')
@@ -213,56 +231,72 @@ def tvmS_run1(iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, init_method='std', 
       graph,lib,params=nnvm.compiler.build(graph=nnvm_graph, target='llvm', shape=i_shape_dict, dtype=i_dtype_dict, params=params)
       # print(graph.ir())
 
+    if nthreads is None:
+      nthreads=20
+
+    get_global_func('runtime.config_threadpool')(1,nthreads)
     m=graph_runtime.create(graph,lib,ctx=tvm.cpu(0))
     print('compiled')
 
-    i_data=common_init(init_method, shape=i.shape.as_list(), dtype=i.dtype.as_numpy_dtype())
-    m.set_input(iname, tvm.nd.array(i_data))
-    m.set_input(**params)
-    m.run()
-    o_data=m.get_output(0, tvm.nd.empty(o.shape.as_list(), o.dtype.name)).asnumpy()
+    perfs:List[float]=[]
+    for it in range(nwarmup+nloops):
+      i_data=common_init(init_method, shape=i.shape.as_list(), dtype=i.dtype.as_numpy_dtype())
+      m.set_input(iname, tvm.nd.array(i_data))
+      m.set_input(**params)
+
+      b=perf_counter()
+      m.run()
+      e=perf_counter()
+      o_data=m.get_output(0, tvm.nd.empty(o.shape.as_list(), o.dtype.name)).asnumpy()
+      print('tvms', e-b)
+
+      if it>=nwarmup:
+        perfs.append(e-b)
+
+    r.set_perfs(perfs)
     r.last_data=o_data
   except KeyboardInterrupt:
     raise
   except Exception as e:
+    warn('exception: '+str(e))
     r.err=e
   return r
 
 
-
-def correctness():
+def correctness()->Result:
   run_args={'init_method':'zeros', 'nwarmup':0, 'nloops':1}
   print('Running TF')
   rtf=tf_run(**run_args)
+  print('Running Staged TVM')
+  rtvms=tvmS_run(**run_args)
+  np.testing.assert_allclose(rtvms.last_data, rtvms.last_data, rtol=5e-1)
   print('Running TVM')
   rtvm=tvm_run(**run_args)
   np.testing.assert_allclose(rtvm.last_data, rtf.last_data, rtol=5e-1)
-  print('Running Staged TVM')
-  rtvms=tvmS_run1(**run_args)
-  np.testing.assert_allclose(rtvms.last_data, rtf.last_data, rtol=5e-1)
-  return rtf
+  return rtvms
 
 
-RUN_ARGS={'init_method':'zeros', 'nwarmup':3, 'nloops':10}
 
 
-def meanerr():
+def meanerr()->Tuple[Result,Result]:
+  run_args={'init_method':'zeros', 'nwarmup':3, 'nloops':10}
   print('Running TF')
-  rtf=tf_run(**RUN_ARGS)
+  rtf=tf_run(**run_args)
   print(result_print(rtf))
   print('Running TVM')
-  rtvm=tvm_run(**RUN_ARGS)
+  rtvm=tvm_run(**run_args)
   print(result_print(rtvm))
   np.testing.assert_allclose(rtvm.last_data, rtf.last_data, rtol=1e-1)
   return rtf,rtvm
 
 # FIXME: tvm doesn't work with intermediate outputs
 
-def dumbsearch():
+def dumbsearch()->dict:
+  run_args={'init_method':'zeros', 'nwarmup':3, 'nloops':10}
   res={}
   with open("dumbsearch.json","w") as f:
     for output in [MODEL_OUTPUTS[-1]]:
-      args=copy(RUN_ARGS)
+      args=copy(run_args)
       args.update({'oname':output})
       print('TF',args)
       res_tf=tf_run(**args)
@@ -281,6 +315,45 @@ def dumbsearch():
           # print(res)
           # f.write(json.dumps(res))
   return res
+
+
+
+def partsearch()->dict:
+  run_args={'init_method':'zeros', 'nwarmup':3, 'nloops':10}
+  res={}
+  for output in MODEL_OUTPUTS:
+
+    args=copy(run_args)
+    args.update({'oname':output})
+    print('TF',args)
+    res_tf=tf_run(**args)
+
+    for nthreads in [None,3,10,20,40]:
+      for opt_level in [3,2,1]:
+
+        args.update({'nthreads':nthreads})
+        args.update({'opt_level':opt_level})
+        print('TVMS',args)
+        res_tvms=tvmS_run(**args)
+
+        if not np.isclose(res_tvms.last_data, res_tf.last_data, rtol=1e-1).any():
+          res_tf.mismatch=True
+          res_tvms.mismatch=True
+
+        def cleanup(x):
+          x2=copy(x)
+          x2.last_data=None
+          x2.perfs=None
+          return x2.__dict__
+
+        res[str(('TF',tuple(args.items())))]=cleanup(res_tf)
+        res[str(('TVMS',tuple(args.items())))]=cleanup(res_tvms)
+
+        with open("partsearch.json","w") as f:
+          json.dump(res,f,sort_keys=True,indent=4)
+
+  return res
+
 
 
 
