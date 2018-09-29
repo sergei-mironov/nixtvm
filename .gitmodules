@@ -7,3 +7,6 @@
 [submodule "internal"]
 	path = internal
 	url = http://code-sh.rnd.huawei.com/mrc-cbg-opensource/hitvm-internal.git
+[submodule "src/mironov/htvm"]
+	path = src/mironov/htvm
+	url = https://github.com/grwlf/htvm
