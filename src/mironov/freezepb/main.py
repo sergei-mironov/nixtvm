@@ -319,19 +319,29 @@ def dumbsearch()->dict:
 
 
 def partsearch()->dict:
-  run_args={'init_method':'zeros', 'nwarmup':3, 'nloops':10}
+  run_args={'init_method':'zeros', 'nwarmup':3, 'nloops':30}
   res={}
+
+  def cleanup(x):
+    x2=copy(x)
+    x2.last_data=None
+    x2.perfs=None
+    return x2.__dict__
+
   for output in MODEL_OUTPUTS:
 
-    args=copy(run_args)
-    args.update({'oname':output})
-    print('TF',args)
-    res_tf=tf_run(**args)
-
     for nthreads in [None,3,10,20,40]:
+
+      args.update({'nthreads':nthreads})
+
+      args=copy(run_args)
+      args.update({'oname':output})
+      print('TF',args)
+      res_tf=tf_run(**args)
+      res[str(('TF',tuple(args.items())))]=cleanup(res_tf)
+
       for opt_level in [3,2,1]:
 
-        args.update({'nthreads':nthreads})
         args.update({'opt_level':opt_level})
         print('TVMS',args)
         res_tvms=tvmS_run(**args)
@@ -340,17 +350,10 @@ def partsearch()->dict:
           res_tf.mismatch=True
           res_tvms.mismatch=True
 
-        def cleanup(x):
-          x2=copy(x)
-          x2.last_data=None
-          x2.perfs=None
-          return x2.__dict__
-
-        res[str(('TF',tuple(args.items())))]=cleanup(res_tf)
         res[str(('TVMS',tuple(args.items())))]=cleanup(res_tvms)
 
         with open("partsearch.json","w") as f:
-          json.dump(res,f,sort_keys=True,indent=4)
+          json.dump(res,f,indent=4)
 
   return res
 
