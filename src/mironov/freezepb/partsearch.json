@@ -1,0 +1,722 @@
+{
+    "('TF', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv1/add_1/add')))": {
+        "perfs": null,
+        "perf_mean": 0.004243987301985423,
+        "perf_std": 0.0002020681628721974,
+        "last_data": null,
+        "desc": "tf running time",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv1/add_1/add'), ('nthreads', None), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.001789046637713909,
+        "perf_std": 0.000175814087657882,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv1/add_1/add'), ('nthreads', None), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.0013848615810275078,
+        "perf_std": 1.246475502279873e-05,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv1/add_1/add'), ('nthreads', None), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.001581443597873052,
+        "perf_std": 0.00012967498249891822,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv1/add_1/add'), ('nthreads', 3), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.006741334994633992,
+        "perf_std": 7.311222549180607e-05,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv1/add_1/add'), ('nthreads', 3), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.006666450078288714,
+        "perf_std": 9.28882698195067e-06,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv1/add_1/add'), ('nthreads', 3), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.006772828412552675,
+        "perf_std": 3.6996444753813784e-05,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv1/add_1/add'), ('nthreads', 10), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.0020936230197548867,
+        "perf_std": 2.802913470854141e-05,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv1/add_1/add'), ('nthreads', 10), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.0020849465702970824,
+        "perf_std": 1.730465394731921e-05,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv1/add_1/add'), ('nthreads', 10), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.0020946940407156945,
+        "perf_std": 1.0099304988398688e-05,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv1/add_1/add'), ('nthreads', 20), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.0017984782656033833,
+        "perf_std": 0.00026634701411506914,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv1/add_1/add'), ('nthreads', 20), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.0016579196477929752,
+        "perf_std": 0.00024111282392137555,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv1/add_1/add'), ('nthreads', 20), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.0013830319667855898,
+        "perf_std": 2.1349506888565554e-05,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv1/add_1/add'), ('nthreads', 40), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.0019247553621729214,
+        "perf_std": 0.00022791201548873834,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv1/add_1/add'), ('nthreads', 40), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.001403874345123768,
+        "perf_std": 3.254736046820036e-05,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv1/add_1/add'), ('nthreads', 40), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.0014051788796981175,
+        "perf_std": 2.067488990932841e-05,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TF', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv2/add_7/add')))": {
+        "perfs": null,
+        "perf_mean": 0.02442995471258958,
+        "perf_std": 0.0008056350088675999,
+        "last_data": null,
+        "desc": "tf running time",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv2/add_7/add'), ('nthreads', None), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.011760849691927432,
+        "perf_std": 0.0021535196398321226,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv2/add_7/add'), ('nthreads', None), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.013383581240971883,
+        "perf_std": 0.0023687164183779502,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv2/add_7/add'), ('nthreads', None), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.011839738488197327,
+        "perf_std": 0.0003851213387055269,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv2/add_7/add'), ('nthreads', 3), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.06063899944225947,
+        "perf_std": 5.0116078226507946e-05,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv2/add_7/add'), ('nthreads', 3), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.06159523284683625,
+        "perf_std": 0.00017543228349964056,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv2/add_7/add'), ('nthreads', 3), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.06114910536756118,
+        "perf_std": 0.0005721005303416279,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv2/add_7/add'), ('nthreads', 10), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.018616753444075585,
+        "perf_std": 0.00021164445467751223,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv2/add_7/add'), ('nthreads', 10), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.01860631542901198,
+        "perf_std": 4.065871869610672e-05,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv2/add_7/add'), ('nthreads', 10), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.018568669694165388,
+        "perf_std": 5.221137407417902e-05,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv2/add_7/add'), ('nthreads', 20), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.011667447288831075,
+        "perf_std": 0.0016293144158765795,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv2/add_7/add'), ('nthreads', 20), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.013487692301472029,
+        "perf_std": 0.002299962276421584,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv2/add_7/add'), ('nthreads', 20), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.010906017137070496,
+        "perf_std": 0.00047733268999372396,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv2/add_7/add'), ('nthreads', 40), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.0124840730180343,
+        "perf_std": 0.002196430819583633,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv2/add_7/add'), ('nthreads', 40), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.010919012191394965,
+        "perf_std": 0.0004542574745520391,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv2/add_7/add'), ('nthreads', 40), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.012432334137459596,
+        "perf_std": 0.0021589210260314568,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TF', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv3/add_13/add')))": {
+        "perfs": null,
+        "perf_mean": 0.05041384752839804,
+        "perf_std": 0.0008557576172074002,
+        "last_data": null,
+        "desc": "tf running time",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv3/add_13/add'), ('nthreads', None), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.040365177268783255,
+        "perf_std": 0.007098334092479661,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv3/add_13/add'), ('nthreads', None), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.03832494014253219,
+        "perf_std": 0.0023386628061243288,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv3/add_13/add'), ('nthreads', None), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.03762388080358505,
+        "perf_std": 0.0015654647494177925,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv3/add_13/add'), ('nthreads', 3), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.21167878974229098,
+        "perf_std": 0.0009228208356704367,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv3/add_13/add'), ('nthreads', 3), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.21158071911583345,
+        "perf_std": 0.0002007884097863578,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv3/add_13/add'), ('nthreads', 3), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.21267993282526731,
+        "perf_std": 0.0006303901780316056,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv3/add_13/add'), ('nthreads', 10), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.06554991888503234,
+        "perf_std": 0.00014004702559638915,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv3/add_13/add'), ('nthreads', 10), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.06552078425884247,
+        "perf_std": 0.00010183858988451551,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv3/add_13/add'), ('nthreads', 10), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.06544477076580127,
+        "perf_std": 0.0004866206945548376,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv3/add_13/add'), ('nthreads', 20), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.041071671557923156,
+        "perf_std": 0.00952385000158342,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv3/add_13/add'), ('nthreads', 20), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.03999087264140447,
+        "perf_std": 0.0058130015775932345,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv3/add_13/add'), ('nthreads', 20), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.0401867580289642,
+        "perf_std": 0.005332054479875955,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv3/add_13/add'), ('nthreads', 40), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.03900652751326561,
+        "perf_std": 0.0054179190024518115,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv3/add_13/add'), ('nthreads', 40), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.04093606633444627,
+        "perf_std": 0.006582337696683907,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv3/add_13/add'), ('nthreads', 40), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.0408941105629007,
+        "perf_std": 0.006371470196613519,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TF', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv4/add_17/add')))": {
+        "perfs": null,
+        "perf_mean": 0.06550389161954323,
+        "perf_std": 0.0015106912375621234,
+        "last_data": null,
+        "desc": "tf running time",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv4/add_17/add'), ('nthreads', None), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.07168940883129835,
+        "perf_std": 0.011786145615980478,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv4/add_17/add'), ('nthreads', None), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.07034864444285631,
+        "perf_std": 0.009457221266906948,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv4/add_17/add'), ('nthreads', None), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.07079447936266661,
+        "perf_std": 0.009333115353027674,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv4/add_17/add'), ('nthreads', 3), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.39094514573613803,
+        "perf_std": 0.0005225599018308285,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv4/add_17/add'), ('nthreads', 3), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.39072317313402893,
+        "perf_std": 0.00037888764243183,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv4/add_17/add'), ('nthreads', 3), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.3916088603436947,
+        "perf_std": 0.0017814537210386085,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv4/add_17/add'), ('nthreads', 10), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.12253193457921346,
+        "perf_std": 0.005320401834450397,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv4/add_17/add'), ('nthreads', 10), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.12164084917555253,
+        "perf_std": 0.00014306975123903645,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv4/add_17/add'), ('nthreads', 10), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.12177810687571763,
+        "perf_std": 0.00030756328305309925,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv4/add_17/add'), ('nthreads', 20), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.07264146010080973,
+        "perf_std": 0.009527369151711509,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv4/add_17/add'), ('nthreads', 20), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.07220235106845697,
+        "perf_std": 0.010885306006505736,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv4/add_17/add'), ('nthreads', 20), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.07130709830671549,
+        "perf_std": 0.010080301943117478,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv4/add_17/add'), ('nthreads', 40), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.07314825685073932,
+        "perf_std": 0.01202942553398209,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv4/add_17/add'), ('nthreads', 40), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.07262295645972093,
+        "perf_std": 0.011352019217141839,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/expand_conv4/add_17/add'), ('nthreads', 40), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.0729896929115057,
+        "perf_std": 0.011862058643580767,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TF', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/conv2d_116/BiasAdd')))": {
+        "perfs": null,
+        "perf_mean": 0.0805279598881801,
+        "perf_std": 0.001206320856321422,
+        "last_data": null,
+        "desc": "tf running time",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/conv2d_116/BiasAdd'), ('nthreads', None), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.09019873961806298,
+        "perf_std": 0.012819771127908214,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/conv2d_116/BiasAdd'), ('nthreads', None), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.09276119787245989,
+        "perf_std": 0.013661930340657123,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/conv2d_116/BiasAdd'), ('nthreads', None), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.09319921905795733,
+        "perf_std": 0.01401556532749053,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/conv2d_116/BiasAdd'), ('nthreads', 3), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.4883774431422353,
+        "perf_std": 0.01903527191054348,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/conv2d_116/BiasAdd'), ('nthreads', 3), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.48499261972804864,
+        "perf_std": 0.0043178133746244445,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/conv2d_116/BiasAdd'), ('nthreads', 3), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.4859181376174092,
+        "perf_std": 0.0020998213874506254,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/conv2d_116/BiasAdd'), ('nthreads', 10), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.15323381380488474,
+        "perf_std": 0.0003596035541978782,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/conv2d_116/BiasAdd'), ('nthreads', 10), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.15341177775214115,
+        "perf_std": 0.0003375967622995627,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/conv2d_116/BiasAdd'), ('nthreads', 10), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.15341873429715633,
+        "perf_std": 0.00032114161577639455,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/conv2d_116/BiasAdd'), ('nthreads', 20), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.0890104856962959,
+        "perf_std": 0.010900292555500927,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/conv2d_116/BiasAdd'), ('nthreads', 20), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.0922081441928943,
+        "perf_std": 0.012521449055995542,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/conv2d_116/BiasAdd'), ('nthreads', 20), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.09178146086633206,
+        "perf_std": 0.013302389040537814,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/conv2d_116/BiasAdd'), ('nthreads', 40), ('opt_level', 3)))": {
+        "perfs": null,
+        "perf_mean": 0.09220768709977469,
+        "perf_std": 0.015668040839637916,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/conv2d_116/BiasAdd'), ('nthreads', 40), ('opt_level', 2)))": {
+        "perfs": null,
+        "perf_mean": 0.0917985605696837,
+        "perf_std": 0.015752710465951166,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    },
+    "('TVMS', (('init_method', 'zeros'), ('nwarmup', 3), ('nloops', 30), ('oname', 'Rcnn_ctcV3/conv2d_116/BiasAdd'), ('nthreads', 40), ('opt_level', 1)))": {
+        "perfs": null,
+        "perf_mean": 0.09115457721054554,
+        "perf_std": 0.011896766891946903,
+        "last_data": null,
+        "desc": "",
+        "err": null,
+        "mismatch": null
+    }
+}
