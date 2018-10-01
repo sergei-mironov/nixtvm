@@ -7,3 +7,8 @@ TODO
 * Run `run` several times?
 * Try with batch size ~100?
 * Try with default NNVM optimisations disabled
+
+Problems
+--------
+
+* Simple TF runners using `session.run` may be suboptimal

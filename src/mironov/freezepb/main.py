@@ -360,16 +360,21 @@ def partsearch()->dict:
 
 def partsearch_restore_plot(fname):
   import matplotlib.pyplot as plt
+  import matplotlib.ticker as plticker
 
   with open(fname,"r") as f:
     r=json.load(f)
 
   def extract(pats):
-    ks=[k for k in r.keys() if all([pat in k for pat in pats])]
     results=[]
-    for k in ks:
-      nt='N'+str(r[k]['args']['nthreads'])
-      results.append((r[k]['perf_mean'],r[k]['perf_std'],nt))
+    for k,res in r.items():
+      args_s=str(res['typ'])+' '+str(res['args'])
+      if not all([pat in args_s for pat in pats]):
+        continue
+      nt=None #dict.get(dict.get(res,'args',{}),'nthreads',None)
+      ol=dict.get(dict.get(res,'args',{}),'opt_level',None)
+      nts=('N'+str(nt) if nt else '')+('O'+str(ol) if ol else '')
+      results.append((res['perf_mean'],res['perf_std'],nts))
     return sorted(results, key=lambda x:x[0])[0]
 
   keys=r.keys()
@@ -391,12 +396,15 @@ def partsearch_restore_plot(fname):
     tvms_notes.append(n)
 
   fig,ax=plt.subplots()
-  def plot_ci(x,mean,std,shade,notes,**kwargs):
+  loc = plticker.MultipleLocator(base=1)
+  ax.xaxis.set_major_locator(loc)
+  def plot_ci(x,mean,std,notes,shade,**kwargs):
     plt.fill_between(x,mean+std,mean-std,color=shade,alpha=0.3)
     plt.plot(x,mean,**kwargs)
     for i,txt in enumerate(notes):
-      ax.annotate(txt,(x[i],meanp[i]))
+      ax.annotate(txt,(x[i],mean[i]))
 
+  ax.grid()
   plot_ci(idx,tf_m,tf_s,tf_notes,shade='orange',color='orange',label='TF')
   plot_ci(idx,tvms_m,tvms_s,tvms_notes,shade='skyblue',color='skyblue',label='TVM')
   plt.legend()
