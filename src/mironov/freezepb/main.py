@@ -106,18 +106,14 @@ def result_print(r:Result)->None:
     return r.desc+': no results'
 
 
-def tf_run(nthreads:int=None, iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, init_method='std', nwarmup:int=10, nloops:int=100, **kwargs)->Result:
+def tf_run(iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, init_method='std', nwarmup:int=10, nloops:int=100, **kwargs)->Result:
   """ Run the model on tensorflow with zero inputs """
   print("Warning: unused args:", kwargs) if kwargs != {} else None
   r=Result()
   r.desc='tf running time'
 
-  sargs={'graph':tf.Graph()}
-  if not nthreads is None:
-    sargs['intra_op_parallelism_threads']=nthreads
-
   try:
-    with tf.Session(**sargs) as sess:
+    with tf.Session(graph=tf.Graph()) as sess:
       with FastGFile(MODEL_PB, 'rb') as f:
         graph_def = tf.GraphDef()
         graph_def.ParseFromString(f.read())
@@ -321,24 +317,28 @@ def dumbsearch()->dict:
 def partsearch()->dict:
   run_args={'init_method':'zeros', 'nwarmup':3, 'nloops':30}
   res={}
+  i=0
 
-  def cleanup(x):
+  def cleanup(typ,x,args):
     x2=copy(x)
+    x2.typ=typ
     x2.last_data=None
     x2.perfs=None
+    x2.args=copy(args)
     return x2.__dict__
 
   for output in MODEL_OUTPUTS:
 
-    for nthreads in [None,3,10,20,40]:
+    args=copy(run_args)
+    args.update({'oname':output})
+    print('TF',args)
+    res_tf=tf_run(**args)
+    res[i]=cleanup('TF',res_tf,args)
+    i+=1
+
+    for nthreads in [3,None,10,20,40]:
 
       args.update({'nthreads':nthreads})
-
-      args=copy(run_args)
-      args.update({'oname':output})
-      print('TF',args)
-      res_tf=tf_run(**args)
-      res[str(('TF',tuple(args.items())))]=cleanup(res_tf)
 
       for opt_level in [3,2,1]:
 
@@ -346,17 +346,63 @@ def partsearch()->dict:
         print('TVMS',args)
         res_tvms=tvmS_run(**args)
 
-        if not np.isclose(res_tvms.last_data, res_tf.last_data, rtol=1e-1).any():
+        if not np.isclose(res_tvms.last_data, res_tf.last_data, rtol=1e-1, atol=1e-5).any():
           res_tf.mismatch=True
           res_tvms.mismatch=True
 
-        res[str(('TVMS',tuple(args.items())))]=cleanup(res_tvms)
+        res[i]=cleanup('TVMS',res_tvms,args)
+        i+=1
 
         with open("partsearch.json","w") as f:
           json.dump(res,f,indent=4)
 
   return res
 
+def partsearch_restore_plot(fname):
+  import matplotlib.pyplot as plt
 
+  with open(fname,"r") as f:
+    r=json.load(f)
 
+  def extract(pats):
+    ks=[k for k in r.keys() if all([pat in k for pat in pats])]
+    results=[]
+    for k in ks:
+      nt='N'+str(r[k]['args']['nthreads'])
+      results.append((r[k]['perf_mean'],r[k]['perf_std'],nt))
+    return sorted(results, key=lambda x:x[0])[0]
+
+  keys=r.keys()
+  idx=np.ndarray(shape=(len(MODEL_OUTPUTS),))
+  tf_m=np.ndarray(shape=(len(MODEL_OUTPUTS),))
+  tf_s=np.ndarray(shape=(len(MODEL_OUTPUTS),))
+  tvms_m=np.ndarray(shape=(len(MODEL_OUTPUTS),))
+  tvms_s=np.ndarray(shape=(len(MODEL_OUTPUTS),))
+  tf_notes=[]; tvms_notes=[]
+  for i,output in enumerate(MODEL_OUTPUTS):
+    idx[i]=i
+    m,s,n=extract(['TF',output])
+    tf_m[i]=m
+    tf_s[i]=s
+    tf_notes.append(n)
+    m,s,n=extract(['TVMS',output])
+    tvms_m[i]=m
+    tvms_s[i]=s
+    tvms_notes.append(n)
+
+  fig,ax=plt.subplots()
+  def plot_ci(x,mean,std,shade,notes,**kwargs):
+    plt.fill_between(x,mean+std,mean-std,color=shade,alpha=0.3)
+    plt.plot(x,mean,**kwargs)
+    for i,txt in enumerate(notes):
+      ax.annotate(txt,(x[i],meanp[i]))
+
+  plot_ci(idx,tf_m,tf_s,tf_notes,shade='orange',color='orange',label='TF')
+  plot_ci(idx,tvms_m,tvms_s,tvms_notes,shade='skyblue',color='skyblue',label='TVM')
+  plt.legend()
+  plt.show()
+  plt.savefig('partsearch.png')
+  # tf_oindex.append(i)
+  # tf_times.append(min([r]))
+  return
 
