@@ -4,6 +4,13 @@ Useful articles
 ML
 --
 
+### CNN
+
+Media:
+
+* https://towardsdatascience.com/understanding-2d-dilated-convolution-operation-with-examples-in-numpy-and-tensorflow-with-d376b3972b25
+  Dilated convolution
+
 ### General
 
 * https://arxiv.org/pdf/1409.2329.pdf
