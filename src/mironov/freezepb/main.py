@@ -25,23 +25,8 @@ from nnvm.compiler import build
 from nnvm.symbol import Symbol
 from nnvm.graph import Graph as TVM_Graph
 
-from freezepb.model import staged_model
-
-# Type of nnvm params
-Params = Dict[str,Any]
-
-MODEL_PB=join(environ['CWD'], "data/freeze.pb")
-MODEL_INPUT='Rcnn_ctcV3/Inputs'
-
-MODEL_OUTPUTS=[
-   'Rcnn_ctcV3/expand_conv1/add_1/add'
-  ,'Rcnn_ctcV3/expand_conv2/add_7/add'
-  ,'Rcnn_ctcV3/expand_conv3/add_13/add'
-  ,'Rcnn_ctcV3/expand_conv4/add_17/add'
-  ,'Rcnn_ctcV3/conv2d_116/BiasAdd']
-MODEL_OUTPUT=MODEL_OUTPUTS[-1]
-
-DEF_LOG_DIR='./_logs'
+from freezepb.modeldefs import *
+from freezepb.model0 import staged_model
 
 
 def common_init(init_method, shape, dtype):
@@ -54,15 +39,6 @@ def common_init(init_method, shape, dtype):
 
 def get_log_dir(tag:str=""):
   return join(DEF_LOG_DIR,((str(tag)+'-') if len(tag)>0 else '')+strftime("%Y%m%d-%H:%M:%S"))
-
-def fropen()->Tuple[TF_Graph,TF_GraphDef]:
-  with tf.Session(graph=tf.Graph()) as sess:
-    with FastGFile(MODEL_PB, 'rb') as f:
-      graph_def = tf.GraphDef()
-      graph_def.ParseFromString(f.read())
-      tf.import_graph_def(graph_def, name="")
-      graphdef=sess.graph.as_graph_def(add_shapes=True)
-  return sess.graph, graphdef
 
 def totb(g:TF_Graph):
   """ Export to TensorBoard """
@@ -130,7 +106,7 @@ def tf_run(iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, init_method='std', nwa
         i_dict={i: common_init(init_method, i.shape, i.dtype.as_numpy_dtype())}
 
         b=perf_counter()
-        o_data=sess.run(o, i_dict)
+        k_data=sess.run(o, i_dict)
         e=perf_counter()
         print('tf', e-b)
 
@@ -168,7 +144,7 @@ def tvm_import(opt_level:int=2, iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT) -
 
 
 
-def tvm_run(opt_level:int=2, nthreads:int=None, iname=MODEL_INPUT, oname=MODEL_OUTPUT, init_method='std', nwarmup:int=10, nloops:int=100)->Result:
+def nnvm_run(opt_level:int=2, nthreads:int=None, iname=MODEL_INPUT, oname=MODEL_OUTPUT, init_method='std', nwarmup:int=10, nloops:int=100)->Result:
   """ Compile Model using TVM and run it multiple times """
   r=Result()
   r.desc='tvm running time'
@@ -207,8 +183,8 @@ def tvm_run(opt_level:int=2, nthreads:int=None, iname=MODEL_INPUT, oname=MODEL_O
   return r
 
 
-def tvmS_run(nthreads:int=None, iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, init_method='std', nwarmup:int=0, nloops:int=1, **kwargs)->Result:
-  """ Staged TVM model runner """
+def nnvmS_run(nthreads:int=None, iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, init_method='std', nwarmup:int=0, nloops:int=1, **kwargs)->Result:
+  """ Run staged NNVM model """
   r=Result()
   print("Warning: unused args:", kwargs) if kwargs != {} else None
   try:
@@ -264,10 +240,10 @@ def correctness()->Result:
   print('Running TF')
   rtf=tf_run(**run_args)
   print('Running Staged TVM')
-  rtvms=tvmS_run(**run_args)
+  rtvms=nnvmS_run(**run_args)
   np.testing.assert_allclose(rtvms.last_data, rtvms.last_data, rtol=5e-1)
   print('Running TVM')
-  rtvm=tvm_run(**run_args)
+  rtvm=nnvm_run(**run_args)
   np.testing.assert_allclose(rtvm.last_data, rtf.last_data, rtol=5e-1)
   return rtvms
 
@@ -280,7 +256,7 @@ def meanerr()->Tuple[Result,Result]:
   rtf=tf_run(**run_args)
   print(result_print(rtf))
   print('Running TVM')
-  rtvm=tvm_run(**run_args)
+  rtvm=nnvm_run(**run_args)
   print(result_print(rtvm))
   np.testing.assert_allclose(rtvm.last_data, rtf.last_data, rtol=1e-1)
   return rtf,rtvm
@@ -301,7 +277,7 @@ def dumbsearch()->dict:
           args.update({'nthreads':nthreads})
           args.update({'opt_level':opt_level})
           print('TVM',args)
-          res_tvm=tvm_run(**args)
+          res_tvm=nnvm_run(**args)
 
           np.testing.assert_allclose(res_tvm.last_data, res_tf.last_data, rtol=1e-1)
 
@@ -344,7 +320,7 @@ def partsearch()->dict:
 
         args.update({'opt_level':opt_level})
         print('TVMS',args)
-        res_tvms=tvmS_run(**args)
+        res_tvms=nnvmS_run(**args)
 
         if not np.isclose(res_tvms.last_data, res_tf.last_data, rtol=1e-1, atol=1e-5).any():
           res_tf.mismatch=True
