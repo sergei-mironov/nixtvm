@@ -12,3 +12,4 @@ Problems
 --------
 
 * Simple TF runners using `session.run` may be suboptimal
+* TV vs TVM error rises with increasing absolute value of input

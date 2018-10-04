@@ -183,7 +183,7 @@ def nnvm_run(opt_level:int=2, nthreads:int=None, iname=MODEL_INPUT, oname=MODEL_
   return r
 
 
-def nnvmS_run(nthreads:int=None, iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, init_method='std', nwarmup:int=0, nloops:int=1, **kwargs)->Result:
+def nnvmS_run(opt_level:int=2,nthreads:int=None, iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, init_method='std', nwarmup:int=0, nloops:int=1, **kwargs)->Result:
   """ Run staged NNVM model """
   r=Result()
   print("Warning: unused args:", kwargs) if kwargs != {} else None
@@ -199,7 +199,7 @@ def nnvmS_run(nthreads:int=None, iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, 
     i_shape_dict={iname+':0': i.shape.as_list()}
     i_dtype_dict={iname+':0': i.dtype.as_numpy_dtype()}
 
-    with nnvm.compiler.build_config(opt_level=2):
+    with nnvm.compiler.build_config(opt_level=opt_level):
       graph,lib,params=nnvm.compiler.build(graph=nnvm_graph, target='llvm', shape=i_shape_dict, dtype=i_dtype_dict, params=params)
       # print(graph.ir())
 

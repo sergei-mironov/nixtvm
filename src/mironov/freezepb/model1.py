@@ -2,11 +2,13 @@ import tensorflow as tf
 
 from nnvm import sym as _sym
 
+from copy import copy
 from tensorflow import Tensor as TF_Tensor
 from tensorflow.gfile import FastGFile
 from tensorflow.summary import FileWriter
 from tensorflow import Graph as TF_Graph, GraphDef as TF_GraphDef
 from tensorflow.python.ops import variables
+from nnvm.frontend import from_tensorflow
 
 from freezepb.runners import *
 from freezepb.modeldefs import *
@@ -148,7 +150,7 @@ def model1_block_tf(sym_149080784):
   sym_140340480 = tf.nn.conv2d(sym_394053216,sym_451228704,data_format="NHWC",strides=(1,1,1,1),padding="VALID",name="Rcnn_ctcV3/expand_conv1/conv2d_5/convolution")
   sym_394053216 = tf.add(sym_140340480,sym_88828560)
   sym_88729488 = tf.add(sym_378983504,sym_73418512,name="Rcnn_ctcV3/expand_conv1/static_batch_normalization_3/batchnorm/add")
-  sym_104808848 = tf.sqrt(sym_88729488,name="Rcnn_ctcV3/expand_conv1/static_batch_normalization_3/batchnorm/Rsqrt")
+  sym_104808848 = tf.rsqrt(sym_88729488,name="Rcnn_ctcV3/expand_conv1/static_batch_normalization_3/batchnorm/Rsqrt")
   sym_80975232 = tf.multiply(sym_104808848,sym_379167584,name="Rcnn_ctcV3/expand_conv1/static_batch_normalization_3/batchnorm/mul")
   sym_86811088 = tf.multiply(sym_394053216,sym_80975232,name="Rcnn_ctcV3/expand_conv1/static_batch_normalization_3/batchnorm/mul_1")
   sym_382126160 = tf.multiply(sym_104779696,sym_80975232,name="Rcnn_ctcV3/expand_conv1/static_batch_normalization_3/batchnorm/mul_2")
@@ -179,10 +181,11 @@ def model1_block_tf(sym_149080784):
   return sym_118484944
 
 
-def _check1():
+def check1():
   na=np.ones(shape=(1,9,9,1))
   nb=np.array([1,1,1,1,3,1,1,1,1]).reshape((3,3,1,1))
   c1=with_nnvm(
+      0,1,
       [na,nb],
       lambda a,b: sym.conv2d(a,b,
         padding=[0, 0],dilation=(1, 1),layout="NHWC",strides=(1, 1),kernel_size=(nb.shape[0], nb.shape[1]),
@@ -196,25 +199,27 @@ def _check1():
   print(c1)
   print(c2)
 
-def _check3():
+def check2():
   na=np.ones(shape=(1,9,9,1))
   c1=with_tf(
+      0,1,
       [na],
       lambda a: tf.get_variable("test_var", shape=(1,1,1)))
   print(c1)
 
-def check1_slice():
+def check3():
   na=np.ones(shape=(5,5))
-  c1=with_nnvm([na], lambda a: sym.strided_slice(a,begin=(0,0),end=(5,3)))
+  c1=with_nnvm(0,1, [na], lambda a: sym.strided_slice(a,begin=(0,0),end=(5,3)))
   print(c1)
 
 
-def model1_check_correctness():
+def model1_correctness1():
   """ TODO: Results match very approximately. Increasing abs(na) leads to
   further decrease in precigion """
 
   na=0.8*np.ones(shape=(1,108,21,32))
   r1=with_tf(
+      0,1,
       [na],
       lambda a: model1_block_tf(a))
 
@@ -223,25 +228,65 @@ def model1_check_correctness():
     return model1_block_nnvm(a,state)
 
   r2=with_nnvm(
+      0,1,
       [na],
       lambda a: m1(a),
       MODEL1_BLOCK_PARAMS)
 
   # print(r1)
   # print(r2)
-  np.testing.assert_allclose(r1, r2, atol=5e-1)
-  print(r1.shape) # (1,108,21,64)
+  np.testing.assert_allclose(r1.last_data, r2.last_data, atol=1e-5)
+  print(r1.last_data.shape) # (1,108,21,64)
+  print(r1.last_data.reshape(-1)) # (1,108,21,64)
+  print(r2.last_data.reshape(-1)) # (1,108,21,64)
+
+def model1_correctness2():
+  na=0.8*np.ones(shape=(1,108,21,32))
+  with tf.Session(graph=tf.Graph()) as sess:
+    p=tf.placeholder(tf.float32, shape=(1,108,21,32), name='a')
+    o=model1_block_tf(p)
+    gd=sess.graph.as_graph_def(add_shapes=True)
+    sym,params=from_tensorflow(gd)
+    r2=with_nnvm(0,1, [na], lambda a: sym, params)
+    print(r2)
+
+def model1_nnvm_run(nblocks:int=1,nwarmup:int=0,nloops:int=1):
+  """ Run block#1 repeated in NNVM """
+  na=0.8*np.ones(shape=(1,108,21,32))
+
+  def repeat_blocks(inp):
+    state=model1_block_nnvm_consts()
+    prev=inp
+    for n in range(nblocks):
+      prev=model1_block_nnvm(prev,state)
+      prev=sym.strided_slice(prev,begin=(0,0,0,0), end=na.shape)
+      prev=sym.broadcast_div(sym.full(shape=(1,),fill_value=1),prev)
+    return prev
+  r=with_nnvm(
+      nwarmup,nloops,
+      [na],
+      lambda a: repeat_blocks(a),
+      MODEL1_BLOCK_PARAMS,
+      verbose=True)
+  print(r)
 
 
-def model1_tvm(inp, nblocks:int=1):
-  state=model1_block_nnvm_consts()
-  prev=inp
-  for n in range(nblocks):
-    prev=model1_block_nnvm(prev,state)
-    prev=sym.strided_slice(prev,begin=(0,0,0,0), end=inp.shape)
-  return prev
+def model1_tf_run(nblocks:int=1,nwarmup:int=0,nloops:int=1):
+  """ Run block#1 repeated in TF """
+  na=0.8*np.ones(shape=(1,108,21,32))
+
+  def repeat_blocks(inp):
+    prev=inp
+    for n in range(nblocks):
+      prev=model1_block_tf(prev)
+      prev=prev[:,:,:,:32] # tf.strided_slice(prev,begin=(0,0,0,0), end=na.shape)
+      prev=tf.fill(dims=(1,1,1,1),value=1.0)/prev
+    return prev
+  r=with_tf(
+      nwarmup,nloops,
+      [na],
+      lambda a: repeat_blocks(a),
+      verbose=True)
+  print(r)
 
 
-
-# def check_model1():
-  
