@@ -13,15 +13,12 @@ from nnvm.frontend import from_tensorflow
 from freezepb.runners import *
 from freezepb.modeldefs import *
 
-    # sym_382705136 = tf.nn.conv2d( sym_457698256,sym_75044384,
-    #     padding="VALID",data_format="NHWC",strides=(1,1,1,1),name="Rcnn_ctcV3/expand_conv1/conv2d_4/convolution")
 
-
-def model_const_tf(name,shape):
+def tf_const(name,shape):
   assert tuple(MODEL_PARAMS[name].shape)==tuple(shape)
   return tf.constant(MODEL_PARAMS[name].asnumpy())
 
-def model1_block_consts():
+def block1_block_consts():
   return [
     "Rcnn_ctcV3/expand_conv1/conv2d_4/kernel",
     "Rcnn_ctcV3/expand_conv1/conv2d_4/bias",
@@ -41,9 +38,9 @@ def model1_block_consts():
     "Rcnn_ctcV3/expand_conv1/conv2d_8/bias"]
 
 
-MODEL1_BLOCK_PARAMS={k:MODEL_PARAMS[k] for k in model1_block_consts()}
+BLOCK1_BLOCK_PARAMS={k:MODEL_PARAMS[k] for k in block1_block_consts()}
 
-def model1_block_nnvm_consts():
+def block1_block_nnvm_consts():
   return {
   "sym_75044384"  : _sym.Variable(name="Rcnn_ctcV3/expand_conv1/conv2d_4/kernel",shape=(1, 1, 32, 64)),
   "sym_73427696"  : _sym.Variable(name="Rcnn_ctcV3/expand_conv1/conv2d_4/bias",shape=(64,)),
@@ -63,7 +60,7 @@ def model1_block_nnvm_consts():
   "sym_105635760" : _sym.Variable(name="Rcnn_ctcV3/expand_conv1/conv2d_8/bias",shape=(64,))
   }
 
-def model1_block_nnvm(sym_149080784, sym_consts):
+def block1_block_nnvm(sym_149080784, sym_consts):
   # Begin of Cell 1
   cs=sym_consts
   sym_75044384  = cs["sym_75044384"]
@@ -117,24 +114,24 @@ def model1_block_nnvm(sym_149080784, sym_consts):
   # End of Cell 1
   return sym_118484944
 
-def model1_block_tf(sym_149080784):
+def block1_block_tf(sym_149080784):
   # Begin of Cell 1
-  sym_75044384  = model_const_tf(name="Rcnn_ctcV3/expand_conv1/conv2d_4/kernel",shape=(1, 1, 32, 64))
-  sym_73427696  = model_const_tf(name="Rcnn_ctcV3/expand_conv1/conv2d_4/bias",shape=(64,))
-  sym_223382672 = model_const_tf(name="Rcnn_ctcV3/expand_conv1/activation/conv2d_6/kernel",shape=(1, 1, 64, 64))
-  sym_356827536 = model_const_tf(name="Rcnn_ctcV3/expand_conv1/activation/conv2d_6/bias",shape=(64,))
-  sym_451228704 = model_const_tf(name="Rcnn_ctcV3/expand_conv1/conv2d_5/kernel",shape=(3, 3, 32, 64))
-  sym_88828560  = model_const_tf(name="Rcnn_ctcV3/expand_conv1/conv2d_5/bias",shape=(64,))
-  sym_379167584 = model_const_tf(name="Rcnn_ctcV3/expand_conv1/static_batch_normalization_3/gamma",shape=(64,))
-  sym_492256464 = model_const_tf(name="Rcnn_ctcV3/expand_conv1/static_batch_normalization_3/beta",shape=(64,))
-  sym_104779696 = model_const_tf(name="Rcnn_ctcV3/expand_conv1/static_batch_normalization_3/moving_mean",shape=(64,))
-  sym_378983504 = model_const_tf(name="Rcnn_ctcV3/expand_conv1/static_batch_normalization_3/moving_variance",shape=(64,))
-  sym_73418512  = model_const_tf(name="Rcnn_ctcV3/expand_conv1/static_batch_normalization_3/batchnorm/add/y",shape=(1,))
-  sym_134609696 = model_const_tf(name="Rcnn_ctcV3/expand_conv1/activation/conv2d_7/kernel",shape=(1, 1, 64, 64))
-  sym_131967104 = model_const_tf(name="Rcnn_ctcV3/expand_conv1/activation/conv2d_7/bias",shape=(64,))
-  sym_473740336 = model_const_tf(name="Rcnn_ctcV3/expand_conv1/activation/max_2/mul/x",shape=(1,))
-  sym_112766576 = model_const_tf(name="Rcnn_ctcV3/expand_conv1/conv2d_8/kernel",shape=(3, 3, 64, 64))
-  sym_105635760 = model_const_tf(name="Rcnn_ctcV3/expand_conv1/conv2d_8/bias",shape=(64,))
+  sym_75044384  = tf_const(name="Rcnn_ctcV3/expand_conv1/conv2d_4/kernel",shape=(1, 1, 32, 64))
+  sym_73427696  = tf_const(name="Rcnn_ctcV3/expand_conv1/conv2d_4/bias",shape=(64,))
+  sym_223382672 = tf_const(name="Rcnn_ctcV3/expand_conv1/activation/conv2d_6/kernel",shape=(1, 1, 64, 64))
+  sym_356827536 = tf_const(name="Rcnn_ctcV3/expand_conv1/activation/conv2d_6/bias",shape=(64,))
+  sym_451228704 = tf_const(name="Rcnn_ctcV3/expand_conv1/conv2d_5/kernel",shape=(3, 3, 32, 64))
+  sym_88828560  = tf_const(name="Rcnn_ctcV3/expand_conv1/conv2d_5/bias",shape=(64,))
+  sym_379167584 = tf_const(name="Rcnn_ctcV3/expand_conv1/static_batch_normalization_3/gamma",shape=(64,))
+  sym_492256464 = tf_const(name="Rcnn_ctcV3/expand_conv1/static_batch_normalization_3/beta",shape=(64,))
+  sym_104779696 = tf_const(name="Rcnn_ctcV3/expand_conv1/static_batch_normalization_3/moving_mean",shape=(64,))
+  sym_378983504 = tf_const(name="Rcnn_ctcV3/expand_conv1/static_batch_normalization_3/moving_variance",shape=(64,))
+  sym_73418512  = tf_const(name="Rcnn_ctcV3/expand_conv1/static_batch_normalization_3/batchnorm/add/y",shape=(1,))
+  sym_134609696 = tf_const(name="Rcnn_ctcV3/expand_conv1/activation/conv2d_7/kernel",shape=(1, 1, 64, 64))
+  sym_131967104 = tf_const(name="Rcnn_ctcV3/expand_conv1/activation/conv2d_7/bias",shape=(64,))
+  sym_473740336 = tf_const(name="Rcnn_ctcV3/expand_conv1/activation/max_2/mul/x",shape=(1,))
+  sym_112766576 = tf_const(name="Rcnn_ctcV3/expand_conv1/conv2d_8/kernel",shape=(3, 3, 64, 64))
+  sym_105635760 = tf_const(name="Rcnn_ctcV3/expand_conv1/conv2d_8/bias",shape=(64,))
 
   # sym_149080784 = tf.placeholder(shape=(1,108,21,32),dtype=tf.float32)
 
@@ -213,52 +210,41 @@ def check3():
   print(c1)
 
 
-def model1_correctness1():
-  """ TODO: Results match very approximately. Increasing abs(na) leads to
-  further decrease in precigion """
-
+def block1_correctness1():
   na=0.8*np.ones(shape=(1,108,21,32))
-  r1=with_tf(
-      0,1,
-      [na],
-      lambda a: model1_block_tf(a))
+
+  r1=with_tf(0,1, [na], lambda a: block1_block_tf(a))
 
   def m1(a):
-    state=model1_block_nnvm_consts()
-    return model1_block_nnvm(a,state)
+    state=block1_block_nnvm_consts()
+    return block1_block_nnvm(a,state)
 
-  r2=with_nnvm(
-      0,1,
-      [na],
-      lambda a: m1(a),
-      MODEL1_BLOCK_PARAMS)
+  r2=with_nnvm(0,1, [na], lambda a: m1(a), BLOCK1_BLOCK_PARAMS)
 
-  # print(r1)
-  # print(r2)
   np.testing.assert_allclose(r1.last_data, r2.last_data, atol=1e-5)
   print(r1.last_data.shape) # (1,108,21,64)
   print(r1.last_data.reshape(-1)) # (1,108,21,64)
   print(r2.last_data.reshape(-1)) # (1,108,21,64)
 
-def model1_correctness2():
+def block1_correctness2():
   na=0.8*np.ones(shape=(1,108,21,32))
   with tf.Session(graph=tf.Graph()) as sess:
     p=tf.placeholder(tf.float32, shape=(1,108,21,32), name='a')
-    o=model1_block_tf(p)
+    o=block1_block_tf(p)
     gd=sess.graph.as_graph_def(add_shapes=True)
     sym,params=from_tensorflow(gd)
     r2=with_nnvm(0,1, [na], lambda a: sym, params)
     print(r2)
 
-def model1_nnvm_run(nblocks:int=1,nwarmup:int=0,nloops:int=1):
+def block1_nnvm_run(nblocks:int=1,nwarmup:int=0,nloops:int=1):
   """ Run block#1 repeated in NNVM """
   na=0.8*np.ones(shape=(1,108,21,32))
 
   def repeat_blocks(inp):
-    state=model1_block_nnvm_consts()
+    state=block1_block_nnvm_consts()
     prev=inp
     for n in range(nblocks):
-      prev=model1_block_nnvm(prev,state)
+      prev=block1_block_nnvm(prev,state)
       prev=sym.strided_slice(prev,begin=(0,0,0,0), end=na.shape)
       prev=sym.broadcast_div(sym.full(shape=(1,),fill_value=1),prev)
     return prev
@@ -266,21 +252,21 @@ def model1_nnvm_run(nblocks:int=1,nwarmup:int=0,nloops:int=1):
       nwarmup,nloops,
       [na],
       lambda a: repeat_blocks(a),
-      MODEL1_BLOCK_PARAMS,
+      BLOCK1_BLOCK_PARAMS,
       verbose=True)
   print(r)
 
 
-def model1_tf_run(nblocks:int=1,nwarmup:int=0,nloops:int=1):
+def block1_tf_run(nblocks:int=1,nwarmup:int=0,nloops:int=1):
   """ Run block#1 repeated in TF """
   na=0.8*np.ones(shape=(1,108,21,32))
 
   def repeat_blocks(inp):
     prev=inp
     for n in range(nblocks):
-      prev=model1_block_tf(prev)
+      prev=block1_block_tf(prev)
       prev=prev[:,:,:,:32] # tf.strided_slice(prev,begin=(0,0,0,0), end=na.shape)
-      prev=tf.fill(dims=(1,1,1,1),value=1.0)/prev
+      prev=tf.fill(dims=(1,1,1,1),value=1.0)/prev # TODO: replace with a safer balancer
     return prev
   r=with_tf(
       nwarmup,nloops,
