@@ -19,8 +19,14 @@ LOG
 ===
 
 #### 04.10.2018
+* Tested TF/TVM performance of repeted block1: TVM: 0.262+-0.034; TF:
+  0.529+-0.007; Block1 was repeated 200 times in both cases TVM is a clear
+  winner.
 * Fixed error in TF code of `block1` (sqrt`->`rsqrt). Now results are equal
   with absoulte tolerance of 1e-5.
+* Decided to compare TF/TVM performance for model block between
+  `Rcnn_ctcV3/expand_conv3/add_13/add` and `Rcnn_ctcV3/expand_conv4/add_17/add`
+  nodes.
 
 #### 01.10.2018
 * Manually encoding TF-version of block between `Rcnn_ctcV3/expand_conv1/add_1`
