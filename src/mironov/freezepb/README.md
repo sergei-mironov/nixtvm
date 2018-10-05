@@ -1,18 +1,18 @@
-
 TODO
 ----
 
+* ~~Run `run` several times?~~
+* ~~Try with default NNVM optimisations disabled~~
 * Measure all possible times (Wall time, CPU time, etc)
 * Figure out parallelism. Which module does schedule parallel execution in TVM?
-* Run `run` several times?
 * Try with batch size ~100?
-* Try with default NNVM optimisations disabled
+* Compare TF/TVM performance on different segments of the Model.
 
 Problems
 --------
 
-* Simple TF runners using `session.run` may be suboptimal
-* TV vs TVM error rises with increasing absolute value of input
+* Simple TF runners use `session.run` which may be slow, try feeders.
+* TV/TVM error correlates with absolute input value, setup relative tolerance.
 
 
 LOG
