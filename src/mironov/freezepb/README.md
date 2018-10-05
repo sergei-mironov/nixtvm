@@ -1,5 +1,5 @@
 TODO
-----
+====
 
 * ~~Run `run` several times?~~
 * ~~Try with default NNVM optimisations disabled~~
@@ -9,25 +9,25 @@ TODO
 * Compare TF/TVM performance on different segments of the Model.
 
 Problems
---------
+========
 
 * Simple TF runners use `session.run` which may be slow, try feeders.
 * TV/TVM error correlates with absolute input value, setup relative tolerance.
 
 
 LOG
----
+===
 
-### 04.10.2018
+#### 04.10.2018
 * Fixed error in TF code of `block1` (sqrt`->`rsqrt). Now results are equal
   with absoulte tolerance of 1e-5.
 
-### 01.10.2018
+#### 01.10.2018
 * Manually encoding TF-version of block between `Rcnn_ctcV3/expand_conv1/add_1`
   and `Rcnn_ctcV3/conv_block1/unit1/add_2/add` nodes. Its name is `block`.
 * Strange difference in results between TF and TVM version of block1.
 
-### 27.09.2018
+#### 27.09.2018
 * Finished writing staging code, obtain Model sources in NNVM DSL, do some
   tests.
 * Plan `partsearch` experiment which would measure the performance of the Model
@@ -51,7 +51,7 @@ LOG
   different input nodes. We will call them `blocks`.
 
 
-### 13.09.2018
+#### 13.09.2018
 * Measured the performance of the Model using TVM and Tensorflow.
   TF shows better results.
 * Decided to measure the performance on a specific model parts. Unfortunately,
@@ -59,6 +59,6 @@ LOG
 * Started the implementation of staging module able to produce the NNVM DSL code
   during TF importing
 
-### 01.09.2018
+#### 01.09.2018
 * Obtained `RCNN_ctcV3` model
 
