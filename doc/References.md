@@ -10,6 +10,8 @@ Media:
 
 * https://towardsdatascience.com/understanding-2d-dilated-convolution-operation-with-examples-in-numpy-and-tensorflow-with-d376b3972b25
   Dilated convolution
+* https://www.oreilly.com/ideas/visualizing-convolutional-neural-networks
+  2017, Visualizing convolutional neural networks
 
 ### General
 
