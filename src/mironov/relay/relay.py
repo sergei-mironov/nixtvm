@@ -7,8 +7,6 @@ lib = CDLL("relay0.so", RTLD_GLOBAL)
 # print(libc)
 lib.test_dispatch()
 
-
-
 from tvm import relay
 from tvm._ffi.function import list_global_func_names, get_global_func
 

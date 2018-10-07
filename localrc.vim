@@ -1,1 +1,11 @@
-let g:ident_spaces=4
+function! Ident(ident_spaces)
+  let &expandtab=1
+  let &shiftwidth=a:ident_spaces
+  let &tabstop=a:ident_spaces
+  let &cinoptions="'g0,(".a:ident_spaces
+  let &softtabstop=a:ident_spaces
+endfunction
+
+if &filetype == 'python'
+  call Ident(4)
+endif
