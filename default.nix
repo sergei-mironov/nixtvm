@@ -109,7 +109,7 @@ rec {
       export LIBRARY_PATH=$TVM/$BUILD
 
       # Fix g++(v7.3): error: unrecognized command line option ‘-stdlib=libstdc++’; did you mean ‘-static-libstdc++’?
-      unset NIX_CXXSTDLIB_LINK
+      unset NIX_CXXSTDLIB_LINK NIX_TARGET_CXXSTDLIB_LINK
 
       cdtvm() { cd $TVM ; }
 

@@ -4,6 +4,13 @@ Useful articles
 ML
 --
 
+### Precision problem
+
+Media:
+
+* https://benjaminjurke.com/content/articles/2015/loss-of-significance-in-floating-point-computations/
+  2015, Jurke, Analyzing the loss of significance in floating-point computations
+
 ### CNN
 
 Media:
