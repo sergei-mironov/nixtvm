@@ -4,8 +4,40 @@ import numpy as np
 from nnvm.testing.check_computation import check_numerical_grads
 import time
 
+import keras.datasets.mnist as mnist
 
-def run():
+def dataset_mnist():
+  """
+  To classify images using a recurrent neural network, we consider every image
+  row as a sequence of pixels. Because MNIST image shape is 28*28px, we will then
+  handle 28 sequences of 28 steps for every sample.
+  """
+  (X,y),(Xte,yte) = mnist.load_data("/tmp/mnist.npz")
+  return (X,y),(Xte,yte)
+
+
+
+def get_shape(tensor):
+  return [tvm.ir_pass.Simplify(s).value for s in tensor.shape]
+
+
+def run(out, inp, args=[], in_range=(-10,10)):
+  sout = tvm.create_schedule(out.op)
+  mout = tvm.build(sout, [out] + inp + args)
+
+  ones = topi.full_like(out, 1.0)
+
+  t = time.time()
+  jacs = list(tvm.ir_pass.JacobianRecursive(out, inp, ones))
+  print("JAC TIME: ", time.time() - t)
+
+  t = time.time()
+  sjac = tvm.create_schedule([j.op for j in jacs])
+  mjac = tvm.build(sjac, jacs + inp + args)
+  print("BUILD TIME: ", time.time() - t)
+  return mjac
+
+def build():
   batch_size = 1
   num_classes = 10
 
@@ -37,43 +69,8 @@ def run():
 
   weights = [w1, b1, w2, b2, w3, b3, w4, b4]
 
+  return run(t, weights, [x, y], in_range=(-1.0, 1.0))
 
 
-def test_grad(out, inp, args=[], in_range=(-10,10)):
-  if not isinstance(inp, (list, tuple)):
-    inp = [inp]
 
-  sout = tvm.create_schedule(out.op)
-  mout = tvm.build(sout, [out] + inp + args)
-
-  ones = topi.full_like(out, 1.0)
-
-  t = time.time()
-  jacs = list(tvm.ir_pass.JacobianRecursive(out, inp, ones))
-  print("JAC TIME: ", time.time() - t)
-
-  t = time.time()
-  sjac = tvm.create_schedule([j.op for j in jacs])
-  mjac = tvm.build(sjac, jacs + inp + args)
-  print("BUILD TIME: ", time.time() - t)
-
-  def fun(*arguments):
-    aaa = [tvm.nd.empty(get_shape(out), out.dtype)] + [tvm.nd.array(a) for a in arguments]
-    mout(*aaa)
-    return aaa[0].asnumpy().sum()
-
-  arg_vals = [
-    tvm.nd.array(np.random.uniform(in_range[0], in_range[1], size=get_shape(a)).astype(a.dtype))
-      for a in inp + args
-    ]
-
-  j_arg_vals = [tvm.nd.empty(get_shape(i), j.dtype) for i, j in zip(inp, jacs)] + arg_vals
-  t = time.time()
-  mjac(*j_arg_vals)
-  j_res = [j_arg_vals[j].asnumpy() for j, _ in enumerate(jacs)]
-  print("JAC EXEC TIME: ", time.time() - t)
-
-  t = time.time()
-  check_numerical_grads(fun, [a.asnumpy() for a in arg_vals], j_res)
-  print("NUMGRAD TIME: ", time.time() - t)
 

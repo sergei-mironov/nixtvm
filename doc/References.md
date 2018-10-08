@@ -34,6 +34,10 @@ Media:
 
 ### Datasets
 
+* http://yann.lecun.com/exdb/mnist/
+  MNIST
+* https://www.cs.toronto.edu/~kriz/cifar.html
+  CIFAR-10, CIFAR-100
 * https://catalog.ldc.upenn.edu/ldc99t42
   Penn Treebank v3
 

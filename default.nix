@@ -73,6 +73,7 @@ rec {
       # mxnet_localssl
       # onnx
       pillow
+      Keras
     ]);
 
     shellHook = ''
