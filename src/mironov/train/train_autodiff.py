@@ -66,41 +66,53 @@ def conv_build():
   return conv_run(t, weights, [x, y], in_range=(-1.0, 1.0))
 
 
-def ex1_build():
-  """
-  gdb --args `which python`  -c 'from train.train_autodiff import * ; ex1_build();'
-
-  (gdb) bt
-  #0  0x00007ffff7e16048 in default_function ()
-  #1  0x00007fffdfbdd0c0 in tvm::runtime::WrapPackedFunc(int (*)(void*, int*, int), std::shared_ptr<tvm::runtime::ModuleNode> const&)::{lambda(tvm::runtime::TVMArgs, tvm::runtime::TVMRetValue*)#1}::operator()(tvm::runtime::TVMArgs, tvm::runtime::TVMRetValue*) const [clone .isra.71] ()
-     from /home/grwlf/proj/nixtvm/tvm/build-native/libtvm.so
-  #2  0x00007fffdfbc48de in TVMFuncCall () from /home/grwlf/proj/nixtvm/tvm/build-native/libtvm.so
-  #3  0x00007fffef013a3e in ffi_call_unix64 () from /nix/store/6z0spj65xwl2wf7dbn0fd8jxcka3yx3h-libffi-3.2.1/lib/libffi.so.6
-  #4  0x00007fffef012a03 in ffi_call () from /nix/store/6z0spj65xwl2wf7dbn0fd8jxcka3yx3h-libffi-3.2.1/lib/libffi.so.6
-  #5  0x00007fffef22850d in _ctypes_callproc ()
-  """
-
+def demo_ad():
   x = tvm.placeholder((1,))
   k = tvm.placeholder((1,))
-  y = tvm.compute((1,), lambda i: x[i]*k[0], name='y')
+  y = tvm.compute((1,), lambda i: x[i]*x[i]*k[0], name='y')
+
+  [dy] = tvm.ir_pass.JacobianRecursive(y, [x], topi.full_like(y, 1.0))
+
+  sdy = tvm.create_schedule(dy.op)
+  mdy = tvm.build(sdy, [dy,x,k])
+
+  dy_out = tvm.nd.empty(get_shape(y), tvm.float32)
+
+  mdy(dy_out,tvm.nd.array(np.array([1.0]).astype(x.dtype))
+            ,tvm.nd.array(np.array([4.0]).astype(k.dtype)))
+  print(dy_out)
+
+
+def ex2_build():
+  npoints = 20
+  x = tvm.placeholder((1,))
+  k = tvm.placeholder((2,))
+  y = tvm.compute((1,), lambda i: x[i]*x[i]*k[0] + x[i]*k[1], name='y')
 
   ones = topi.full_like(y, 1.0)
-  jac = list(tvm.ir_pass.JacobianRecursive(y, [x], ones))
-  print('jac',type(jac),jac[0])
+  [dy] = list(tvm.ir_pass.JacobianRecursive(y, [x], ones))
+  # print('jac',type(jac),jac[0])
 
-  sjac = tvm.create_schedule([j.op for j in jac])
-  mjac = tvm.build(sjac, jac + [y,x,k])  # TODO: Why should we specify y,x,k?
-  # print(type(mjac), mjac.get_source())
+  sdy = tvm.create_schedule(dy.op)
+  sy = tvm.create_schedule(y.op)
 
+  my = tvm.build(sy, [y,x,k])
+  mdy = tvm.build(sdy, [dy,x,k])
 
-  args = [tvm.nd.empty(get_shape(i), j.dtype) for i, j in zip([y], jac)] +\
-         [tvm.nd.array(np.array([1.0]).astype(a.dtype)) for a in [x,k]]
-  print('args',type(args),len(args),args)
+  xs=np.linspace(-10.0,10.0,20);ys=[];dys=[]
+  for xi in xs:
+    k_in = tvm.nd.array(np.array([4.0, 2.0]).astype(k.dtype))
 
-  mjac(*args)
+    y_out = tvm.nd.empty(get_shape(y), y.dtype)
+    my(y_out, tvm.nd.array(np.array([xi]).astype(x.dtype)), k_in)
+    ys.append(y_out.asnumpy())
 
-  print('Done??')
-  print(jout.asnumpy())
+    dy_out = tvm.nd.empty(get_shape(y), dy.dtype)
+    mdy(dy_out, tvm.nd.array(np.array([xi]).astype(x.dtype)), k_in)
+    dys.append(dy_out.asnumpy())
 
+    # print(xi, y_out.asnumpy(), dy_out.asnumpy())
+
+  print(xs,ys,dys)
 
 
