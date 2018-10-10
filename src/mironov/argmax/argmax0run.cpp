@@ -19,7 +19,7 @@ int main(void) {
   int device_id = 0;
   int64_t shape[2] = {10,10};
   TVMArrayAlloc(shape, ndim, dtype_code, dtype_bits, dtype_lanes,
-                device_type, device_id, &a);
+    device_type, device_id, &a);
 
   for (int i = 0; i < shape[0]; ++i) {
     for (int j = 0; j < shape[0]; ++j) {
@@ -35,7 +35,7 @@ int main(void) {
   int odtype_code = kDLInt;
   int64_t oshape[1] = {1};
   TVMArrayAlloc(oshape, ondim, odtype_code, dtype_bits, dtype_lanes,
-                device_type, device_id, &c);
+    device_type, device_id, &c);
 
   tvm::runtime::Module mod = tvm::runtime::Module::LoadFromFile("argmax0.so");
   tvm::runtime::PackedFunc f = mod.GetFunction("vecargmax");
