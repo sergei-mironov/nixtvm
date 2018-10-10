@@ -27,13 +27,13 @@ int main(void) {
   int device_id = 0;
   int64_t shape[1] = {10};
 
-  /* Preparing the input data */
+  /* Prepare the input data */
   TVMArrayAlloc(shape, ndim, dtype_code, dtype_bits, dtype_lanes,
     device_type, device_id, &a);
   TVMArrayAlloc(shape, ndim, dtype_code, dtype_bits, dtype_lanes,
     device_type, device_id, &b);
 
-  /* Preparing the placeholder for output data */
+  /* Prepare the placeholder for output data */
   TVMArrayAlloc(shape, ndim, dtype_code, dtype_bits, dtype_lanes,
     device_type, device_id, &c);
 
@@ -42,10 +42,10 @@ int main(void) {
     static_cast<float*>(b->data)[i] = i*10;
   }
 
-  /* Calling the function */
+  /* Call the function */
   f(a,b,c);
 
-  /* Printing the result */
+  /* Print the result */
   for (int i = 0; i < shape[0]; ++i) {
     cout << static_cast<float*>(c->data)[i] << " ";
   }
