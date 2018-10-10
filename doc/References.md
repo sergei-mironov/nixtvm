@@ -19,6 +19,8 @@ Media:
   Dilated convolution
 * https://www.oreilly.com/ideas/visualizing-convolutional-neural-networks
   2017, Visualizing convolutional neural networks
+* https://towardsdatascience.com/intuitively-understanding-convolutions-for-deep-learning-1f6f42faee1
+  2018, Shafkat, Intuitively Understanding Convolutions for Deep Learning
 
 ### General
 
