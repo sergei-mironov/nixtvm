@@ -24,7 +24,7 @@ esac
 export TVM=$CWD/tvm
 export PYTHONPATH="$CWD/src/$USER:$TVM/python:$TVM/topi/python:$TVM/nnvm/python:$TVM/nnvm/tests/python:$PYTHONPATH"
 export LD_LIBRARY_PATH="$TVM/build-docker:$LD_LIBRARY_PATH"
-export C_INCLUDE_PATH="$TVM/include:$TVM/dmlc-core/include:$TVM/HalideIR/src:$TVM/dlpack/include:$TVM/topi/include:$TVM/nnvm/include"
+export C_INCLUDE_PATH="$TVM/include:$TVM/dmlc-core/include:$TVM/HalideIR/src:$TVM/dlpack/include:$TVM/topi/include:$TVM/nnvm/include:$TVM/3rdparty/dlpack/include:$TVM/3rdparty/dmlc-core/include:$TVM/3rdparty/HalideIR/src"
 export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
 export LIBRARY_PATH=$TVM/build-docker
 
