@@ -11,7 +11,7 @@ using namespace tvm;
 int main(void) {
 
   tvm::runtime::Module mod =
-      tvm::runtime::Module::LoadFromFile(TVM_SO);
+    tvm::runtime::Module::LoadFromFile(TVM_SO);
 
   tvm::runtime::PackedFunc f = mod.GetFunction("vecadd");
   CHECK(f != nullptr);
@@ -29,13 +29,13 @@ int main(void) {
 
   /* Preparing the input data */
   TVMArrayAlloc(shape, ndim, dtype_code, dtype_bits, dtype_lanes,
-                device_type, device_id, &a);
+    device_type, device_id, &a);
   TVMArrayAlloc(shape, ndim, dtype_code, dtype_bits, dtype_lanes,
-                device_type, device_id, &b);
+    device_type, device_id, &b);
 
   /* Preparing the placeholder for output data */
   TVMArrayAlloc(shape, ndim, dtype_code, dtype_bits, dtype_lanes,
-                device_type, device_id, &c);
+    device_type, device_id, &c);
 
   for (int i = 0; i < shape[0]; ++i) {
     static_cast<float*>(a->data)[i] = i;
