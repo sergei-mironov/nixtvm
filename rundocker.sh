@@ -27,7 +27,7 @@ test -z "$SUFFIX" && SUFFIX="dev"
 test -z "$NOPORT" && NOPORT=n
 test -z "$DOCKER_WORKSPACE" && DOCKER_WORKSPACE=`pwd`
 test -z "$DOCKER_COMMAND" && DOCKER_COMMAND="/bin/bash"
-DOCKER_CONTEXT_PATH="./tvm/docker"
+DOCKER_CONTEXT_PATH="./src/$USER/tvm/docker"
 DOCKERFILE_PATH="./Dockerfile.${SUFFIX}"
 
 if echo "$SUFFIX" | grep -q gpu ; then
@@ -98,7 +98,7 @@ ${DOCKER_BINARY} $DOCKER_CFG run --rm --pid=host \
   -it \
   --cap-add SYS_PTRACE \
   ${DOCKER_IMG_NAME} \
-  bash --login ./tvm/docker/with_the_same_user \
+  bash --login ./src/$USER/tvm/docker/with_the_same_user \
   ${DOCKER_COMMAND}
 
   # -e "MAVEN_OPTS=-Dhttps.proxyHost=$PROXY_HOST -Dhttps.proxyPort=$PROXY_PORT -Dmaven.wagon.http.ssl.insecure=true" \

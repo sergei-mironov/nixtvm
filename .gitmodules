@@ -1,6 +1,3 @@
-[submodule "tvm"]
-	path = tvm
-	url = https://github.com/grwlf/tvm
 [submodule "nixpkgs"]
 	path = nixpkgs
 	url = https://github.com/grwlf/nixpkgs
@@ -10,3 +7,6 @@
 [submodule "src/mironov/htvm"]
 	path = src/mironov/htvm
 	url = https://github.com/grwlf/htvm
+[submodule "src/mironov/tvm"]
+	path = src/mironov/tvm
+	url = https://github.com/dmlc/tvm
