@@ -1,8 +1,8 @@
 Useful articles
 ===============
 
-ML
---
+General
+-------
 
 ### Precision problem
 
@@ -10,29 +10,6 @@ Media:
 
 * https://benjaminjurke.com/content/articles/2015/loss-of-significance-in-floating-point-computations/
   2015, Jurke, Analyzing the loss of significance in floating-point computations
-
-### CNN
-
-Media:
-
-* https://towardsdatascience.com/understanding-2d-dilated-convolution-operation-with-examples-in-numpy-and-tensorflow-with-d376b3972b25
-  Dilated convolution
-* https://www.oreilly.com/ideas/visualizing-convolutional-neural-networks
-  2017, Visualizing convolutional neural networks
-* https://towardsdatascience.com/intuitively-understanding-convolutions-for-deep-learning-1f6f42faee1
-  2018, Shafkat, Intuitively Understanding Convolutions for Deep Learning
-
-### General
-
-* https://arxiv.org/pdf/1409.2329.pdf
-  2015, Zaremba, Recurrent Neural Network Regularization
-
-### Examples and tutorials
-
-* https://github.com/chiphuyen/stanford-tensorflow-tutorials
-* https://github.com/aymericdamien/TensorFlow-Examples/
-* https://github.com/adventuresinML/adventures-in-ml-code
-* https://github.com/philipperemy/tensorflow-multi-dimensional-lstm
 
 ### Datasets
 
@@ -43,7 +20,10 @@ Media:
 * https://catalog.ldc.upenn.edu/ldc99t42
   Penn Treebank v3
 
-### General NLP
+Tasks
+-----
+
+### NLP
 
 General Media:
 
@@ -67,7 +47,6 @@ Articles:
   2015, Visualizing and Understanding recurrent Networks
 * https://arxiv.org/pdf/1708.02709.pdf
   2018, Recent Trends in Deep Learning Based Natural Language Processing
-
 
 ### OCR
 
@@ -132,6 +111,27 @@ Articles
   2018, Differentiable Programming for Image Processing and Deep Learning in Halide
 * https://arxiv.org/pdf/1803.10228.pdf
   2018, Demystifying Differentiable Programming: Shift/Reset the Penultimate Backpropagator
+
+
+
+Models
+------
+
+### CNN
+
+Media:
+
+* https://towardsdatascience.com/understanding-2d-dilated-convolution-operation-with-examples-in-numpy-and-tensorflow-with-d376b3972b25
+  Dilated convolution
+* https://www.oreilly.com/ideas/visualizing-convolutional-neural-networks
+  2017, Visualizing convolutional neural networks
+* https://towardsdatascience.com/intuitively-understanding-convolutions-for-deep-learning-1f6f42faee1
+  2018, Shafkat, Intuitively Understanding Convolutions for Deep Learning
+
+### RNN
+
+* https://arxiv.org/pdf/1409.2329.pdf
+  2015, Zaremba, Recurrent Neural Network Regularization
 
 
 TVM
@@ -205,4 +205,14 @@ TVM
   Glow: Graph Lowering Compiler Techniques for Neural Networks
 
 * https://en.wikipedia.org/wiki/Polytope\_model
+
+TensorFlow
+----------
+
+Media:
+
+* https://github.com/chiphuyen/stanford-tensorflow-tutorials
+* https://github.com/aymericdamien/TensorFlow-Examples/
+* https://github.com/adventuresinML/adventures-in-ml-code
+* https://github.com/philipperemy/tensorflow-multi-dimensional-lstm
 
