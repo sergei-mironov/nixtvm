@@ -1,6 +1,6 @@
 [submodule "nixpkgs"]
 	path = nixpkgs
-	url = https://github.com/grwlf/nixpkgs
+	url = https://github.com/nixpkgs/nixpkgs
 [submodule "internal"]
 	path = internal
 	url = http://code-sh.rnd.huawei.com/mrc-cbg-opensource/hitvm-internal.git
