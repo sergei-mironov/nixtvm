@@ -169,3 +169,5 @@ https.proxyHost=$PROXY_HOST
 https.proxyPort=$PROXY_PORT
 EOF
 
+# TODO: Handle Pythonish import ssl; ssl._create_default_https_context = ssl._create_unverified_context;
+# TODO: Handle Pythonish certifi internal certificates

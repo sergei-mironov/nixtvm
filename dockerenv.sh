@@ -2,18 +2,6 @@
 # This file is intended to be sourced from Docker container's interactive shell
 
 export CWD=`pwd`
-mkdir $HOME/.ipython-profile 2>/dev/null || true
-cat >$HOME/.ipython-profile/ipython_config.py <<EOF
-print("Enabling autoreload")
-c = get_config()
-c.InteractiveShellApp.exec_lines = []
-c.InteractiveShellApp.exec_lines.append('%load_ext autoreload')
-c.InteractiveShellApp.exec_lines.append('%autoreload 2')
-EOF
-
-if test -n "$DISPLAY"; then
-  alias ipython3='ipython3 --profile-dir=$HOME/.ipython-profile'
-fi
 
 # User Aliasing
 case $USER in
@@ -21,7 +9,7 @@ case $USER in
   *) ;;
 esac
 
-export TVM=$CWD/tvm
+export TVM=$CWD/src/$USER/tvm
 export PYTHONPATH="$CWD/src/$USER:$TVM/python:$TVM/topi/python:$TVM/nnvm/python:$TVM/nnvm/tests/python:$PYTHONPATH"
 export LD_LIBRARY_PATH="$TVM/build-docker:$LD_LIBRARY_PATH"
 export C_INCLUDE_PATH="$TVM/include:$TVM/dmlc-core/include:$TVM/HalideIR/src:$TVM/dlpack/include:$TVM/topi/include:$TVM/nnvm/include:$TVM/3rdparty/dlpack/include:$TVM/3rdparty/dmlc-core/include:$TVM/3rdparty/HalideIR/src"
@@ -62,11 +50,6 @@ djupyter() {(
 dtensorboard() {(
   mkdir $CWD/_logs 2>/dev/null
   tensorboard --logdir=$CWD/_logs "$@"
-)}
-
-ipython() {(
-  # FIXME: One should figure out how to setup non-file backend on Ubuntu
-  ipython3 -i -c "import matplotlib; matplotlib.use('agg'); import matplotlib.pyplot; matplotlib.pyplot.ioff()" "$@"
 )}
 
 cdc() {(
