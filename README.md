@@ -6,5 +6,5 @@ members. Useful documents:
 
   * [Environment setup](./doc/HitvmEnv.md)
   * [Basic workflow](./doc/BasicWorkflow.md)
-  * [Article collection](./doc/References.md)
+  * [PDF links collection](./doc/References.md)
   * [Bugs/problems](./doc/Problems.md)
