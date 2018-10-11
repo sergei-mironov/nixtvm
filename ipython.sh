@@ -13,13 +13,29 @@ fi
 
 mkdir .ipython-profile 2>/dev/null || true
 cat >.ipython-profile/ipython_config.py <<EOF
-print("Enabling autoreload")
 c = get_config()
 c.InteractiveShellApp.exec_lines = []
 c.InteractiveShellApp.exec_lines.append('%load_ext autoreload')
 c.InteractiveShellApp.exec_lines.append('%autoreload 2')
+
+def tweak():
+  print("Enabling tweaks")
+
+  import numpy as np
+  np.set_printoptions(edgeitems=30, linewidth=100000)
+
+  import ssl;
+  ssl._create_default_https_context = ssl._create_unverified_context
+
+  import matplotlib;
+  matplotlib.use('agg');
+
+  import matplotlib.pyplot;
+  matplotlib.pyplot.ioff()
+
+tweak()
 EOF
 
-ipython3 --profile-dir=$CWD/.ipython-profile -i -c "import ssl; ssl._create_default_https_context = ssl._create_unverified_context; import matplotlib; matplotlib.use('agg'); import matplotlib.pyplot; matplotlib.pyplot.ioff()" "$@"
+ipython3 --profile-dir=$CWD/.ipython-profile -i "$@"
 
 
