@@ -8,6 +8,8 @@ General
 
 Media:
 
+* https://timvieira.github.io/blog/post/2014/02/11/exp-normalize-trick/
+  2014, Exp-normalize trick
 * https://benjaminjurke.com/content/articles/2015/loss-of-significance-in-floating-point-computations/
   2015, Jurke, Analyzing the loss of significance in floating-point computations
 
