@@ -1,0 +1,4 @@
+Moscow OpenSourceInsight team are expanding now and in the same time actively
+contributes to the TVM OpenSource project. Its members have more than 10
+confirmed pull requrests and certain scope of work, recognized by the
+community.
