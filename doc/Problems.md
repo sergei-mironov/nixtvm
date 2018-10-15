@@ -84,3 +84,16 @@ This document describes TVM/NNVM issues, that were not reported to upstream yet.
 
  * Mysterious Scan primitive, didn't write about it yet.
 
+ * Array bounds-checking:
+   ```
+   def demo_array_bounds():
+     a = tvm.placeholder((10,), name='a')
+     b = tvm.compute((10,), lambda i: a[i+100050000])
+     # Lets say run_tvm helper schedules, builds, and executes the program
+     b_np = run_tvm({ a:np.ones(get_shape(a)).astype(np.float32) },b)
+     print(b_np)
+   ```
+
+ * Missing Trace primitive. It would be great to have a primitive to print the
+   value of an expression.
+
