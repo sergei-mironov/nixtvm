@@ -97,3 +97,6 @@ This document describes TVM/NNVM issues, that were not reported to upstream yet.
  * Missing Trace primitive. It would be great to have a primitive to print the
    value of an expression.
 
+ * TVM Runtime is uneble to execute the model from one arbitrary point to
+   another. TF supports execution of parts of the model correctly.
+
