@@ -27,6 +27,14 @@ def fropen()->Tuple[TF_Graph,TF_GraphDef]:
       graphdef=sess.graph.as_graph_def(add_shapes=True)
   return sess.graph, graphdef
 
+def common_init(init_method, shape, dtype):
+  if init_method=='zeros':
+    return np.zeros(shape=shape, dtype=dtype)
+  elif init_method=='std':
+    return np.random.uniform(low=-50, high=51, size=shape).astype(dtype=dtype)
+  else:
+    raise ValueError("invalid 'init' argument")
+
 MODEL_PB=join(environ['CWD'], "data/freeze.pb")
 MODEL_INPUT='Rcnn_ctcV3/Inputs'
 

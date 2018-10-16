@@ -12,6 +12,9 @@ from tvm.contrib import graph_runtime
 from topi.util import get_const_tuple
 from nnvm import sym
 from nnvm.testing.check_computation import infer_shapes_dtypes
+from tensorflow import Tensor as TF_Tensor
+from numpy import array as NP_Array
+
 
 Time=float
 
@@ -121,7 +124,29 @@ def with_tvm(nwarmup:int,nloops:int,args,lam,verbose:bool=False)->Result:
   return Result.fromPasses(out_nd.asnumpy(),perfs)
 
 
+def run_tf(sess,nwarmup:int,nloops:int,args:Dict[TF_Tensor,NP_Array],out:TF_Tensor,verbose:bool=False)->Result:
+  inits={}; pls=[]
+  for pl,val in args.items():
+    pls.append(pl)
+    inits.update({pl:val})
+
+  perfs:List[float]=[]
+  for i in range(nwarmup+nloops):
+    sess.run(variables.global_variables_initializer())
+    tb=perf_counter()
+    o_np=sess.run(out, inits)
+    te=perf_counter()
+    if i>=nwarmup:
+      perfs.append(te-tb)
+    if verbose:
+      print("TF",te-tb)
+
+  return Result.fromPasses(o_np,perfs)
+
+
 def with_tf(nwarmup:int,nloops:int,args,lam,verbose:bool=False)->Result:
+  """ Deprecated: 1) implement via run_tf 2) implement using functional approach
+  """
   with tf.Session(graph=tf.Graph()) as sess:
     inits={}; pls=[]
     for i,arg in enumerate(args):

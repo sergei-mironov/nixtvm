@@ -18,6 +18,14 @@ Problems
 LOG
 ===
 
+#### 16.10.2018
+* Implemented TF runner for block2. Turns out that it is possible to run the
+  part of the model in TensorFlow. TF checks that users provide enough
+  information to the Model to run it.
+
+#### 15.10.2018
+* Started block2 implementation
+
 #### 04.10.2018
 * Tested TF/TVM performance of repeted block1: TVM: 0.262+-0.034; TF:
   0.529+-0.007; Block1 was repeated 200 times in both cases TVM is a clear

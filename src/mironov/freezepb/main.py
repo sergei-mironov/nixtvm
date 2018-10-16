@@ -29,14 +29,6 @@ from freezepb.modeldefs import *
 from freezepb.model0 import staged_model
 
 
-def common_init(init_method, shape, dtype):
-  if init_method=='zeros':
-    return np.zeros(shape=shape, dtype=dtype)
-  elif init_method=='std':
-    return np.random.uniform(low=-50, high=51, size=shape).astype(dtype=dtype)
-  else:
-    raise ValueError("invalid 'init' argument")
-
 def get_log_dir(tag:str=""):
   return join(DEF_LOG_DIR,((str(tag)+'-') if len(tag)>0 else '')+strftime("%Y%m%d-%H:%M:%S"))
 
@@ -106,7 +98,7 @@ def tf_run(iname:str=MODEL_INPUT, oname:str=MODEL_OUTPUT, init_method='std', nwa
         i_dict={i: common_init(init_method, i.shape, i.dtype.as_numpy_dtype())}
 
         b=perf_counter()
-        k_data=sess.run(o, i_dict)
+        o_data=sess.run(o, i_dict)
         e=perf_counter()
         print('tf', e-b)
 

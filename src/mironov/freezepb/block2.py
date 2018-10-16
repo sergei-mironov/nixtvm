@@ -18,9 +18,10 @@ def tf_const(name,shape):
   assert tuple(MODEL_PARAMS[name].shape)==tuple(shape)
   return tf.constant(MODEL_PARAMS[name].asnumpy())
 
+BLOCK2_INPUT="Rcnn_ctcV3/conv_block3/unit1/add_14/add"
 # sym_480391360 is connected to both inputs
 BLOCK2_INPUTS=[
-    "Rcnn_ctcV3/conv_block3_1/unit2/static_batch_normalization_28/batchnorm/mul_1:0",
+    "Rcnn_ctcV3/conv_block3_1/unit2/static_batch_normalization_28/batchnorm/mul_1:0"
   , "Rcnn_ctcV3/conv_block3_1/unit2/add_15/add:1"
   ]
 
@@ -414,3 +415,46 @@ def block2_block_nnvm(sym_480391360):
   sym_89033648 = _sym.conv2d(sym_140634432,sym_283877680,dilation=(1, 1),layout="NHWC",strides=(1, 1),padding=[0, 0],kernel_size=(1, 6),channels=1318,kernel_layout="HWIO",name="Rcnn_ctcV3/conv2d_116/convolution",use_bias=False)
   sym_375435392 = _sym.broadcast_add(sym_89033648,sym_105665056)
   return sym_375435392,varnames
+
+
+def block2_tf_run(nwarmup:int,nloops:int,init_method='zeros',verbose=True,**kwargs)->Result:
+  """ Run the model on tensorflow with zero inputs """
+  print("Warning: unused args:", kwargs) if kwargs != {} else None
+  r=Result()
+  r.desc='tf running time'
+
+  with tf.Session(graph=tf.Graph()) as sess:
+    with FastGFile(MODEL_PB, 'rb') as f:
+      graph_def = tf.GraphDef()
+      graph_def.ParseFromString(f.read())
+    tf.import_graph_def(graph_def, name="")
+    sess.run(variables.global_variables_initializer())
+    g=tf.get_default_graph()
+    # inps=[g.get_tensor_by_name(t) for t in BLOCK2_INPUTS]
+    # inps=[g.get_tensor_by_name(t) for t in ["Rcnn_ctcV3/conv_block3/unit1/conv2d_84/BiasAdd:0"]]
+    inps=[g.get_tensor_by_name(t) for t in [BLOCK2_INPUT+":0"]]
+    for i in inps:
+      print("Input nodes:",type(i), i.name, i.dtype, i)
+    out=g.get_tensor_by_name(BLOCK2_OUTPUT+":0")
+    print("Output node:",type(out), out.name, out.dtype, out)
+
+    return run_tf(
+        sess,nwarmup,nloops
+      , {i:common_init(init_method, i.shape, i.dtype.as_numpy_dtype()) for i in inps}
+      , out
+      , verbose)
+
+
+# def block2_nnvm_run(nblocks:int,nwarmup:int,nloops:int,init_method='zeros',verbose=True,**kwargs):
+
+#   na=0.8*np.ones(shape=(1,108,21,32))
+
+#   block,vars=block2_block_nnvm(nblocks)
+
+#   r=with_nnvm(
+#       nwarmup,nloops,
+#       [na],
+#       lambda a: repeat_blocks(a),
+#       BLOCK2_BLOCK_PARAMS,
+#       verbose=True)
+
