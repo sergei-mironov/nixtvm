@@ -152,6 +152,9 @@ TVM
 
 * https://github.com/andersy005/tvm-in-action
 
+* https://arxiv.org/pdf/1807.04188.pdf
+  2018, VTA: An Open Hardware-Software Stack for Deep Learning
+
 * https://dl.acm.org/ft_gateway.cfm?id=3211348&ftid=1979148&dwn=1&CFID=8566367&CFTOKEN=e89fe1de14e82d30-9B3A947F-BA70-A2B8-C972CEE81188C1C5
   2018, Relay: A New IR for Machine Learning Frameworks
 
