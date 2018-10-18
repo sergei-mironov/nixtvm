@@ -28,12 +28,12 @@ BLOCK2_INPUTS=[
 BLOCK2_OUTPUT="Rcnn_ctcV3/conv2d_116/BiasAdd"
 
 
-def block2_block_nnvm(sym_480391360):
+def block2_block_nnvm(nblocks:int,sym_480391360):
   varnames = []
 
   def addvar(name,shape):
     nonlocal varnames
-    s = _sym.Variable(name,shape)
+    s = _sym.Variable(name=name,shape=shape)
     varnames.append(name)
     return s
 
@@ -162,6 +162,7 @@ def block2_block_nnvm(sym_480391360):
   sym_140634816 = addvar(name="Rcnn_ctcV3/activation/max_36/mul/x",shape=(1,))
   sym_283877680 = addvar(name="Rcnn_ctcV3/conv2d_116/kernel",shape=(1, 6, 256, 1318))
   sym_105665056 = addvar(name="Rcnn_ctcV3/conv2d_116/bias",shape=(1318,))
+  sym_452814752 = addvar(name="Rcnn_ctcV3/conv_block4/unit1/activation/max_32/mul/x",shape=(1,))
 
 
   sym_146107552 = _sym.broadcast_add(sym_89108592,sym_86660000,name="Rcnn_ctcV3/conv_block3_1/unit2/static_batch_normalization_28/batchnorm/add")
@@ -445,16 +446,19 @@ def block2_tf_run(nwarmup:int,nloops:int,init_method='zeros',verbose=True,**kwar
       , verbose)
 
 
-# def block2_nnvm_run(nblocks:int,nwarmup:int,nloops:int,init_method='zeros',verbose=True,**kwargs):
+def block2_nnvm_run(nblocks:int=1,nwarmup:int=0,nloops:int=1,init_method='zeros',verbose=True,**kwargs):
+  na=0.8*np.ones(shape=(1,108,21,32))
 
-#   na=0.8*np.ones(shape=(1,108,21,32))
+  # sym_149080784 = tf.placeholder(shape=(1,108,21,32),dtype=tf.float32)
+  inp=_sym.Variable(name='inp', init=np.zeros(shape=(1,54,6,192)))
 
-#   block,vars=block2_block_nnvm(nblocks)
+  block,vars=block2_block_nnvm(nblocks,inp)
+  print(block)
 
-#   r=with_nnvm(
-#       nwarmup,nloops,
-#       [na],
-#       lambda a: repeat_blocks(a),
-#       BLOCK2_BLOCK_PARAMS,
-#       verbose=True)
+  # r=with_nnvm(
+  #     nwarmup,nloops,
+  #     [na],
+  #     lambda a: repeat_blocks(a),
+  #     BLOCK2_BLOCK_PARAMS,
+  #     verbose=True)
 

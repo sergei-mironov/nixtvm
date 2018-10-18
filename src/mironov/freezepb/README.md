@@ -18,6 +18,9 @@ Problems
 LOG
 ===
 
+#### 18.10.2018
+* Block2, fix bugs in TVM DSL for block2. `block2_block_nnvm` now compiles.
+
 #### 16.10.2018
 * Implemented TF runner for block2. Turns out that it is possible to run the
   part of the model in TensorFlow. TF checks that users provide enough
