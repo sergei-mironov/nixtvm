@@ -11,6 +11,7 @@ fi
 #   alias ipython0='ipython --profile-dir=$CWD/.ipython-profile'
 # fi
 
+cd "$CWD"
 mkdir .ipython-profile 2>/dev/null || true
 cat >.ipython-profile/ipython_config.py <<EOF
 c = get_config()
