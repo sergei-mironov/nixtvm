@@ -1,10 +1,10 @@
 result
 .*
 *pyc
-_tags/*
-_logs/*
-_dist/*
-_jupyter/*
-_build/*
+_tags/
+_logs/
+_dist/
+_jupyter/
+_build/
 tags
 data/*
