@@ -9,9 +9,12 @@ from typing import Dict,Any,List,Tuple
 
 from tensorflow.python.ops import variables
 from tvm.contrib import graph_runtime
+from tvm.contrib.debugger import debug_runtime
 from topi.util import get_const_tuple
 from nnvm import sym
 from nnvm.testing.check_computation import infer_shapes_dtypes
+
+
 
 Time=float
 
@@ -52,10 +55,12 @@ class Result:
 
 
 
-def with_nnvm(nwarmup:int,nloops:int,args,lam, params={},verbose:bool=False,opt_level:int=2)->Result:
+def with_nnvm(nwarmup:int,nloops:int,args,lam, params={},verbose:bool=False,opt_level:int=2,debug:bool=False)->Result:
   """ Take numpy arrays as args, convert them to TVM tensors and call `lam`.
   Result of lambda is converted back to numpy array and returned.
   """
+  runtime=graph_runtime if not debug else debug_runtime
+
   tgt='llvm'
   ctx=tvm.cpu(0)
   inps=[];ishapes={};itypes={};idata={}
@@ -74,7 +79,7 @@ def with_nnvm(nwarmup:int,nloops:int,args,lam, params={},verbose:bool=False,opt_
       infer_shapes_dtypes(nnvm.graph.create(out), shape=ishapes, dtype=itypes, fallback_dtype='float32')
 
   out_nd=tvm.nd.array(np.zeros(out_shapes[0], dtype=out_types[0]), ctx)
-  m=graph_runtime.create(graph,lib,ctx)
+  m=runtime.create(graph,lib,ctx)
   m.set_input(**idata)
   m.set_input(**params)
 
@@ -90,10 +95,11 @@ def with_nnvm(nwarmup:int,nloops:int,args,lam, params={},verbose:bool=False,opt_
   out_nd=m.get_output(0, tvm.nd.empty(shape=out_shapes[0],dtype=out_types[0],ctx=ctx))
   return Result.fromPasses(out_nd.asnumpy(),perfs)
 
-def run_tvm(nwarmup:int,nloops:int,args:dict,out,verbose:bool=False)->Result:
+def run_tvm(nwarmup:int,nloops:int,args:dict,out,verbose:bool=False,debug:bool=False)->Result:
   """ Take dict[TVM_Tensor, np_array] as args, convert them to TVM tensors and
   call `lam`.  Result of lambda is converted back to numpy array and returned.
   """
+
   ctx = tvm.cpu(0)
   pls = []     # placeholders
   vals_nd = [] # initial values
@@ -118,13 +124,13 @@ def run_tvm(nwarmup:int,nloops:int,args:dict,out,verbose:bool=False)->Result:
       print("TVM",te-tb)
   return Result.fromPasses(out_nd.asnumpy(),perfs)
 
-def with_tvm(nwarmup:int,nloops:int,args:list,lam,verbose:bool=False)->Result:
+def with_tvm(nwarmup:int,nloops:int,args:list,lam,verbose:bool=False,debug:bool=False)->Result:
   pls=[];d={}
   for i,arg in enumerate(args):
     pls.append(tvm.placeholder(arg.shape, name='pl'+str(i)))
     d.update({pls[-1]:args[i]})
   out=lam(*pls)
-  return run_tvm(nwarmup,nloops,d,out,verbose)
+  return run_tvm(nwarmup,nloops,d,out,verbose,debug)
 
 def with_tf(nwarmup:int,nloops:int,args,lam,verbose:bool=False)->Result:
   with tf.Session(graph=tf.Graph()) as sess:
