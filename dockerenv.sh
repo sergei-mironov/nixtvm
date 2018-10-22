@@ -32,6 +32,7 @@ dmake() {(
   mkdir build-docker 2>/dev/null
   cp $TVM/cmake/config.cmake $TVM/build-docker/config.cmake
   sed -i 's/USE_LLVM OFF/USE_LLVM ON/g' $TVM/build-docker/config.cmake
+  sed -i 's/USE_GRAPH_RUNTIME_DEBUG OFF/USE_GRAPH_RUNTIME_DEBUG ON/g' $TVM/build-docker/config.cmake
   ./tests/scripts/task_build.sh build-docker "$@" -j6
   ln -f -s build-docker build # FIXME: Python uses 'build' name
 )}
