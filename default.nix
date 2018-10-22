@@ -56,6 +56,7 @@ rec {
       llvm_6
       clang_6
       openblas
+      tig
     ]) ++ (with pypkgs; [
       Keras
       tensorflow
@@ -83,6 +84,9 @@ rec {
       if test -f ~/.display ; then
         . ~/.display
       fi
+
+      # See https://github.com/NixOS/nixpkgs/issues/38991
+      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
 
       export CWD=`pwd`
 
