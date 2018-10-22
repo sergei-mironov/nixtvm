@@ -188,6 +188,9 @@ TVM
 * https://software.intel.com/en-us/openvino-toolkit
   OpenVINO (Intel)
 
+* https://arxiv.org/pdf/1804.10694.pdf
+  2018, Tiramisu: A Code Optimization Framework for High Performance Systems
+
 ### Benchmarks
 
 * https://github.com/dmlc/tvm/wiki/Benchmark
