@@ -6,15 +6,17 @@ import tensorflow as tf
 
 from time import strftime, perf_counter
 from typing import Dict,Any,List,Tuple
+from os import environ
 
 from tensorflow.python.ops import variables
 from tvm.contrib import graph_runtime
+from tvm.contrib.debugger import debug_runtime
 from topi.util import get_const_tuple
 from nnvm import sym
 from nnvm.testing.check_computation import infer_shapes_dtypes
 from tensorflow import Tensor as TF_Tensor
 from numpy import array as NP_Array
-
+from tvm.tensor import Tensor as TVM_Tensor
 
 Time=float
 
@@ -53,11 +55,55 @@ class Result:
         (str(s.perf_mean)+'+-'+str(s.perf_std)) if len(s.perfs)>1 else str(s.perf_mean)
         )
 
+def run_nnvm(nwarmup:int,nloops:int,
+            args:Dict[TVM_Tensor,np.array],
+            out:TVM_Tensor,
+            verbose:bool=False,
+            debug:bool=False,
+            opt_level:int=2)->Result:
+
+  runtime=debug_runtime if debug else graph_runtime
+  tgt='llvm'
+  ctx=tvm.cpu(0)
+  inps=[];ishapes={};itypes={};idata={}
+  for i,(arg,val) in enumerate(args.items()):
+    # print(arg.list_attr(recursive=True))
+    # print(arg.__dir__())
+    # print()
+    nm=arg.list_output_names()[0]
+    # print(nm)
+    ishapes.update({nm:val.shape})
+    idata.update({nm:val})
+    itypes.update({nm:"float32"})
+
+  with nnvm.compiler.build_config(opt_level=opt_level):
+    graph,lib,_ = nnvm.compiler.build(out,tgt,ishapes)
+
+  forward_graph,_,_,out_shapes,out_types = \
+      infer_shapes_dtypes(nnvm.graph.create(out), shape=ishapes, dtype=itypes, fallback_dtype='float32')
+
+  out_nd=tvm.nd.array(np.zeros(out_shapes[0], dtype=out_types[0]), ctx)
+  m=runtime.create(graph,lib,ctx,dump_root=environ['CWD']+'/_debug')
+  m.set_input(**idata)
+
+  perfs:List[float]=[]
+  for i in range(nwarmup+nloops):
+    tb=perf_counter()
+    m.run()
+    te=perf_counter()
+    if i>=nwarmup:
+      perfs.append(te-tb)
+    if verbose:
+      print("NNVM",te-tb)
+  out_nd=m.get_output(0, tvm.nd.empty(shape=out_shapes[0],dtype=out_types[0],ctx=ctx))
+  return Result.fromPasses(out_nd.asnumpy(),perfs)
 
 
-def with_nnvm(nwarmup:int,nloops:int,args,lam, params={},verbose:bool=False,opt_level:int=2)->Result:
+def with_nnvm(nwarmup:int,nloops:int,args:list,lam, params={},verbose:bool=False,opt_level:int=2)->Result:
   """ Take numpy arrays as args, convert them to TVM tensors and call `lam`.
   Result of lambda is converted back to numpy array and returned.
+
+  TODO: re-implement using run_nnvm
   """
   tgt='llvm'
   ctx=tvm.cpu(0)

@@ -1,7 +1,6 @@
 import tensorflow as tf
 
 from nnvm import sym as _sym
-
 from copy import copy
 from tensorflow import Tensor as TF_Tensor
 from tensorflow.gfile import FastGFile
@@ -9,10 +8,11 @@ from tensorflow.summary import FileWriter
 from tensorflow import Graph as TF_Graph, GraphDef as TF_GraphDef
 from tensorflow.python.ops import variables
 from nnvm.frontend import from_tensorflow
+from typing import Any,Dict,List
+from tvm.tensor import Tensor as TVM_Tensor
 
 from freezepb.runners import *
 from freezepb.modeldefs import *
-
 
 def tf_const(name,shape):
   assert tuple(MODEL_PARAMS[name].shape)==tuple(shape)
@@ -29,12 +29,12 @@ BLOCK2_OUTPUT="Rcnn_ctcV3/conv2d_116/BiasAdd"
 
 
 def block2_block_nnvm(nblocks:int,sym_480391360):
-  varnames = []
+  varnames = {}
 
   def addvar(name,shape):
     nonlocal varnames
     s = _sym.Variable(name=name,shape=shape)
-    varnames.append(name)
+    varnames.update({name:s})
     return s
 
   sym_85993200 = addvar(name="Rcnn_ctcV3/conv_block3_1/unit2/static_batch_normalization_28/gamma",shape=(192,))
@@ -418,7 +418,7 @@ def block2_block_nnvm(nblocks:int,sym_480391360):
   return sym_375435392,varnames
 
 
-def block2_tf_run(nwarmup:int,nloops:int,init_method='zeros',verbose=True,**kwargs)->Result:
+def block2_tf_run(nwarmup:int=0,nloops:int=1,init_method='zeros',verbose=True,**kwargs)->Result:
   """ Run the model on tensorflow with zero inputs """
   print("Warning: unused args:", kwargs) if kwargs != {} else None
   r=Result()
@@ -446,19 +446,20 @@ def block2_tf_run(nwarmup:int,nloops:int,init_method='zeros',verbose=True,**kwar
       , verbose)
 
 
-def block2_nnvm_run(nblocks:int=1,nwarmup:int=0,nloops:int=1,init_method='zeros',verbose=True,**kwargs):
-  na=0.8*np.ones(shape=(1,108,21,32))
-
+def block2_nnvm_run(nblocks:int=1,nwarmup:int=0,nloops:int=1,init_method='zeros',verbose=True,debug=False,**kwargs):
   # sym_149080784 = tf.placeholder(shape=(1,108,21,32),dtype=tf.float32)
+  print('aaaaaaaaa')
+  print("Warning: unused args:", kwargs) if kwargs != {} else None
   inp=_sym.Variable(name='inp', init=np.zeros(shape=(1,54,6,192)))
 
-  block,vars=block2_block_nnvm(nblocks,inp)
-  print(block)
+  block2,blockvars=block2_block_nnvm(nblocks,inp)
+  block2_params={sym:MODEL_PARAMS[k] for (k,sym) in blockvars.items()}
+  block2_params.update({inp:common_init('zeros',(1,54,6,192),np.float32)})
 
-  # r=with_nnvm(
-  #     nwarmup,nloops,
-  #     [na],
-  #     lambda a: repeat_blocks(a),
-  #     BLOCK2_BLOCK_PARAMS,
-  #     verbose=True)
+  return run_nnvm(
+      nwarmup,nloops,
+      block2_params,
+      block2,
+      verbose=verbose,
+      debug=debug)
 

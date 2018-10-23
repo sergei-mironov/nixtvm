@@ -18,6 +18,15 @@ Problems
 LOG
 ===
 
+#### 23.10.2018
+* Finished block2 in TVM. Results of running a single instance of block2 are:
+  - NNVM: 0.047517
+  - TF:   0.026365
+  We see that TVM is twice as fast as TVM on this block
+  TVM/NNVM was compiled with debug runtime
+* Noticed the autotvm missing workload warning issued by TVM
+* More experiments showed even worse time for TVM/NNVM: 0.06411564
+
 #### 18.10.2018
 * Block2, fix bugs in TVM DSL for block2. `block2_block_nnvm` now compiles.
 
