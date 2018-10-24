@@ -20,7 +20,7 @@ int main()
   tvm::Tensor B = tvm::placeholder(shape, tvm::Float(32), "B");
 
   /* Build a graph for computing A + B */
-  tvm::Tensor C = tvm::compute(shape, tvm::FCompute([=](auto i){ return tvm::trace(tvm::String("A="), A(i)) + B(i); } )) ;
+  tvm::Tensor C = tvm::compute(shape, tvm::FCompute([=](auto i){ return tvm::trace("A+B", i, A(i) + B(i)); } )) ;
 
   /* Prepare a function `vecadd` with no optimizations */
   tvm::Schedule s = tvm::create_schedule({C->op});
