@@ -1,0 +1,57 @@
+time_is;shape;op_name
+---------------------
+
+    8.76 (192,) fuse_pad_2 pad600
+    8.93 (1, 54, 6, 192) fuse_pad_2 pad603
+    8.93 (1, 54, 6, 192) fuse_pad_2 pad609
+    9.29 (192,) fuse_pad_2 pad606
+   11.24 (1,) fuse_pad_1 pad593
+   18.04 (1,) fuse_broadcast_add_broadcast_sub_relu_broadcast_add_broadcast_sub_relu_broadcast_add_broadcast_mul_pad pad582
+   18.70 (192,) fuse_broadcast_add_broadcast_sub_relu_broadcast_add_broadcast_sub_relu_broadcast_add_broadcast_mul_pad pad591
+   18.81 (1, 54, 6, 192) fuse_broadcast_add_broadcast_sub_relu_broadcast_add_broadcast_sub_relu_broadcast_add_broadcast_mul_pad pad588
+   19.30 (1, 54, 6, 192) fuse_broadcast_add_broadcast_sub_relu_broadcast_add_broadcast_sub_relu_broadcast_add_broadcast_mul Rcnn_ctcV3/activation/max_36/mul
+   20.32 (192,) fuse_broadcast_add_broadcast_sub_relu_broadcast_add_broadcast_sub_relu_broadcast_add_broadcast_mul_pad pad585
+   21.15 (192,) fuse_broadcast_add_broadcast_sub_relu_broadcast_add_broadcast_sub_relu_broadcast_add_broadcast_mul_pad_1 pad608
+   21.41 (1, 54, 6, 192) fuse_broadcast_add_broadcast_sub_relu_broadcast_add_broadcast_sub_relu_broadcast_add_broadcast_mul_pad_1 pad605
+   21.95 (1, 54, 6, 192) fuse_broadcast_add_broadcast_sub_relu_broadcast_add_broadcast_sub_relu_broadcast_add_broadcast_mul_pad_1 pad599
+   23.13 (1,) fuse_pad pad580
+   25.51 (1, 54, 6, 192) fuse_broadcast_add_broadcast_sub_relu_broadcast_add_broadcast_sub_relu_broadcast_add_broadcast_mul_pad_1 pad602
+   25.77 (1, 1, 192, 192) fuse_broadcast_add_broadcast_sub_relu_broadcast_add_broadcast_sub_relu_broadcast_add_broadcast_mul_pad_1 pad596
+   36.51 (1,) fuse_broadcast_mul_broadcast_mul_broadcast_sub_broadcast_add Rcnn_ctcV3/conv_block3_1/unit2/static_batch_normalization_28/batchnorm/add_1
+   47.22 (192,) fuse_broadcast_mul_broadcast_mul_broadcast_sub_broadcast_add Rcnn_ctcV3/conv_block3_2/unit3/static_batch_normalization_30/batchnorm/add_1
+   52.60 (192,) fuse_broadcast_mul_broadcast_mul_broadcast_sub_broadcast_add_1 Rcnn_ctcV3/conv_block4/unit1/static_batch_normalization_33/batchnorm/add_1
+   53.32 (192,) fuse_broadcast_mul_broadcast_mul_broadcast_sub_broadcast_add_1 Rcnn_ctcV3/conv_block4_1/unit2/static_batch_normalization_35/batchnorm/add_1
+  146.88 (1,) fuse_broadcast_add___pow_scalar___broadcast_mul Rcnn_ctcV3/conv_block3_1/unit2/static_batch_normalization_28/batchnorm/mul
+  298.46 (1, 54, 6, 192) fuse_conv2d_broadcast_add_2 broadcast_add809
+  345.38 (1,) fuse_conv2d_broadcast_add broadcast_add798
+  361.66 (192,) fuse_conv2d_broadcast_add_1 broadcast_add827
+  366.17 (1, 54, 6, 192) fuse_conv2d_broadcast_add_1 broadcast_add826
+  366.68 (192,) fuse_conv2d_broadcast_add_1 broadcast_add823
+  371.64 (192,) fuse_conv2d_broadcast_add_1 broadcast_add824
+  381.08 (1, 54, 6, 192) fuse_conv2d_broadcast_add_1 broadcast_add820
+  386.45 (1, 54, 6, 192) fuse_conv2d_broadcast_add_1 broadcast_add812
+  388.91 (192,) fuse_conv2d_broadcast_add_1 broadcast_add821
+  392.72 (192,) fuse_conv2d_broadcast_add_1 broadcast_add818
+  393.94 (192,) fuse_conv2d_broadcast_add_1 broadcast_add815
+  394.12 (192,) fuse_conv2d_broadcast_add_1 broadcast_add817
+  394.13 (1, 56, 8, 192) fuse_conv2d_broadcast_add_1 broadcast_add814
+  398.59 (192,) fuse_conv2d_broadcast_add_1 broadcast_add811
+  406.69 (1,) fuse_conv2d_broadcast_add broadcast_add797
+  576.45 (1, 54, 6, 192) fuse_conv2d_broadcast_add broadcast_add800
+  580.33 (1,) fuse_conv2d_broadcast_add broadcast_add801
+  632.98 (1, 54, 6, 192) fuse_conv2d_broadcast_add broadcast_add806
+  635.50 (3, 3, 192, 192) fuse_conv2d_broadcast_add broadcast_add807
+  642.59 (192,) fuse_conv2d_broadcast_add broadcast_add804
+  646.44 (1, 54, 6, 192) fuse_conv2d_broadcast_add broadcast_add803
+ 2537.52 (192,) fuse_conv2d_broadcast_add_broadcast_mul_broadcast_mul_broadcast_sub_broadcast_add_1 Rcnn_ctcV3/expand_conv4/static_batch_normalization_32/batchnorm/add_1
+ 3030.60 (1, 54, 6, 192) fuse_conv2d_broadcast_add_broadcast_add_1 Rcnn_ctcV3/conv_block4/unit1/add_18/add
+ 3036.00 (1, 54, 6, 192) fuse_conv2d_broadcast_add_broadcast_add_1 Rcnn_ctcV3/expand_conv4/add_17/add
+ 3140.23 (192,) fuse_conv2d_broadcast_add_broadcast_add_broadcast_mul_broadcast_mul_broadcast_sub_broadcast_add Rcnn_ctcV3/static_batch_normalization_37/batchnorm/add_1
+ 3236.44 (3, 3, 192, 192) fuse_conv2d_broadcast_add_broadcast_mul_broadcast_mul_broadcast_sub_broadcast_add_2 Rcnn_ctcV3/conv_block4_1/unit2/static_batch_normalization_36/batchnorm/add_1
+ 3249.54 (1,) fuse_conv2d_broadcast_add_broadcast_mul_broadcast_mul_broadcast_sub_broadcast_add_2 Rcnn_ctcV3/conv_block4/unit1/static_batch_normalization_34/batchnorm/add_1
+ 4048.41 (1,) fuse_conv2d_broadcast_add_broadcast_mul_broadcast_mul_broadcast_sub_broadcast_add Rcnn_ctcV3/conv_block3_1/unit2/static_batch_normalization_29/batchnorm/add_1
+ 6122.07 (192,) fuse_conv2d_broadcast_add_broadcast_add Rcnn_ctcV3/conv_block3_1/unit2/add_15/add
+ 6446.72 (192,) fuse_conv2d_broadcast_add_broadcast_add Rcnn_ctcV3/conv_block3_2/unit3/add_16/add
+ 6454.93 (1, 1, 192, 192) fuse_conv2d_broadcast_add_broadcast_mul_broadcast_mul_broadcast_sub_broadcast_add Rcnn_ctcV3/conv_block3_2/unit3/static_batch_normalization_31/batchnorm/add_1
+10067.64 (1, 54, 6, 192) fuse_conv2d_broadcast_add_3 broadcast_add828
+

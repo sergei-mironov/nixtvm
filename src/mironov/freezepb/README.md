@@ -18,6 +18,15 @@ Problems
 LOG
 ===
 
+#### 24.10.2018
+* Obtained results from built-in profiler, which is called 'debugger' for some
+  reason. The typical result of a single run is in [the dump file](./data/block2-timings-sorted.txt)
+* We can see, that despite the fact that the slowest operation is 2-3 times
+  slower than others, it can't cause x2 slowdown, so we need better
+  comparision with TensorFlow
+* Modified TVM block2 code to stop at specified place. TF already has this
+  possibility from the box.
+
 #### 23.10.2018
 * Finished block2 in TVM. Results of running a single instance of block2 are:
   - NNVM: 0.047517

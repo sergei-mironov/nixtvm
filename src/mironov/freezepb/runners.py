@@ -23,17 +23,19 @@ Time=float
 class Result:
 
   @classmethod
-  def fromSinglePass(cls, out_data:np.array, time:Time)->"Result":
+  def fromSinglePass(cls, out_data:np.array, time:Time, debug_datum=None)->"Result":
     r=Result()
     r.set_perfs([time])
     r.last_data=out_data
+    r.last_debug_datum=debug_datum
     return r
 
   @classmethod
-  def fromPasses(cls, out_data:np.array, perfs:List[Time])->"Result":
+  def fromPasses(cls, out_data:np.array, perfs:List[Time], debug_datum=None)->"Result":
     r=Result()
     r.set_perfs(perfs)
     r.last_data=out_data
+    r.last_debug_datum=debug_datum
     return r
 
   def __init__(s):
@@ -41,6 +43,7 @@ class Result:
     s.perf_mean:float=None
     s.perf_std:float=None
     s.last_data:np.array=None
+    s.last_debug_datum=None
     s.err=None
     pass
 
@@ -62,7 +65,13 @@ def run_nnvm(nwarmup:int,nloops:int,
             debug:bool=False,
             opt_level:int=2)->Result:
 
-  runtime=debug_runtime if debug else graph_runtime
+  if debug:
+    runtime=debug_runtime
+    create_args={'dump_root':environ['CWD']+'/_debug'}
+  else:
+    runtime=graph_runtime
+    create_args={}
+
   tgt='llvm'
   ctx=tvm.cpu(0)
   inps=[];ishapes={};itypes={};idata={}
@@ -83,9 +92,10 @@ def run_nnvm(nwarmup:int,nloops:int,
       infer_shapes_dtypes(nnvm.graph.create(out), shape=ishapes, dtype=itypes, fallback_dtype='float32')
 
   out_nd=tvm.nd.array(np.zeros(out_shapes[0], dtype=out_types[0]), ctx)
-  m=runtime.create(graph,lib,ctx,dump_root=environ['CWD']+'/_debug')
+  m=runtime.create(graph,lib,ctx,**create_args)
   m.set_input(**idata)
 
+  debug_datum=None
   perfs:List[float]=[]
   for i in range(nwarmup+nloops):
     tb=perf_counter()
@@ -95,8 +105,10 @@ def run_nnvm(nwarmup:int,nloops:int,
       perfs.append(te-tb)
     if verbose:
       print("NNVM",te-tb)
+    if debug:
+      debug_datum=m.debug_datum
   out_nd=m.get_output(0, tvm.nd.empty(shape=out_shapes[0],dtype=out_types[0],ctx=ctx))
-  return Result.fromPasses(out_nd.asnumpy(),perfs)
+  return Result.fromPasses(out_nd.asnumpy(),perfs,debug_datum=debug_datum)
 
 
 def with_nnvm(nwarmup:int,nloops:int,args:list,lam, params={},verbose:bool=False,opt_level:int=2)->Result:

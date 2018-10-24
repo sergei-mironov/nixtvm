@@ -448,7 +448,6 @@ def block2_tf_run(nwarmup:int=0,nloops:int=1,init_method='zeros',verbose=True,**
 
 def block2_nnvm_run(nblocks:int=1,nwarmup:int=0,nloops:int=1,init_method='zeros',verbose=True,debug=False,**kwargs):
   # sym_149080784 = tf.placeholder(shape=(1,108,21,32),dtype=tf.float32)
-  print('aaaaaaaaa')
   print("Warning: unused args:", kwargs) if kwargs != {} else None
   inp=_sym.Variable(name='inp', init=np.zeros(shape=(1,54,6,192)))
 
@@ -456,10 +455,41 @@ def block2_nnvm_run(nblocks:int=1,nwarmup:int=0,nloops:int=1,init_method='zeros'
   block2_params={sym:MODEL_PARAMS[k] for (k,sym) in blockvars.items()}
   block2_params.update({inp:common_init('zeros',(1,54,6,192),np.float32)})
 
-  return run_nnvm(
+  r=run_nnvm(
       nwarmup,nloops,
       block2_params,
       block2,
       verbose=verbose,
       debug=debug)
+
+  return r
+
+
+def block2_analyze(r:Result):
+
+  d=r.last_debug_datum
+  print(d)
+
+  eid = 0
+  rank=[]
+  for node, time in zip(d._nodes_list, d._time_list):
+    num_outputs = d.get_graph_node_output_num(node)
+    for j in range(num_outputs):
+      op = node['op']
+      if node['op'] == 'param':
+        continue
+      name = node['name']
+      shape = str(d._output_tensor_list[eid].shape)
+      time_us = round(time[0] * 1000000, 2)
+      inputs = str(node['attrs']['num_inputs'])
+      outputs = str(node['attrs']['num_outputs'])
+      rank.append((time_us, shape, op,name))
+      eid+=1
+
+  for t,shape,op,name in sorted(rank,key=lambda x: x[0]):
+    # print(t,shape,op)
+    print('%8.2f'%(t,), shape, op, name)
+
+
+
 
