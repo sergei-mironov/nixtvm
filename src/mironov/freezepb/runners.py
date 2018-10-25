@@ -53,9 +53,8 @@ class Result:
     s.perf_std=np.std(perfs)
 
   def __repr__(s)->str:
-    return "Result(%s,%s)" % (
-        str(s.last_data.reshape((1,-1))),
-        (str(s.perf_mean)+'+-'+str(s.perf_std)) if len(s.perfs)>1 else str(s.perf_mean)
+    return "Result(%s)" % (
+        (str(s.perf_mean)+'+-'+str(s.perf_std)) if len(s.perfs)>1 else str(s.perf_mean) ,
         )
 
 def run_nnvm(nwarmup:int,nloops:int,

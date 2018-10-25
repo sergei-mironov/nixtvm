@@ -18,6 +18,13 @@ Problems
 LOG
 ===
 
+#### 25.10.2018
+* Compared the cumulative performance of block2 in TVM vs TF. There is no any
+  operation which brings the speed down. Looks like every operation in TVM works
+  a bit slower.
+* TODO: apply latest instrumentation approach to the whole model
+* TODO: compare shapes of the operations. Try to find 'cursed shapes'
+
 #### 24.10.2018
 * Obtained results from built-in profiler, which is called 'debugger' for some
   reason. The typical result of a single run is in [the dump file](./data/block2-timings-sorted.txt)

@@ -224,3 +224,9 @@ Media:
 * https://github.com/adventuresinML/adventures-in-ml-code
 * https://github.com/philipperemy/tensorflow-multi-dimensional-lstm
 
+### Profiling
+
+* https://towardsdatascience.com/howto-profile-tensorflow-1a49fb18073d
+  2017, HowTo profile TensorFlow
+
+
