@@ -1,21 +1,6 @@
-import tensorflow as tf
-
-from nnvm import sym as _sym
-from copy import copy
-from tensorflow import Tensor as TF_Tensor
-from tensorflow.gfile import FastGFile
-from tensorflow.summary import FileWriter
-from tensorflow import Graph as TF_Graph, GraphDef as TF_GraphDef
-from tensorflow.python.ops import variables
-from nnvm.frontend import from_tensorflow
-from typing import Any,Dict,List
-from tvm.tensor import Tensor as TVM_Tensor
-
-from freezepb.runners import *
-from freezepb.modeldefs import *
 from nnvm import sym as _sym
 
-def model0_nnvm():
+def staged_model():
   points={}
   sym_89307680 = _sym.Variable(name="Rcnn_ctcV3/Inputs",shape=[1, 216, 41, 1])
   sym_216086096 = _sym.Variable(name="Rcnn_ctcV3/static_batch_normalization_1/gamma",shape=(1,))
@@ -1397,46 +1382,3 @@ def model0_nnvm():
   return sym_375435392,points
 
 
-def model0_tf_run(nwarmup:int=0,nloops:int=1,init_method='zeros',verbose=True,stopat:str=MODEL0_OUTPUT,**kwargs)->Result:
-  """ Run the model on tensorflow with zero inputs """
-  print("Warning: unused args:", kwargs) if kwargs != {} else None
-  r=Result()
-  r.desc='tf running time'
-
-  with tf.Session(graph=tf.Graph()) as sess:
-    with FastGFile(MODEL_PB, 'rb') as f:
-      graph_def = tf.GraphDef()
-      graph_def.ParseFromString(f.read())
-    tf.import_graph_def(graph_def, name="")
-    sess.run(variables.global_variables_initializer())
-    g=tf.get_default_graph()
-    # inps=[g.get_tensor_by_name(t) for t in BLOCK2_INPUTS]
-    # inps=[g.get_tensor_by_name(t) for t in ["Rcnn_ctcV3/conv_block3/unit1/conv2d_84/BiasAdd:0"]]
-    inps=[g.get_tensor_by_name(t) for t in [MODEL0_INPUT+":0"]]
-    for i in inps:
-      print("Input nodes:",type(i), i.name, i.dtype, i)
-    out=g.get_tensor_by_name(stopat+":0")
-    print("Output node:",type(out), out.name, out.dtype, out)
-
-    return run_tf(
-        sess,nwarmup,nloops
-      , {i:common_init(init_method, i.shape, i.dtype.as_numpy_dtype()) for i in inps}
-      , out
-      , verbose)
-
-
-def model0_nnvm_run(nwarmup:int=0,nloops:int=1,init_method='zeros',verbose=True,debug=False,stopat:str=MODEL0_OUTPUT,**kwargs):
-  # sym_149080784 = tf.placeholder(shape=(1,108,21,32),dtype=tf.float32)
-  print("Warning: unused args:", kwargs) if kwargs != {} else None
-
-  model,blockvars,_=model0_nnvm(inp,stopat=stopat)
-  model_params={sym:MODEL_PARAMS[k] for (k,sym) in blockvars.items()}
-
-  r=run_nnvm(
-      nwarmup,nloops,
-      model_params,
-      model,
-      verbose=verbose,
-      debug=debug)
-
-  return r
