@@ -18,16 +18,28 @@ Problems
 LOG
 ===
 
+#### 26.10.2018
+* Instrument the whole [model](./model0v2.py) with checkpoints and shape
+  pickers.
+* Dumped the shapes of all the convolutions. There are 6 different shapes:
+  (1,108,21,32)x3, (1,108,21,64)x35, (1,108,11,128)x35, (1,54,6,192)x20,
+  (1,54,6,256)x20, (1,54,1,1318)x1
+* TODO: Write a test comparing the performance of TVM vs TF on all of this
+  shapes
+* Compared the tolerance of TVM model with its TF equivalent. The
+  precision is relatively low: 1e-1. Expected value is 1e-5.
+
 #### 25.10.2018
 * Compared the cumulative performance of block2 in TVM vs TF. There is no any
-  operation which brings the speed down. Looks like every operation in TVM works
-  a bit slower.
-* TODO: apply latest instrumentation approach to the whole model
-* TODO: compare shapes of the operations. Try to find 'cursed shapes'
+  operation which brings the speed down. Looks like every operation in block2 works
+  a bit slower in TVM than in TF.
+* ~~TODO: apply latest instrumentation approach to the whole model~~
+* ~~TODO: compare shapes of the operations. Try to find 'cursed shapes'~~
 
 #### 24.10.2018
 * Obtained results from built-in profiler, which is called 'debugger' for some
-  reason. The typical result of a single run is in [the dump file](./data/block2-timings-sorted.txt)
+  reason. The typical result of a single run is in
+  [the dump file](./data/block2-timings-sorted.txt)
 * We can see, that despite the fact that the slowest operation is 2-3 times
   slower than others, it can't cause x2 slowdown, so we need better
   comparision with TensorFlow
@@ -55,8 +67,8 @@ LOG
 * Started block2 implementation
 
 #### 04.10.2018
-* Tested TF/TVM performance of repeted block1: TVM: 0.262+-0.034; TF:
-  0.529+-0.007; Block1 was repeated 200 times in both cases TVM is a clear
+* Tested TF/TVM performance of repeated block1: TVM: 0.262+-0.034; TF:
+  0.529+-0.007; Block1 was repeated 200 times. In both cases TVM is a clear
   winner.
 * Fixed error in TF code of `block1` (sqrt`->`rsqrt). Now results are equal
   with absoulte tolerance of 1e-5.
@@ -70,7 +82,7 @@ LOG
 * Strange difference in results between TF and TVM version of block1.
 
 #### 27.09.2018
-* Finished writing staging code, obtain Model sources in NNVM DSL, do some
+* Finished writing staging code, obtain Model sources in NNVM DSL, did some
   tests.
 * Plan `partsearch` experiment which would measure the performance of the Model
   running from the same input node to different output nodes.

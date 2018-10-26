@@ -522,12 +522,11 @@ def block2_analyze(r:Result):
   for t,shape,op,name in sorted(rank,key=lambda x: x[0]):
     print('%8.2f'%(t,), shape, op, name)
 
-
-_,_,BLOCK2_STOPNAMES=block2_block_nnvm(_sym.Variable(name='inp', init=np.zeros(shape=(1,54,6,192))))
-
 def experiment1():
-  for stopat in BLOCK2_STOPNAMES:
-    print('stopat',stopat)
+  _,_,stopnames=block2_block_nnvm(_sym.Variable(name='inp', init=np.zeros(shape=(1,54,6,192))))
+
+  for stopat in stopnames:
+    print('StopPoint',stopat)
     r1=block2_nnvm_run(1,10,stopat=stopat);
     print(r1)
     r2=block2_tf_run(1,10,stopat=stopat);
