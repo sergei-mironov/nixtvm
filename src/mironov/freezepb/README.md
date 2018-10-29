@@ -3,10 +3,12 @@ TODO
 
 * ~~Run `run` several times?~~
 * ~~Try with default NNVM optimisations disabled~~
+* ~~Compare TF/TVM performance on different segments of the Model.~~
 * Measure all possible times (Wall time, CPU time, etc)
 * Figure out parallelism. Which module does schedule parallel execution in TVM?
 * Try with batch size ~100?
-* Compare TF/TVM performance on different segments of the Model.
+* Try to apply scheduling
+* Try to enable autotuner
 
 Problems
 ========
