@@ -108,6 +108,9 @@ def run_tvm(nwarmup:int,nloops:int,args:dict,out,verbose:bool=False,debug:bool=F
     vals_nd.append(tvm.nd.array(val,ctx=ctx))
 
   sout = tvm.create_schedule(out.op)
+
+  ir = tvm.lower(sout, pls+[out], simple_mode=True)
+  print(ir) if debug else None
   mout = tvm.build(sout, pls+[out])
   out_nd = tvm.nd.array(np.zeros(get_const_tuple(out.shape), dtype=out.dtype), ctx=ctx)
 
