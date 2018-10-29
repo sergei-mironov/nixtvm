@@ -18,8 +18,13 @@ Problems
 LOG
 ===
 
+#### 29.10.2018
+* Wrote simple conv2d testbench for model's typical shapes. (3x3) kernels work
+  x10 times slower than trivial 1x1 kernels. See [test sources](./convperf.py)
+* TODO: interpret the results
+
 #### 26.10.2018
-* Instrument the whole [model](./model0v2.py) with checkpoints and shape
+* Instrumented the whole [model](./model0v2.py) with checkpoints and shape
   pickers.
 * Dumped the shapes of all the convolutions. There are 6 different shapes:
   (1,108,21,32)x3, (1,108,21,64)x35, (1,108,11,128)x35, (1,54,6,192)x20,

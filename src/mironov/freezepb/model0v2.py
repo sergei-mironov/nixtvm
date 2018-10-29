@@ -14,7 +14,6 @@ from tvm.tensor import Tensor as TVM_Tensor
 
 from freezepb.runners import *
 from freezepb.modeldefs import *
-from nnvm import sym as _sym
 
 class Stopped(Exception):
   def __init__(self, out):
@@ -54,8 +53,9 @@ def model0_nnvm(sym_89307680,stopat=MODEL_OUTPUT):
   def conv2d(a,b,**kwargs):
     s = _sym.conv2d(a,b,**kwargs)
     checkpoint(s)
-    if 'name' in kwargs:
-      print(infer_shape(s)[kwargs['name']][0])
+    shape=infer_shape(s)[kwargs['name']][0] if 'name' in kwargs else []
+    kernel_size=kwargs['kernel_size'] if 'kernel_size' in kwargs else []
+    print(shape,kernel_size)
     return s
 
   try:
@@ -1523,23 +1523,6 @@ def model0_experiment1():
     r2=model0_tf_run(1,10,stopat=stopat);
     print(r2)
 
-
-def model0_experiment2():
-
-  shape=(1,54,6,256)
-
-  # run_tf(
-  #     sess,nwarmup,nloops
-  #   , {i:common_init(init_method, i.shape, i.dtype.as_numpy_dtype()) for i in inps}
-  #   , out
-  #   , verbose)
-
-  r=with_tf(1,10,[np.zeros(shape=shape),np.zeros(shape=shapeK)]
-    , lambda x:
-        conv2d(x,k,
-          dilation=(1,1),layout="NHWC",strides=(1,1),
-          padding=[0, 0],kernel_size=(1,1), channels=256, kernel_layout="HWIO", name="1",use_bias=False)
-    , verbose=True)
 
 
 
