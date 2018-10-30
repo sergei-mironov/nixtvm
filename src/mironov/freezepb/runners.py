@@ -75,11 +75,7 @@ def run_nnvm(nwarmup:int,nloops:int,
   ctx=tvm.cpu(0)
   inps=[];ishapes={};itypes={};idata={}
   for i,(arg,val) in enumerate(args.items()):
-    # print(arg.list_attr(recursive=True))
-    # print(arg.__dir__())
-    # print()
     nm=arg.list_output_names()[0]
-    # print(nm)
     ishapes.update({nm:val.shape})
     idata.update({nm:val})
     itypes.update({nm:"float32"})

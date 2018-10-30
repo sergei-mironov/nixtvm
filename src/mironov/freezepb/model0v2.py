@@ -1459,7 +1459,8 @@ def model0_tf_run(nwarmup:int=0,nloops:int=1,init_method='zeros',verbose=True,st
       , verbose)
 
 
-def model0_nnvm_run(nwarmup:int=0,nloops:int=1,init_method='zeros',verbose=True,debug=False,stopat:str=MODEL_OUTPUT,**kwargs):
+def model0_nnvm_run(nwarmup:int=0,nloops:int=1,init_method='zeros',verbose=True,debug=False,stopat:str=MODEL_OUTPUT,
+                    opt_level:int=2, **kwargs):
   # sym_149080784 = tf.placeholder(shape=(1,108,21,32),dtype=tf.float32)
   print("Warning: unused args:", kwargs) if kwargs != {} else None
 
@@ -1472,7 +1473,8 @@ def model0_nnvm_run(nwarmup:int=0,nloops:int=1,init_method='zeros',verbose=True,
       model_params,
       model,
       verbose=verbose,
-      debug=debug)
+      debug=debug,
+      opt_level=opt_level)
   return r
 
 
@@ -1482,7 +1484,7 @@ def model0_correctness():
   tvm.testing.assert_allclose(r0.last_data,r1.last_data,rtol=1e-1,atol=1e-1)
 
 
-def model_analyze(r:Result, sorted=False):
+def model0_render_debug(r:Result, need_sort=False):
   d=r.last_debug_datum
   print(d)
   eid = 0
@@ -1501,7 +1503,7 @@ def model_analyze(r:Result, sorted=False):
       rank.append((time_us, shape, op,name))
       eid+=1
 
-  rank=rank if not sorted else sorted(rank,key=lambda x: x[0])
+  rank=rank if not need_sort else sorted(rank,key=lambda x: x[0])
   for t,shape,op,name in rank:
     print('%8.2f'%(t,), shape, op, name)
 
