@@ -21,7 +21,7 @@ g++ -c -o $WD/$NM.o $WD/$NM.s
 g++ -shared -fPIC -o $WD/$NM.so $WD/$NM.o
 
 # Compile the model loader
-g++ -std=c++14 -DTVM_SO=\"$WD/$NM.so\" ${NM}run.cpp -ltvm -o $WD/run
+g++ -std=c++14 -DTVM_SO=\"$WD/$NM.so\" ${NM}run.cpp -ltvm_runtime -lpthread -ldl -o $WD/run
 
 # Run the model loader
 $WD/run
