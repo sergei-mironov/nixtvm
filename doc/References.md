@@ -13,6 +13,11 @@ Media:
 * https://benjaminjurke.com/content/articles/2015/loss-of-significance-in-floating-point-computations/
   2015, Jurke, Analyzing the loss of significance in floating-point computations
 
+Articles:
+
+* https://arxiv.org/pdf/1805.01078
+  2018, Exploration of Numerical Precision in Deep Neural Networks (some problems with downloading)
+
 ### Datasets
 
 * http://yann.lecun.com/exdb/mnist/

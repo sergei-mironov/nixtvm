@@ -34,7 +34,7 @@ def nnvm_shape(sym):
   return sdict
 
 
-def conv_test(nblocks=200,ks=1,w=54,h=6,c=256):
+def nnvm_conv_test(nblocks=200,ks=1,w=54,h=6,c=256):
   shape=(1,h,w,c)
   kshape=(ks,ks,c,c)
   x=_sym.Variable(init=np.zeros(shape=shape),name='x')
@@ -64,19 +64,35 @@ def conv_test(nblocks=200,ks=1,w=54,h=6,c=256):
   r=run_nnvm(1,15,
     {x:np.zeros(shape=shape),
      k:np.zeros(shape=kshape)},
-    t,verbose=True)
+    t,verbose=False)
   return r
 
 
-def experiment1():
+def e1():
+  """ Experiment 1 """
   nblocks=200
-  r=conv_test(nblocks,h=54,w=6,c=256,ks=1)
-  print(r)
-  r=conv_test(nblocks,h=54,w=6,c=256,ks=3)
-  print(r)
-  r=conv_test(nblocks,h=108,w=21,c=64,ks=1)
-  print(r)
-  r=conv_test(nblocks,h=108,w=21,c=64,ks=3)
-  print(r)
+  results=[]
+  for (args,block_weight) in [
+      # ({'h':108, 'w':21,'c':32,'ks':ks},3)
+        ({'h':108, 'w':21, 'c':64,  'ks':1},35-12)
+      , ({'h':108, 'w':21, 'c':64,  'ks':3},12)
+      , ({'h':108, 'w':11, 'c':128, 'ks':1},35-12)
+      , ({'h':108, 'w':11, 'c':128, 'ks':3},12)
+      , ({'h':54,  'w':6,  'c':192, 'ks':1},23-8)
+      , ({'h':54,  'w':6,  'c':192, 'ks':3},8)
+      , ({'h':54,  'w':6,  'c':256, 'ks':1},19-6)
+      , ({'h':54,  'w':6,  'c':256, 'ks':3},6)
+      , ({'h':54,'w':1,'c':1318, 'ks':1},1)
+      ]:
+    r=nnvm_conv_test(nblocks,**args)
+    results.append((args,r.perf_mean,r.perf_mean*block_weight))
+    print(args, r, 'weighted', r.perf_mean*block_weight)
+  return results
 
+def e1_print(results):
+  print('Sorted by model-weighted running time:')
+  for r in sorted(results, key=lambda x:-x[2]):
+    a=r[0]
+    print((1,a['h'],a['w'],a['c']), 'kernel', (a['ks'],a['ks']), 'time1', r[1],
+        'timeM', r[2])
 

@@ -20,6 +20,23 @@ Problems
 LOG
 ===
 
+#### 30.10.2018
+* Below are results, dorted by model time, spent on each convolution.  Times are
+  in seconds, every type of convolution block was repeated 200 times for
+  reliable testing
+
+  (1, 54, 6, 192)   kernel (3, 3)  time1 0.485376 timeM 3.88301
+  (1, 108, 11, 128) kernel (3, 3)  time1 0.263262 timeM 3.15915
+  (1, 54, 6, 192)   kernel (1, 1)  time1 0.119617 timeM 1.79426
+  (1, 54, 6, 256)   kernel (3, 3)  time1 0.247189 timeM 1.48313
+  (1, 54, 1, 1318)  kernel (1, 1)  time1 1.146242 timeM 1.14624
+  (1, 108, 21, 64)  kernel (3, 3)  time1 0.091557 timeM 1.09869
+  (1, 108, 11, 128) kernel (1, 1)  time1 0.039408 timeM 0.90638
+  (1, 54, 6, 256)   kernel (1, 1)  time1 0.042709 timeM 0.55522
+  (1, 108, 21, 64)  kernel (1, 1)  time1 0.014288 timeM 0.32863
+
+  It means that we should optimize (1,54,6,192) kernels first.
+
 #### 29.10.2018
 * Wrote simple conv2d testbench for model's typical shapes. (3x3) kernels work
   x10 times slower than trivial 1x1 kernels. See [test sources](./convperf.py)
@@ -29,8 +46,12 @@ LOG
 * Instrumented the whole [model](./model0v2.py) with checkpoints and shape
   pickers.
 * Dumped the shapes of all the convolutions. There are 6 different shapes:
-  (1,108,21,32)x3, (1,108,21,64)x35, (1,108,11,128)x35, (1,54,6,192)x20,
-  (1,54,6,256)x20, (1,54,1,1318)x1
+  - (1,108,21,32)x3    kernel 11x31
+  - (1,108,21,64)x35   kernels 1x1 3x3
+  - (1,108,11,128)x35  kernels 1x1 3x3
+  - (1,54,6,192)x20    kernels 1x1 3x3
+  - (1,54,6,256)x20    kernels 1x1 3x3
+  - (1,54,1,1318)x1    kernel 1x1
 * TODO: Write a test comparing the performance of TVM vs TF on all of this
   shapes
 * Compared the tolerance of TVM model with its TF equivalent. The
