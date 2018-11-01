@@ -1,3 +1,6 @@
+"""
+Array bounds issue illustration
+"""
 import tvm
 import topi
 import numpy as np

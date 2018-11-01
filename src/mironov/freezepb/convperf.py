@@ -62,9 +62,11 @@ def nnvm_conv_test(nblocks=200,ks=1,w=54,h=6,c=256):
     t=_sym.expand_like(t,x,axis=[1,2])
 
   r=run_nnvm(1,15,
-    {x:np.zeros(shape=shape),
-     k:np.zeros(shape=kshape)},
-    t,verbose=False)
+    {x:np.zeros(shape=shape)
+    ,k:np.zeros(shape=kshape)
+    },
+    t,
+    verbose=False)
   return r
 
 

@@ -20,10 +20,13 @@ Problems
 LOG
 ===
 
+#### 01.11.2018
+* Learned about scheduling in NNVM.
+
 #### 30.10.2018
-* Below are results, dorted by model time, spent on each convolution.  Times are
+* Below are convolution execution results, sorted by model time.  Times are
   in seconds, every type of convolution block was repeated 200 times for
-  reliable testing
+  reliable measurements
 
   (1, 54, 6, 192)   kernel (3, 3)  time1 0.485376 timeM 3.88301
   (1, 108, 11, 128) kernel (3, 3)  time1 0.263262 timeM 3.15915
@@ -35,7 +38,8 @@ LOG
   (1, 54, 6, 256)   kernel (1, 1)  time1 0.042709 timeM 0.55522
   (1, 108, 21, 64)  kernel (1, 1)  time1 0.014288 timeM 0.32863
 
-  It means that we should optimize (1,54,6,192) kernels first.
+  We see that we should optimize (1,54,6,192) and (1,108,11,128) kernels
+  first in this model since we spend most of the time there..
 
 #### 29.10.2018
 * Wrote simple conv2d testbench for model's typical shapes. (3x3) kernels work

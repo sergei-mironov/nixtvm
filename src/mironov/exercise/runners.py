@@ -95,7 +95,7 @@ def with_nnvm(nwarmup:int,nloops:int,args,lam, params={},verbose:bool=False,opt_
   out_nd=m.get_output(0, tvm.nd.empty(shape=out_shapes[0],dtype=out_types[0],ctx=ctx))
   return Result.fromPasses(out_nd.asnumpy(),perfs)
 
-def run_tvm(nwarmup:int,nloops:int,args:dict,out,verbose:bool=False,debug:bool=False)->Result:
+def run_tvm(nwarmup:int,nloops:int,args:dict,out,verbose:bool=False,debug:bool=False,scheduling=None)->Result:
   """ Take dict[TVM_Tensor, np_array] as args, convert them to TVM tensors and
   call `lam`.  Result of lambda is converted back to numpy array and returned.
   """
@@ -108,6 +108,7 @@ def run_tvm(nwarmup:int,nloops:int,args:dict,out,verbose:bool=False,debug:bool=F
     vals_nd.append(tvm.nd.array(val,ctx=ctx))
 
   sout = tvm.create_schedule(out.op)
+  scheduling(sout) if scheduling is not None else None
 
   ir = tvm.lower(sout, pls+[out], simple_mode=True)
   print(ir) if debug else None
