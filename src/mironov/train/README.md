@@ -3,6 +3,11 @@ This project demonstrates different aspects of training using TVM
 LOG
 ===
 
+#### 01.11.2018
+* Created issue http://code.huawei.com/mrc-cbg-opensource/hitvm-internal/issues/7
+* Segfault couldn't be reproduced with d579b52
+* Added simple LSTM test
+
 #### 12.10.2018
 * Implemented conv2d model and training loop, see `autodiff_conv.py`.
 * Setting `batch_size` to 10 leads to Segfault
