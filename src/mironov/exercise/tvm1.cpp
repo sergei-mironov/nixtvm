@@ -1,3 +1,10 @@
+/*
+Build and execute like this:
+
+g++ -std=c++14  tvm1.cpp -ltvm -o tvm1.gen
+tvm1.gen > tvm1.s
+*/
+
 #include <random>
 #include <iomanip>
 #include <array>
