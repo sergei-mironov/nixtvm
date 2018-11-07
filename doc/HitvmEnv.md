@@ -4,23 +4,6 @@ TVM/NNVM environment setup
 This document describes the working process regarding TVM/NNVM project arranged
 in Moscow Research center.
 
-The main machine is a Linux workstation with [NixOS](http://www.nixos.org) operating
-system installed. This operating system has a notion of build environments
-where users may define the exact set of packages and versions they use. This
-definitions are stored as 'expressions' in Nix language. By using this feature,
-developers may be sure they use exactly the same versions of environment which
-make collaborative development easier.
-
-This repository expects the NixOS [packages](http://www.github.com/nixos/nixpkgs) tree
-to be derived from the following commit:
-
-    commit 08d245eb31a3de0ad73719372190ce84c1bf3aee (HEAD -> nixos-18.03)
-    Author: Benjamin Hipple <bhipple@protonmail.com>
-    Date:   Sat Jun 9 19:08:59 2018 -0400
-
-Server used in Moscow office has been already set up accordingly.
-
-
 Overall procedure
 -----------------
 
@@ -52,139 +35,45 @@ Overall procedure
 Building the TVM/NNVM
 =====================
 
-
-Build TVM/NNVM using docker
----------------------------
-
-TVM/NNVM project includes scripts specifying the automated build and test
-procedures to be used by [Jenkins](https://jenkins.io/) facilities.
-This scripts were examined and the minimal build procedure was extracted in
-order to be able to reproduce various build conditions.
-
-General procedure is encoded in `Jenkinsfile` and `test/ci_build/ci_build.sh`
-files. In order to run the docker software, one have to execute the following
-command:
-
-    $ sh ./tests/ci_build/ci_build.sh cpu ./tests/scripts/task_build.sh build
-
-As a result, the Docker image should be generated, the current source folder
-should be loop-mounted inside and the build procedure should be completed. Note
-that Docker doesn't fix the dependencies like NixOS does, so one should prefer
-native builds in day-to-day development.
-
-`nixtvm` environment defines `dmake` and `dtest` commands to simplify the docker
-execution:
-
-
-    $ type dmake  # Review the build algorithm
-    $ dmake
-
-    $ type dtest  # Review the test algorithm
-    $ dtest
-
-More test commands may be extracted using `cat Jenkinsfile | grep docker`
-
-
-Native build of TVM/NNVM
+Obtaining TVM repository
 ------------------------
 
-Direct build assumes we are building TVM from source without any virtualisation
-employed. [Official manual](https://docs.tvm.ai/install/index.html) describes
-the following process:
+Download upstream TVM repository and save to to some `/path/to/tvm` folder.
 
-  * Creating `build` folder in TVM tree for storing temporary files
-  * Copying the config from template folder to `build/config.cmake` file
-  * Editing the configuration to enable/disable components
-  * Running `cmake ..` to generate the Makefile
-  * Running `make` to perform actual make
+Notes:
 
-In order to simplify this proceess, the current working environment includes
-`nmake` shell function. After entering the nix-shell, developers may execute the
-following commands to perform basic LLVM build:
+  1. Make sure you have set `http_proxy` and `https_proxy` environment variables
+     correctly.
+  2. Git may issue errors about GNU TLS during `git clone`. If this is the case,
+     ask the team members.
 
-    $ type nmake  # Review the build algorithm
-    $ nmake
+Running Docker container
+------------------------
 
-After the build is complete, `build-native` folder will contain `*.so` libraries
-to link with C++ applications.
+This environment provides [rundocler.sh](../rundocler.sh) script which can be
+used to run interactive docker session for local development.
 
-`nclean` command is also defined
+First, we have to setup `./src/$USER/tvm` link to point to valid TVM repo. This
+link will be used to execute Docker rules, defined in TVM project
 
-    $ type nclean  # Review the algorithm
-    $ nclean
+    $ ln -s ./src/$USER/tvm /path/to/tvm
 
-Running typical tasks from nix-shell environment
-================================================
-
-General information
--------------------
-
-We expect that native build procedure described above has been completed.
-
-Inside `nix-shell tvm-llvm.nix -A shell`, users are able to run development
-tools such as python, g++, gdb, etc. `LD_LIBRARY_PATH` and `PYTHONPATH` include
-build directory. After running `nmake` shell function, just-built libraries
-should appear in `build-native` directory.
-
-In order to run examples, the following shell environment variables may need be
-changed:
-
-    PYTHONPATH
-    LD_LIBRARY_PATH
-    C_INCLUDE_PATH
-    CPLUS_INCLUDE_PATH
-    LIBRARY_PATH
-
-`default.nix` contains useful default values for this variables
-
-Creating tags file
-------------------
-
-Tags may be generated with `mktags` shell function defined in the environment.
-This command indexes `src`, `tvm` folders. Additional sources may be added to the `_tags` folder
-
-
-Running Python programs using TVM/NNVM
---------------------------------------
-
-In order to run Python programs, the `PYTHONPATH` variable should point to build
-directories. The environment does it automatically. For example, to run code
-from `nixtvm/src/reduction.py` one may run:
-
-    $ ./ipython.sh
-    >> from reduction import *
-    >> lesson1()
-
-
-Running C++ programs using TVM/NNVM
------------------------------------
-
-C++ programs should know paths to `tvm/include` and `tvm/build-native`
-directories to include and link the runtime. The `nixtvm` scripts set the
-related `C_INCLUDE_PATH`, `CPLUS_INCLUDE_PATH` and `LD_LIBRARY_PATH` variables.
-
-    [nix-shell:~/proj/nixtvm/tvm]$ g++ -ltvm ../src/tutorials/tvm0.cpp
-    [nix-shell:~/proj/nixtvm/tvm]$ ./a.out
-
-
-
-Running typical tasks from interactive docker container
-=======================================================
-
-The project provides `rundocler.sh` script which can be used to run interactive
-docker session for local development. To run the session, the following command
-is to be invoked:
+Next, execute the following script to build and run the docker:
 
     $ ./rundocker.sh
 
 The `Dockerfile.dev` will be used for building the docker image. One may
 adjust/modify/duplicate it as needed.
 
-Inside the docker shell, one may source `dockerenv.sh` file to get access to
-useful helpers `dmake`, `dclean`, `dtest` etc.
+Finally, source dockerenv.sh to access useful helpers `dmake`, `dclean`, `dtest`
+and others:
 
     (docker) $ . dockerenv.sh
     (docker) $ dmake
+
+
+Running TVM tasks
+=================
 
 Running Python programs using TVM/NNVM
 --------------------------------------
@@ -201,12 +90,15 @@ Running C++ programs using TVM/NNVM
 Should be the same as for native mode.
 
 
-Running tensorboard within docker
+Running Tensorboard within docker
 ---------------------------------
 
-`rundocker.sh` script maps port equal to `6000 + USER_ID - 1000` to port 6006
-of the Host. The exact values are printed during `rundocker.sh` execution.  It
-looks like this:
+Tensorboard is a web-application allowing users to examine the structure and
+performance metrics of Tensorflow models.
+
+`rundocker.sh` script maps port equal to `6000 + USER_ID -
+1000` to port 6006 of the Host. The exact values should be printed during
+container startup:
 
     *****************************
     Your Jupyter port: XXXX
@@ -234,7 +126,8 @@ directory.
 Running jupyter-notebook within docker
 --------------------------------------
 
-Jupyter notebook may be started by typing `djupyter` command
+Jupyter notebook may be started by typing `djupyter` command, defined by
+`dockerenv.sh` script.
 
     (docker) $ djupyter
 

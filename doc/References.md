@@ -4,6 +4,21 @@ Useful articles
 General
 -------
 
+### Datasets
+
+* http://yann.lecun.com/exdb/mnist/
+  ?, MNIST
+* https://www.cs.toronto.edu/~kriz/cifar.html
+  ?, CIFAR-10, CIFAR-100
+* https://catalog.ldc.upenn.edu/ldc99t42
+  ?, Penn Treebank v3
+* https://www.microsoft.com/en-us/research/publication/mctest-challenge-dataset-open-domain-machine-comprehension-text/
+  2013, MCTest
+* https://nlp.stanford.edu/projects/glove/
+  2014, GloVe: Global Vectors for Word Representation
+* SQuAD, The Standford Question Answering Dataset
+  2018, https://rajpurkar.github.io/SQuAD-explorer/
+
 ### Precision problem
 
 Media:
@@ -18,15 +33,6 @@ Articles:
 * https://arxiv.org/pdf/1805.01078
   2018, Exploration of Numerical Precision in Deep Neural Networks (some problems with downloading)
 
-### Datasets
-
-* http://yann.lecun.com/exdb/mnist/
-  MNIST
-* https://www.cs.toronto.edu/~kriz/cifar.html
-  CIFAR-10, CIFAR-100
-* https://catalog.ldc.upenn.edu/ldc99t42
-  Penn Treebank v3
-
 Tasks
 -----
 
@@ -39,14 +45,14 @@ General Media:
 * https://hackernoon.com/understanding-architecture-of-lstm-cell-from-scratch-with-code-8da40f0b71f4
   Understanding LSTM networks
 
-Huawei Mdeia:
+Huawei Media:
 
 * https://pdfs.semanticscholar.org/presentation/51d9/81c1b28818fd0ee94dd3e607e1004874dfef.pdf
   2015, Research on Deep Learning for Natural Language Processing at Huawei Noah’s Ark Lab
 * https://www.huawei.com/en/about-huawei/publications/winwin-magazine/AI/intelligent-agents-tomorrow-digital-valets
   2016, Nuawei NLP news
 * http://www.aclweb.org/anthology/N16-4004
-  Noah ark document
+  Noah Ark document
 
 Articles:
 
@@ -54,6 +60,14 @@ Articles:
   2015, Visualizing and Understanding recurrent Networks
 * https://arxiv.org/pdf/1708.02709.pdf
   2018, Recent Trends in Deep Learning Based Natural Language Processing
+
+### QA
+
+* https://arxiv.org/pdf/1611.01603v6
+  2014-2018, Bidirectional Attention Flow for Machine Comprehension
+  - [Homepage](https://allenai.github.io/bi-att-flow/)
+  - https://github.com/allenai/bi-att-flow
+  - https://github.com/galsang/BiDAF-pytorch
 
 ### OCR
 
@@ -135,14 +149,31 @@ Media:
 * https://towardsdatascience.com/intuitively-understanding-convolutions-for-deep-learning-1f6f42faee1
   2018, Shafkat, Intuitively Understanding Convolutions for Deep Learning
 
+Articles:
+
+* https://arxiv.org/pdf/1505.00387.pdf
+  2015, Highway Networks
+
 ### RNN
 
 * https://arxiv.org/pdf/1409.2329.pdf
   2015, Zaremba, Recurrent Neural Network Regularization
 
+### Memory Networks
+
+* https://arxiv.org/abs/1410.3916
+  2014, Memory Networks
 
 TVM
 ---
+
+### Integration
+
+* https://tvm.ai/2018/03/23/nmt-transformer-optimize.html
+  2018, TensorFlow integration
+
+* https://tvm.ai/2018/08/10/DLPack-Bridge.html
+  2018, PyTorch integration
 
 ### General
 
