@@ -38,14 +38,10 @@ Building the TVM/NNVM
 Obtaining TVM repository
 ------------------------
 
+**Solutions to typical problems may be found
+[here](http://code.huawei.com/mrc-cbg-opensource/hitvm-internal/tree/master/mironov/md/README.md)**
+
 Download upstream TVM repository and save to to some `/path/to/tvm` folder.
-
-Notes:
-
-  1. Make sure you have set `http_proxy` and `https_proxy` environment variables
-     correctly.
-  2. Git may issue errors about GNU TLS during `git clone`. If this is the case,
-     ask the team members.
 
 Running Docker container
 ------------------------
