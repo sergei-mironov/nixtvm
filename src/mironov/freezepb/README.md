@@ -26,10 +26,13 @@ Vocabulary
  * Block2 - tail part of the mode, approx 1/3 from the end
 
 
-Slides
-======
+References
+==========
 
  * [Stauts report 2018-10-10](http://code.huawei.com/mrc-cbg-opensource/hitvm-internal/blob/master/mironov/doc/Meeting%202018-10-10/MRC%20OSI%20Status%20report%202018-10-10.pptx)
+ * [Staging branch of tvm used to obtain NNVM code of TF model](https://github.com/grwlf/tvm/tree/staging)
+   - May be out of date
+   - Defines `stage_tensorflow` function
 
 
 Folder description
@@ -38,15 +41,15 @@ Folder description
     .
     ├── modeldefs.py       - Define global model constants and helpers
     ├── runners.py         - Define `with_nnvm`, `with_tf` and other helper combinators
-    ├── model0v2.py        - Latest version of Model definition in NNVM
+    ├── model0v2.py        - Latest version of Model definition in NNVM DSL
     ├── convperf.py        - Experiments on individual convolution operations
-    ├── block1.py          - ** May be out of date** Encodes experiments on Block1 of the Model
-    ├── block2.py          - ** May be out of date** Encodes experiments on Block2 of the Model
-    ├── block2v2.py        - ** May be out of date** Encodes experiments on Block2 of the Model
+    ├── block1.py          - **May be out of date** Encodes experiments on Block1 of the Model
+    ├── block2.py          - **May be out of date** Encodes experiments on Block2 of the Model
+    ├── block2v2.py        - **May be out of date** Encodes experiments on Block2 of the Model
     ├── data
     │   └── block2-timings-sorted.txt
-    ├── main.py            - ** Out of date ** First experiments on the model
-    ├── model0.py          - ** Out of date ** First version of model0v2.py
+    ├── main.py            - **Out of date** First experiments on the model
+    ├── model0.py          - **Out of date** First version of model0v2.py
     ├── partsearch.json
     ├── partsearch.png
     └── README.md          - This README
