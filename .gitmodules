@@ -10,3 +10,6 @@
 [submodule "src/mironov/tvm"]
 	path = src/mironov/tvm
 	url = https://github.com/dmlc/tvm
+[submodule "src/romanov/tvm"]
+	path = src/romanov/tvm
+	url = https://github.com/dmlc/tvm.git
