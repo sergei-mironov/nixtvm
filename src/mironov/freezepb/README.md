@@ -1,21 +1,22 @@
 TODO
 ====
 
-* ~~Run `run` several times?~~
-* ~~Try with default NNVM optimisations disabled~~
-* ~~Compare TF/TVM performance on different segments of the Model.~~
-* Measure all possible times (Wall time, CPU time, etc)
-* Figure out parallelism. Which module does schedule parallel execution in TVM?
-* Try with batch size ~100?
-* Try to apply scheduling
-* Try to enable autotuner
+ * ~~Run `run` several times?~~
+ * ~~Try with default NNVM optimisations disabled~~
+ * ~~Compare TF/TVM performance on different segments of the Model.~~
+ * Measure all possible times (Wall time, CPU time, etc)
+ * Figure out parallelism. Which module does schedule parallel execution in TVM?
+ * Try with batch size ~100?
+ * Try to apply scheduling
+ * Try to enable autotuner
+ * Improve TVM debugger
 
 Problems
 ========
 
-* Simple TF runners use `session.run` which may be slow, try feeders.
-* TV/TVM error correlates with absolute input value, setup relative tolerance.
-* `nnvm_shape` in ./convperf.py doesn't work for some reason
+ * Simple TF runners use `session.run` which may be slow, try feeders.
+ * TV/TVM error correlates with absolute input value, setup relative tolerance.
+ * `nnvm_shape` in ./convperf.py doesn't work for some reason
 
 Vocabulary
 ==========
@@ -61,15 +62,15 @@ LOG
    in seconds, every type of convolution block was repeated 200 times for
    reliable measurements
 
-       (1, 54, 6, 192)   kernel (3, 3)  time1 0.485376 timeM 3.88301
-       (1, 108, 11, 128) kernel (3, 3)  time1 0.263262 timeM 3.15915
-       (1, 54, 6, 192)   kernel (1, 1)  time1 0.119617 timeM 1.79426
-       (1, 54, 6, 256)   kernel (3, 3)  time1 0.247189 timeM 1.48313
-       (1, 54, 1, 1318)  kernel (1, 1)  time1 1.146242 timeM 1.14624
-       (1, 108, 21, 64)  kernel (3, 3)  time1 0.091557 timeM 1.09869
-       (1, 108, 11, 128) kernel (1, 1)  time1 0.039408 timeM 0.90638
-       (1, 54, 6, 256)   kernel (1, 1)  time1 0.042709 timeM 0.55522
-       (1, 108, 21, 64)  kernel (1, 1)  time1 0.014288 timeM 0.32863
+        (1, 54, 6, 192)   kernel (3, 3)  time1 0.485376 timeM 3.88301
+        (1, 108, 11, 128) kernel (3, 3)  time1 0.263262 timeM 3.15915
+        (1, 54, 6, 192)   kernel (1, 1)  time1 0.119617 timeM 1.79426
+        (1, 54, 6, 256)   kernel (3, 3)  time1 0.247189 timeM 1.48313
+        (1, 54, 1, 1318)  kernel (1, 1)  time1 1.146242 timeM 1.14624
+        (1, 108, 21, 64)  kernel (3, 3)  time1 0.091557 timeM 1.09869
+        (1, 108, 11, 128) kernel (1, 1)  time1 0.039408 timeM 0.90638
+        (1, 54, 6, 256)   kernel (1, 1)  time1 0.042709 timeM 0.55522
+        (1, 108, 21, 64)  kernel (1, 1)  time1 0.014288 timeM 0.32863
 
    We see that we should optimize (1,54,6,192) and (1,108,11,128) kernels
    first in this model since we spend most of the time there..
