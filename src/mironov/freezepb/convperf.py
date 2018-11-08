@@ -34,7 +34,8 @@ def nnvm_shape(sym):
   return sdict
 
 
-def nnvm_conv_test(nblocks=200,ks=1,w=54,h=6,c=256):
+def nnvm_conv_test(nblocks=200,ks=1,w=54,h=6,c=256,opt_level:int=2):
+  """ Test convolution performance for different shape """
   shape=(1,h,w,c)
   kshape=(ks,ks,c,c)
   x=_sym.Variable(init=np.zeros(shape=shape),name='x')
@@ -66,7 +67,8 @@ def nnvm_conv_test(nblocks=200,ks=1,w=54,h=6,c=256):
     ,k:np.zeros(shape=kshape)
     },
     t,
-    verbose=False)
+    verbose=False,
+    opt_level=opt_level)
   return r
 
 
