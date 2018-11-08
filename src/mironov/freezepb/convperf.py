@@ -21,7 +21,9 @@ def tvm_shape(t):
   return [tvm.ir_pass.Simplify(s).value for s in t.shape]
 
 def nnvm_shape(sym):
-  """ Doesn't work for some reason. In model0v2 this worked fine """
+  """ Doesn't work for some reason. In model0v2 this worked fine
+  TODO: try to use `infer_shapes_dtypes`
+  """
   g = nnvm.graph.create(sym)
   g._set_json_attr("shape_attr_key", "shape")
   g = g.apply("InferShape")
@@ -34,7 +36,7 @@ def nnvm_shape(sym):
   return sdict
 
 
-def nnvm_conv_test(nblocks=200,ks=1,w=54,h=6,c=256,opt_level:int=2):
+def nnvm_conv_test(nblocks=200,ks=1,w=54,h=6,c=256,verbose:bool=False,opt_level:int=2):
   """ Test convolution performance for different shape """
   shape=(1,h,w,c)
   kshape=(ks,ks,c,c)
@@ -67,7 +69,7 @@ def nnvm_conv_test(nblocks=200,ks=1,w=54,h=6,c=256,opt_level:int=2):
     ,k:np.zeros(shape=kshape)
     },
     t,
-    verbose=False,
+    verbose=verbose,
     opt_level=opt_level)
   return r
 

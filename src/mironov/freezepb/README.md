@@ -57,8 +57,13 @@ Folder description
 LOG
 ===
 
+#### 08.11.2018
+ * Learned about layouts in NNVM. It is a dict or a formatted string like
+   'NCHW', 'OIHW' or similar. Doesn't help much for optimisation
+ * Scheduling may be performed with the help of `FTVMSchedule` attribute.
+
 #### 01.11.2018
- * Learned about scheduling in NNVM.
+ * Experimented with scheduling in NNVM.
 
 #### 30.10.2018
  * Below are convolution execution results, sorted by model time.  Times are
