@@ -35,3 +35,6 @@ RUN apt-get install -y gdb
 RUN apt-get install -y apport
 RUN apt-get install -y llvm-5.0
 RUN apt-get install -y libedit-dev
+
+# Runs into https://bugs.launchpad.net/ubuntu/+source/python3.6/+bug/1631367 otherwise
+RUN rm /usr/lib/python3.6/sitecustomize.py
