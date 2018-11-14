@@ -11,9 +11,8 @@ fi
 #   alias ipython0='ipython --profile-dir=$CWD/.ipython-profile'
 # fi
 
-cd "$CWD"
-mkdir .ipython-profile 2>/dev/null || true
-cat >.ipython-profile/ipython_config.py <<EOF
+mkdir $CWD/.ipython-profile 2>/dev/null || true
+cat >$CWD/.ipython-profile/ipython_config.py <<EOF
 c = get_config()
 c.InteractiveShellApp.exec_lines = []
 c.InteractiveShellApp.exec_lines.append('%load_ext autoreload')
