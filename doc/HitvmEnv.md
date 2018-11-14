@@ -56,7 +56,7 @@ link will be used to execute Docker rules, defined in TVM project
 
 Next, execute the following script to build and run the docker:
 
-    $ ./rundocker.sh
+    $ ./rundocker.sh --map-sockets
 
 The `Dockerfile.dev` will be used for building the docker image. One may
 adjust/modify/duplicate it as needed.
@@ -93,8 +93,8 @@ Tensorboard is a web-application allowing users to examine the structure and
 performance metrics of Tensorflow models.
 
 `rundocker.sh` script maps port equal to `6000 + USER_ID -
-1000` to port 6006 of the Host. The exact values should be printed during
-container startup:
+1000` to port 6006 of the Host (if the `--map-sockets` option is passed).
+The exact values should be printed during container startup:
 
     *****************************
     Your Jupyter port: XXXX
