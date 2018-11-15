@@ -57,6 +57,14 @@ Folder description
 LOG
 ===
 
+#### 09.11.2018
+ * Found the post describing custom scheduling in NNVM.
+   https://discuss.tvm.ai/t/supporting-flexible-precomputation/730/3
+   See `register_alter_op_layout`
+ * Implemented [convsched.py](./convsched.py) sketch demonstrating how to
+   override scheduling from NNVM.
+ * TODO: Figure out how to print a TVM IR of a single NNVM operation
+
 #### 08.11.2018
  * Learned about layouts in NNVM. It is a dict or a formatted string like
    'NCHW', 'OIHW' or similar. Doesn't help much for optimisation
@@ -86,7 +94,7 @@ LOG
 #### 29.10.2018
  * Wrote simple conv2d testbench for model's typical shapes. (3x3) kernels work
    x10 times slower than trivial 1x1 kernels. See [test sources](./convperf.py)
- * TODO: interpret the results
+ * ~~TODO: interpret the results~~
 
 #### 26.10.2018
  * Instrumented the whole [model](./model0v2.py) with checkpoints and shape

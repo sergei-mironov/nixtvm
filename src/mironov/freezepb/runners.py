@@ -83,8 +83,8 @@ def run_nnvm(nwarmup:int,nloops:int,
   with nnvm.compiler.build_config(opt_level=opt_level) as cfg:
     print('config', cfg) if verbose else None
     graph,lib,_ = nnvm.compiler.build(out,tgt,ishapes)
-    # print(graph.ir()) if verbose else None
-    print(graph.json()) if verbose else None
+    print(graph.ir()) if verbose else None
+    #print(graph.json()) if verbose else None
 
   forward_graph,_,_,out_shapes,out_types = \
       infer_shapes_dtypes(nnvm.graph.create(out), shape=ishapes, dtype=itypes, fallback_dtype='float32')

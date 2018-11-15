@@ -14,6 +14,7 @@ This document describes TVM/NNVM issues, that were not reported to upstream yet.
 
  * NNVM uses Shapes `[1]` to represent scalar values, while it should mean
    vectors of size one. For some reason, they dont use empty shapes for that
+   Related: https://discuss.tvm.ai/t/nnvm-reduction-is-broken/857
 
  * Target architecture: host and host\_device labels are not first-class
 
@@ -99,4 +100,7 @@ This document describes TVM/NNVM issues, that were not reported to upstream yet.
 
  * TVM Runtime is uneble to execute the model from one arbitrary point to
    another. TF supports execution of parts of the model correctly.
+
+ * Regarding custom scheduling in NNVM
+   https://discuss.tvm.ai/t/supporting-flexible-precomputation/730
 

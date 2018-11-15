@@ -51,6 +51,7 @@ def nnvm_conv_test(nblocks=200,ks=1,w=54,h=6,c=256,verbose:bool=False,opt_level:
         t).last_data.shape)
 
   for i in range(nblocks):
+
     t=_sym.conv2d(t,k,
         dilation=(1,1),
         layout="NHWC",
@@ -61,14 +62,13 @@ def nnvm_conv_test(nblocks=200,ks=1,w=54,h=6,c=256,verbose:bool=False,opt_level:
         kernel_layout="HWIO",
         name="conv1",
         use_bias=False)
+
     t=_sym.strided_slice(t,begin=[0,0,0,0],end=[1,1,1,c])
     t=_sym.expand_like(t,x,axis=[1,2])
 
   r=run_nnvm(1,15,
     {x:np.zeros(shape=shape)
-    ,k:np.zeros(shape=kshape)
-    },
-    t,
+    ,k:np.zeros(shape=kshape)}, t,
     verbose=verbose,
     opt_level=opt_level)
   return r

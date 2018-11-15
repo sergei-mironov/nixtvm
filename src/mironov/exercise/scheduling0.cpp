@@ -1,5 +1,5 @@
 /*
-Various scheduling technics in C++
+Inestigate how to perform scheduling in C++
 
 g++ -std=c++14  scheduling0.cpp -ltvm -o scheduling0.gen
 scheduling0.gen > scheduling0.s
@@ -38,11 +38,11 @@ int main()
   BuildConfig config = build_config();
 
   auto n = var("n");
-  Array<Expr> shape = {n};
+  Array<Expr> shape = {n,n};
   Tensor A = placeholder(shape, Float(32), "A");
   Tensor B = placeholder(shape, Float(32), "B");
-  IterVar r = reduce_axis({0,n-1});
-  Tensor X = compute(shape, FCompute([=](auto i){ return tvm::sum(B(r)+A(i), {r}); } )) ;
+  IterVar r = reduce_axis({0,n});
+  Tensor X = compute(shape, FCompute([=](auto i){ return tvm::sum( A(i[0],r)*B(r,i[1]), {r}); } )) ;
 
 
   auto vecadd_lowered = ({
@@ -60,11 +60,25 @@ int main()
     cerr << "1)" << endl;
     cerr << "===========================" << endl;
     print_lowered_body(s);
+    }
 
+    {
+    Schedule s = create_schedule({X->op});
     Stage st = s[X->op];
     st.parallel(r);
     cerr << "===========================" << endl;
     cerr << "2)" << endl;
+    cerr << "===========================" << endl;
+    print_lowered_body(s);
+    }
+
+    {
+    Schedule s = create_schedule({X->op});
+    IterVar i,o; // note: no more splitting is allowed for i,o
+    Stage st = s[X->op];
+    st.split(r,3,&i,&o);
+    cerr << "===========================" << endl;
+    cerr << "3)" << endl;
     cerr << "===========================" << endl;
     print_lowered_body(s);
     }
@@ -74,7 +88,7 @@ int main()
     auto args = Array<Tensor>({A, B, X});
     auto lowered = lower(s, args, "vecadd", binds, config);
     lowered;
-    });
+  });
 
   auto target = Target::create("llvm");
   auto target_host = Target::create("llvm");
