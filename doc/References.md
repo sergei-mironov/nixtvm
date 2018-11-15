@@ -175,10 +175,12 @@ TVM
 * https://tvm.ai/2018/08/10/DLPack-Bridge.html
   2018, PyTorch integration
 
-### General
+### Autotuner
 
 * https://arxiv.org/pdf/1805.08166.pdf
   Learning to Optimize Tensor Programs
+
+### General
 
 * https://arxiv.org/pdf/1802.04799.pdf
   TVM: An Automated End-to-End Optimizing Compiler for Deep Learning
