@@ -111,6 +111,7 @@ def run_tvm(nwarmup:int,nloops:int,args:dict,out,verbose:bool=False,debug:bool=F
   scheduling(sout) if scheduling is not None else None
 
   ir = tvm.lower(sout, pls+[out], simple_mode=True)
+  print(type(ir), ir.__str__)
   print(ir) if debug else None
   mout = tvm.build(sout, pls+[out])
   out_nd = tvm.nd.array(np.zeros(get_const_tuple(out.shape), dtype=out.dtype), ctx=ctx)
