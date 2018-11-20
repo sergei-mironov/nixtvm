@@ -4,6 +4,11 @@ Useful articles
 General
 -------
 
+### Books
+
+* http://neuralnetworksanddeeplearning.com/
+  2015, Neural Networks and Deep Learning
+
 ### Datasets
 
 * http://yann.lecun.com/exdb/mnist/
@@ -18,6 +23,35 @@ General
   2014, GloVe: Global Vectors for Word Representation
 * SQuAD, The Standford Question Answering Dataset
   2018, https://rajpurkar.github.io/SQuAD-explorer/
+
+### Well-known ML models used for performance measurements
+
+* VGG
+  - https://arxiv.org/abs/1409.1556
+    2014, Very Deep Convolutional Networks for Large-Scale Image Recognition
+  - https://www.cs.toronto.edu/~frossard/post/vgg16/
+    Blog, Model and pre-trained parameters for VGG16 in TensorFlow
+
+* Densnet
+  - https://arxiv.org/pdf/1608.06993v3.pdf
+    2016, Densely Connected Convolutional Networks
+  - https://towardsdatascience.com/densenet-2810936aeebb
+    2017, Article
+
+* Mobile Net V1
+  - https://arxiv.org/abs/1704.04861
+    2017, MobileNet V1 article
+  - https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet_v1.md
+    TensorFlow README
+
+* Mobile Net V2
+  - https://arxiv.org/abs/1801.04381
+    2018, MobileNet V2 article: Inverted Residuals and Linear Bottlenecks
+  - https://github.com/tensorflow/models/tree/master/research/slim/nets/mobilenet
+    TensorFlow README
+
+* Inception
+  - https://towardsdatascience.com/a-simple-guide-to-the-versions-of-the-inception-network-7fc52b863202
 
 ### Precision problem
 
@@ -228,6 +262,10 @@ TVM
 
 * https://arxiv.org/pdf/1804.10694.pdf
   2018, Tiramisu: A Code Optimization Framework for High Performance Systems
+
+* https://github.com/xiaomi/mace
+  2018, MACE is a deep learning inference framework optimized for mobile heterogeneous computing platforms
+
 
 ### Benchmarks
 
