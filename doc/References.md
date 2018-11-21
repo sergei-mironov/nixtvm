@@ -151,6 +151,8 @@ Media
   2015, Automatic Differentiation or Mathemagically Finding Derivatives (blog, 2015). !Errors
 * http://www.autodiff.org/?module=Introduction&submenu=Selected%20Books
   Collection of textbooks on AD
+* https://autodiff-workshop.github.io/
+  2017, Autodiff Workshop
 
 Articles
 
