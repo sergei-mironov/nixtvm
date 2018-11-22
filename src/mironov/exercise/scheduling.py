@@ -67,3 +67,10 @@ def test_vectorize():
   r=run(scheduling)
   print(r.last_data)
 
+def test_parallel():
+  def scheduling(s):
+    s[C].parallel(ra)
+
+  r=run(scheduling)
+  print(r.last_data)
+
