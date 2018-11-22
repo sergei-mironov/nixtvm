@@ -7,7 +7,9 @@ General
 ### Books
 
 * http://neuralnetworksanddeeplearning.com/
-  2015, Neural Networks and Deep Learning
+  2015, Neural Networks and Deep Learning book
+* https://github.com/janishar/mit-deep-learning-book-pdf/tree/master/complete-book-bookmarked-pdf
+  2017, MIT Deep Learning Book
 
 ### Datasets
 
@@ -24,13 +26,46 @@ General
 * SQuAD, The Standford Question Answering Dataset
   2018, https://rajpurkar.github.io/SQuAD-explorer/
 
-### Well-known ML models used for performance measurements
+### Precision problem
+
+Media:
+
+* https://timvieira.github.io/blog/post/2014/02/11/exp-normalize-trick/
+  2014, Exp-normalize trick
+* https://benjaminjurke.com/content/articles/2015/loss-of-significance-in-floating-point-computations/
+  2015, Jurke, Analyzing the loss of significance in floating-point computations
+
+Articles:
+
+* https://arxiv.org/pdf/1805.01078
+  2018, Exploration of Numerical Precision in Deep Neural Networks (some problems with downloading)
+
+Tasks by classes
+----------------
+
+### CV
 
 * VGG
   - https://arxiv.org/abs/1409.1556
     2014, Very Deep Convolutional Networks for Large-Scale Image Recognition
   - https://www.cs.toronto.edu/~frossard/post/vgg16/
     Blog, Model and pre-trained parameters for VGG16 in TensorFlow
+
+* Inception
+  - https://towardsdatascience.com/a-simple-guide-to-the-versions-of-the-inception-network-7fc52b863202
+  - https://arxiv.org/pdf/1409.4842v1.pdf
+    2014, Going deeper with convolution
+
+* AlexNet ??
+  - ??
+
+* Squeezenet
+  - https://arxiv.org/pdf/1602.07360
+    2016, SqueezeNet: AlexNet-level accuracy with 50x fewer parameters and <0.5MB model size
+  - https://en.wikipedia.org/wiki/SqueezeNet
+    2016, Wikipedia
+  - https://github.com/DeepScale/SqueezeNet
+    2016, GitHub repository
 
 * Densnet
   - https://arxiv.org/pdf/1608.06993v3.pdf
@@ -50,25 +85,7 @@ General
   - https://github.com/tensorflow/models/tree/master/research/slim/nets/mobilenet
     TensorFlow README
 
-* Inception
-  - https://towardsdatascience.com/a-simple-guide-to-the-versions-of-the-inception-network-7fc52b863202
 
-### Precision problem
-
-Media:
-
-* https://timvieira.github.io/blog/post/2014/02/11/exp-normalize-trick/
-  2014, Exp-normalize trick
-* https://benjaminjurke.com/content/articles/2015/loss-of-significance-in-floating-point-computations/
-  2015, Jurke, Analyzing the loss of significance in floating-point computations
-
-Articles:
-
-* https://arxiv.org/pdf/1805.01078
-  2018, Exploration of Numerical Precision in Deep Neural Networks (some problems with downloading)
-
-Tasks
------
 
 ### NLP
 
@@ -78,6 +95,8 @@ General Media:
   LSTM tutorial
 * https://hackernoon.com/understanding-architecture-of-lstm-cell-from-scratch-with-code-8da40f0b71f4
   Understanding LSTM networks
+* https://aclanthology.coli.uni-saarland.de/
+  Study of computational linguistics and natural language processing
 
 Huawei Media:
 
@@ -92,16 +111,30 @@ Articles:
 
 * https://arxiv.org/pdf/1506.02078.pdf
   2015, Visualizing and Understanding recurrent Networks
+* https://arxiv.org/pdf/1706.03762.pdf
+  2017, Attention Is All You Need
 * https://arxiv.org/pdf/1708.02709.pdf
   2018, Recent Trends in Deep Learning Based Natural Language Processing
+* http://aclweb.org/anthology/D15-1141
+  2018, Long Short-Term Memory Neural Networks for Chinese Word Segmentation
 
 ### QA
 
-* https://arxiv.org/pdf/1611.01603v6
-  2014-2018, Bidirectional Attention Flow for Machine Comprehension
+* https://rajpurkar.github.io/SQuAD-explorer/
+  - The Stanford Question Answering DataSet and Leaderboard
+
+
+* BiDAF, Bidirectional Attention Flow for Machine Comprehension
+  - 2014, https://arxiv.org/pdf/1611.01603v6
   - [Homepage](https://allenai.github.io/bi-att-flow/)
   - https://github.com/allenai/bi-att-flow
   - https://github.com/galsang/BiDAF-pytorch
+
+* BERT Model
+  - https://arxiv.org/pdf/1810.04805.pdf
+    2018, BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding
+  - https://towardsdatascience.com/bert-explained-state-of-the-art-language-model-for-nlp-f8b21a9b6270
+    2018, BERT explained
 
 ### OCR
 
@@ -171,8 +204,8 @@ Articles
 
 
 
-Models
-------
+Models by classes
+-----------------
 
 ### CNN
 

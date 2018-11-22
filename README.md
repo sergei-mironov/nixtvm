@@ -12,6 +12,7 @@ projects.
 Links
 -----
 
+  * [NLP tasks](./doc/NLP.md)
   * [Environment setup](./doc/HitvmEnv.md)
   * [Basic TVM development workflow](./doc/BasicWorkflow.md)
   * [Unresolved problems](./doc/Problems.md)
