@@ -103,6 +103,8 @@ rec {
 
       cdtvm() { cd $TVM ; }
 
+      alias ipython="$CWD/ipython.sh"
+
       nmake() {(
         cdtvm
         mkdir "$BUILD" 2>/dev/null
