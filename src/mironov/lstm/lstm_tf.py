@@ -1,3 +1,7 @@
+"""
+Poor man's LSTM cell applied to MNIST. Use `train` function to train the model.
+"""
+
 import tensorflow as tf
 import numpy as np
 import argparse
@@ -19,6 +23,7 @@ def lstm_gate(op, U,V,b, x,h):
   return op(tf.matmul(x,U) + tf.matmul(h,V) + b)
 
 def lstm_cell(Ug,Vg,bg, Ui,Vi,bi, Uf,Vf,bf, Uo,Vo,bo):
+  """ LSTM cell. Ideomatic TF code would define all the variable here """
   def call(xt,st,ht):
     g = lstm_gate(tf.tanh,    Ug,Vg,bg, xt,ht)
     i = lstm_gate(tf.sigmoid, Ui,Vi,bi, xt,ht)
@@ -39,8 +44,9 @@ def lstm_layer(cell, xs:List[TF_Tensor], s0, h0)->List[TF_Tensor]:
     hs.append(h)
   return hs
 
-def model(batch_size, num_inputs, num_channels, num_classes:int=10, init=tf.random_normal):
+def model(batch_size:int, num_inputs:int, num_channels:int, num_classes:int=10, init=tf.random_normal):
   """
+  Create a single cell and replicate it `num_inputs` times for training.
   Return X,[(batch_size,num_classes) x num_inputs]
   """
   X = tf.placeholder(tf.float32, shape=(batch_size, num_inputs, num_channels))
@@ -63,14 +69,22 @@ def model(batch_size, num_inputs, num_channels, num_classes:int=10, init=tf.rand
 
   cell = lstm_cell(Ug,Vg,bg, Ui,Vi,bi, Uf,Vf,bf, Uo,Vo,bo)
 
+  # TODO: Not clear: should the initial state be a trainable parameter or a
+  # constant?
   s0 = tf.Variable(init([1, num_classes]))
+  # TODO: Not clear: shoule the initial h be a trainable parameter or a
+  # constant?
   h0 = tf.constant(np.zeros(shape=[1, num_classes], dtype=np.float32))
   xs = tf.unstack(X, num_inputs, 1)
 
   outputs = lstm_layer(cell, xs, s0, h0)
   return X,outputs
 
-def model2(batch_size, num_inputs, num_channels, num_classes:int=10, num_hidden:int=128, init=tf.random_normal):
+def model2(batch_size:int, num_inputs:int, num_channels:int, num_classes:int=10, num_hidden:int=128, init=tf.random_normal):
+  """
+  Use `model` with 128 "classes", but translate them back to 10 classes via
+  dense layer.
+  """
   W=tf.Variable(init([num_hidden, num_classes]))
   b=tf.Variable(init([1, num_classes]))
 
@@ -79,6 +93,7 @@ def model2(batch_size, num_inputs, num_channels, num_classes:int=10, num_hidden:
   return X,cls
 
 def mnist_load():
+  """ Load MNIST and convert its ys to one-hot encoding """
   (Xl,yl),(Xt,yt)=mnist.load_data()
   def oh(y):
     yoh=np.zeros((y.shape[0],10),dtype=np.float32)
@@ -89,6 +104,7 @@ def mnist_load():
 (Xl,yl),(Xt,yt)=mnist_load()
 
 def train():
+  """ Main train """
   batch_size=50
   num_inputs=28
   num_channels=28
@@ -112,15 +128,17 @@ def train():
     sess.run(variables.global_variables_initializer())
     for e in range(num_epochs):
       for step in range(training_steps):
+        # TODO: One should randomize batches preperly. Approach below is very poor.
         Xi_=Xl[step*batch_size:(step+1)*batch_size,:,:]
         yi_=yl[step*batch_size:(step+1)*batch_size,:]
         loss_,acc_,_=sess.run((loss_op,accuracy_op,train_op), feed_dict={X:Xi_, y:yi_})
 
         if step%100==0:
-          print("epoch",e,"step",e*training_steps + step,"loss","{:.4f}".format(loss_),"acc","{:.3f}".format(acc_))
+          print("epoch",e,"step",e*training_steps + step,"loss","{:.4f}".format(loss_),"acc","{:.2f}".format(acc_))
 
 
 def go2():
+  """ Test facility 2 """
   batch_size=3
   num_inputs=2
   num_channels=28
@@ -136,6 +154,7 @@ def go2():
     return o_
 
 def go1():
+  """ Test facility 1 """
   batch_size=3
   num_inputs=2
   num_channels=28
