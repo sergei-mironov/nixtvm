@@ -91,10 +91,6 @@ Tasks by classes
 
 General Media:
 
-* http://adventuresinmachinelearning.com/recurrent-neural-networks-lstm-tutorial-tensorflow/
-  LSTM tutorial
-* https://hackernoon.com/understanding-architecture-of-lstm-cell-from-scratch-with-code-8da40f0b71f4
-  Understanding LSTM networks
 * https://aclanthology.coli.uni-saarland.de/
   Study of computational linguistics and natural language processing
 
@@ -232,6 +228,25 @@ Articles:
 
 * https://arxiv.org/abs/1410.3916
   2014, Memory Networks
+
+### LSTM
+
+Media:
+
+* https://www.quora.com/What-is-the-best-research-paper-about-recurrent-neural-networks-to-start-with
+  What is the best research paper about recurrent neural networks to start with?
+* http://adventuresinmachinelearning.com/recurrent-neural-networks-lstm-tutorial-tensorflow/
+  LSTM tutorial
+* https://hackernoon.com/understanding-architecture-of-lstm-cell-from-scratch-with-code-8da40f0b71f4
+  Understanding LSTM networks
+
+Articles:
+
+* https://arxiv.org/pdf/1508.02774.pdf
+  2015, Bruel, Benchmarking of LSTM Networks
+* https://arxiv.org/pdf/1503.04069.pdf
+  2017, LSTM: A Search Space Odyssey
+
 
 TVM
 ---
