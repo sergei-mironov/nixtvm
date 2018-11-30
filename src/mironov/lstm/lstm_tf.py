@@ -4,14 +4,13 @@ Poor man's LSTM cell applied to MNIST. Use `train` function to train the model.
 
 import tensorflow as tf
 import numpy as np
-import argparse
 
 from typing import Any,List,Dict
 from keras.datasets import mnist
 from tensorflow import Tensor as TF_Tensor
 from tensorflow.python.ops import variables
 
-def lstm_gate(op, U,V,b, x,h):
+def lstm_gate(op, U,b, x):
   """
   op - nonlinearity operation
   x,h - input tensor of shape (1,a)
@@ -20,15 +19,16 @@ def lstm_gate(op, U,V,b, x,h):
 
   return tensor of shape (1,b)
   """
-  return op(tf.matmul(x,U) + tf.matmul(h,V) + b)
+  return op(tf.matmul(x,U) + b)
 
-def lstm_cell(Ug,Vg,bg, Ui,Vi,bi, Uf,Vf,bf, Uo,Vo,bo):
+def lstm_cell(Ug,bg, Ui,bi, Uf,bf, Uo,bo):
   """ LSTM cell. Ideomatic TF code would define all the variable here """
   def call(xt,st,ht):
-    g = lstm_gate(tf.tanh,    Ug,Vg,bg, xt,ht)
-    i = lstm_gate(tf.sigmoid, Ui,Vi,bi, xt,ht)
-    f = lstm_gate(tf.sigmoid, Uf,Vf,bf, xt,ht)
-    o = lstm_gate(tf.sigmoid, Uo,Vo,bo, xt,ht)
+    input = tf.concat([xt,ht],1)
+    g = lstm_gate(tf.tanh,    Ug,bg, input)
+    i = lstm_gate(tf.sigmoid, Ui,bi, input)
+    f = lstm_gate(tf.sigmoid, Uf,bf, input)
+    o = lstm_gate(tf.sigmoid, Uo,bo, input)
 
     st2 = st*f + g*i
     ht2 = tf.tanh(st2)*o
@@ -44,37 +44,31 @@ def lstm_layer(cell, xs:List[TF_Tensor], s0, h0)->List[TF_Tensor]:
     hs.append(h)
   return hs
 
-def model(batch_size:int, num_timesteps:int, num_inputs:int, num_units:int, init=tf.random_normal, bias_init=tf.zeros):
+def model(batch_size:int, num_timesteps:int, num_inputs:int, num_units:int, init=tf.initializers.glorot_uniform(), bias_init=tf.zeros):
   """
   Create a single cell and replicate it `num_timesteps` times for training.
   Return X,[(batch_size,num_classes) x num_timesteps]
   """
   X = tf.placeholder(tf.float32, shape=(batch_size, num_timesteps, num_inputs))
 
-  Ug = tf.Variable(init([num_inputs, num_units]))
-  Vg = tf.Variable(init([num_units, num_units]))
-  bg = tf.Variable(bias_init([1, num_units]))
+  U_shape = [num_inputs + num_units, num_units]
+  b_shape = [1, num_units]
+  Ug = tf.Variable(init(U_shape))
+  bg = tf.Variable(bias_init(b_shape))
 
-  Ui = tf.Variable(init([num_inputs, num_units]))
-  Vi = tf.Variable(init([num_units, num_units]))
-  bi = tf.Variable(bias_init([1, num_units]))
+  Ui = tf.Variable(init(U_shape))
+  bi = tf.Variable(bias_init(b_shape))
 
-  Uf = tf.Variable(init([num_inputs, num_units]))
-  Vf = tf.Variable(init([num_units, num_units]))
-  bf = tf.Variable(bias_init([1, num_units]) + tf.constant(1.0))
+  Uf = tf.Variable(init(U_shape))
+  bf = tf.Variable(bias_init(b_shape) + tf.ones(b_shape))
 
-  Uo = tf.Variable(init([num_inputs, num_units]))
-  Vo = tf.Variable(init([num_units, num_units]))
-  bo = tf.Variable(bias_init([1, num_units]))
+  Uo = tf.Variable(init(U_shape))
+  bo = tf.Variable(bias_init(b_shape))
 
-  cell = lstm_cell(Ug,Vg,bg, Ui,Vi,bi, Uf,Vf,bf, Uo,Vo,bo)
+  cell = lstm_cell(Ug,bg, Ui,bi, Uf,bf, Uo,bo)
 
-  # TODO: Not clear: should the initial state be a trainable parameter or a
-  # constant?
-  s0 = tf.constant(np.zeros(shape=[1, num_units], dtype=np.float32))
-  # TODO: Not clear: shoule the initial h be a trainable parameter or a
-  # constant?
-  h0 = tf.constant(np.zeros(shape=[1, num_units], dtype=np.float32))
+  s0 = tf.constant(np.zeros(shape=[batch_size, num_units], dtype=np.float32))
+  h0 = tf.constant(np.zeros(shape=[batch_size, num_units], dtype=np.float32))
   xs = tf.unstack(X, num_timesteps, 1)
 
   outputs = lstm_layer(cell, xs, s0, h0)
@@ -88,8 +82,8 @@ def model2(batch_size:int, num_timesteps:int, num_inputs:int, num_classes:int, n
   W=tf.Variable(init([num_hidden, num_classes]))
   b=tf.Variable(init([1, num_classes]))
 
-  X,outputs=model(batch_size, num_timesteps, num_inputs, num_units=num_hidden, init=init)
-  cls=tf.squeeze(tf.matmul(outputs[-1],W)+b)
+  X,outputs=model(batch_size, num_timesteps, num_inputs, num_units=num_hidden)
+  cls=tf.matmul(outputs[-1],W)+b
   return X,cls
 
 def mnist_load():
@@ -107,7 +101,7 @@ def mnist_load():
 
 def train():
   """ Main train """
-  batch_size=128
+  batch_size=64
   num_inputs=28
   num_channels=28
   num_hidden=128
