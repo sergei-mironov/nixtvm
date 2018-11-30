@@ -50,7 +50,7 @@ def lstm_layer(cell, xs: List[TF_Tensor], s0, h0) -> List[TF_Tensor]:
     return hs
 
 
-def model(batch_size: int, num_timesteps: int, num_inputs: int, num_units: int, init=tf.initializers.glorot_uniform(),
+def model(num_timesteps: int, num_inputs: int, num_units: int, init=tf.initializers.glorot_uniform(),
           bias_init=tf.zeros):
     """
     Create a single cell and replicate it `num_timesteps` times for training.
@@ -74,15 +74,17 @@ def model(batch_size: int, num_timesteps: int, num_inputs: int, num_units: int, 
 
     cell = lstm_cell(Ug, bg, Ui, bi, Uf, bf, Uo, bo)
 
-    s0 = tf.constant(np.zeros(shape=[batch_size, num_units], dtype=np.float32))
-    h0 = tf.constant(np.zeros(shape=[batch_size, num_units], dtype=np.float32))
     xs = tf.unstack(X, num_timesteps, 1)
+    x = xs[0]
+    s_shape = tf.stack([x.shape[0].value or tf.shape(x)[0], num_units], name="s_shape")
+    s0 = tf.zeros(s_shape, dtype=np.float32)
+    h0 = s0
 
     outputs = lstm_layer(cell, xs, s0, h0)
     return X, outputs
 
 
-def model2(batch_size: int, num_timesteps: int, num_inputs: int, num_classes: int, num_hidden: int,
+def model2(num_timesteps: int, num_inputs: int, num_classes: int, num_hidden: int,
            init=tf.random_normal):
     """
     Use `model` with 128 "classes", but translate them back to 10 classes via
@@ -91,7 +93,7 @@ def model2(batch_size: int, num_timesteps: int, num_inputs: int, num_classes: in
     W = tf.Variable(init([num_hidden, num_classes]))
     b = tf.Variable(init([1, num_classes]))
 
-    X, outputs = model(batch_size, num_timesteps, num_inputs, num_units=num_hidden)
+    X, outputs = model(num_timesteps, num_inputs, num_units=num_hidden)
     cls = tf.matmul(outputs[-1], W) + b
     return X, cls
 
@@ -121,15 +123,15 @@ def train():
     num_inputs = 28 # length of each row
     num_hidden = 128
     num_classes = 10
-    training_steps = 500 # TODO temporary to make faster
+    training_steps = 500 # TODO temporary to make faster, 10000 to actually train
     learning_rate = 0.001
     num_examples = Xl.shape[0]
     with tf.Session(graph=tf.Graph()) as sess:
-        X, logits = model2(batch_size, num_timesteps, num_inputs, num_classes=num_classes, num_hidden=num_hidden,
+        X, logits = model2(num_timesteps, num_inputs, num_classes=num_classes, num_hidden=num_hidden,
                            init=tf.random_normal)
         y = tf.placeholder(tf.float32, shape=(None, num_classes))
 
-        loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=y))
+        loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(logits=logits, labels=y))
         optimizer = tf.train.GradientDescentOptimizer(learning_rate=learning_rate)
         train_op = optimizer.minimize(loss_op)
 
@@ -159,7 +161,7 @@ def train():
             batch_end = batch_start + batch_size
             return {X: Xi_, y: yi_}
 
-        for step in range(training_steps):
+        for step in range(training_steps + 1):
             batch = next_batch()
             sess.run(train_op, feed_dict=batch)
 
@@ -169,10 +171,6 @@ def train():
                       "{:.2f}".format(acc_))
 
         print("Optimization Finished!")
-        # TODO modify op to handle any number of images
-        test_samples = batch_size
-        Xt = Xt[:test_samples, :, :]
-        yt = yt[:test_samples, :]
         print("Testing Accuracy:",
             sess.run(accuracy_op, feed_dict={X: Xt, y: yt}))
 
