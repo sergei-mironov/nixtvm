@@ -27,11 +27,11 @@ def lstm_cell(Ug,Vg,bg, Ui,Vi,bi, Uf,Vf,bf, Uo,Vo,bo):
   def call(xt,st,ht):
     g = lstm_gate(tf.tanh,    Ug,Vg,bg, xt,ht)
     i = lstm_gate(tf.sigmoid, Ui,Vi,bi, xt,ht)
-    f = lstm_gate(tf.sigmoid, Uf,Vf,bf, xt,ht)
+    f = lstm_gate(tf.sigmoid, Uf,Vf,bf + tf.constant(1.0), xt,ht)
     o = lstm_gate(tf.sigmoid, Uo,Vo,bo, xt,ht)
 
     st2 = st*f + g*i
-    ht2 = tf.tanh(st)*o
+    ht2 = tf.tanh(st2)*o
     return (st2,ht2)
   return call
 
@@ -44,43 +44,43 @@ def lstm_layer(cell, xs:List[TF_Tensor], s0, h0)->List[TF_Tensor]:
     hs.append(h)
   return hs
 
-def model(batch_size:int, num_inputs:int, num_channels:int, num_classes:int=10, init=tf.random_normal):
+def model(batch_size:int, num_timesteps:int, num_inputs:int, num_units:int, init=tf.random_normal):
   """
-  Create a single cell and replicate it `num_inputs` times for training.
-  Return X,[(batch_size,num_classes) x num_inputs]
+  Create a single cell and replicate it `num_timesteps` times for training.
+  Return X,[(batch_size,num_classes) x num_timesteps]
   """
-  X = tf.placeholder(tf.float32, shape=(batch_size, num_inputs, num_channels))
+  X = tf.placeholder(tf.float32, shape=(batch_size, num_timesteps, num_inputs))
 
-  Ug = tf.Variable(init([num_channels, num_classes]))
-  Vg = tf.Variable(init([num_classes, num_classes]))
-  bg = tf.Variable(init([1, num_classes]))
+  Ug = tf.Variable(init([num_inputs, num_units]))
+  Vg = tf.Variable(init([num_units, num_units]))
+  bg = tf.Variable(init([1, num_units]))
 
-  Ui = tf.Variable(init([num_channels, num_classes]))
-  Vi = tf.Variable(init([num_classes, num_classes]))
-  bi = tf.Variable(init([1, num_classes]))
+  Ui = tf.Variable(init([num_inputs, num_units]))
+  Vi = tf.Variable(init([num_units, num_units]))
+  bi = tf.Variable(init([1, num_units]))
 
-  Uf = tf.Variable(init([num_channels, num_classes]))
-  Vf = tf.Variable(init([num_classes, num_classes]))
-  bf = tf.Variable(init([1, num_classes]))
+  Uf = tf.Variable(init([num_inputs, num_units]))
+  Vf = tf.Variable(init([num_units, num_units]))
+  bf = tf.Variable(init([1, num_units]))
 
-  Uo = tf.Variable(init([num_channels, num_classes]))
-  Vo = tf.Variable(init([num_classes, num_classes]))
-  bo = tf.Variable(init([1, num_classes]))
+  Uo = tf.Variable(init([num_inputs, num_units]))
+  Vo = tf.Variable(init([num_units, num_units]))
+  bo = tf.Variable(init([1, num_units]))
 
   cell = lstm_cell(Ug,Vg,bg, Ui,Vi,bi, Uf,Vf,bf, Uo,Vo,bo)
 
   # TODO: Not clear: should the initial state be a trainable parameter or a
   # constant?
-  s0 = tf.Variable(init([1, num_classes]))
+  s0 = tf.Variable(init([1, num_units]))
   # TODO: Not clear: shoule the initial h be a trainable parameter or a
   # constant?
-  h0 = tf.constant(np.zeros(shape=[1, num_classes], dtype=np.float32))
-  xs = tf.unstack(X, num_inputs, 1)
+  h0 = tf.constant(np.zeros(shape=[1, num_units], dtype=np.float32))
+  xs = tf.unstack(X, num_timesteps, 1)
 
   outputs = lstm_layer(cell, xs, s0, h0)
   return X,outputs
 
-def model2(batch_size:int, num_inputs:int, num_channels:int, num_classes:int=10, num_hidden:int=128, init=tf.random_normal):
+def model2(batch_size:int, num_timesteps:int, num_inputs:int, num_classes:int, num_hidden:int, init=tf.random_normal):
   """
   Use `model` with 128 "classes", but translate them back to 10 classes via
   dense layer.
@@ -88,7 +88,7 @@ def model2(batch_size:int, num_inputs:int, num_channels:int, num_classes:int=10,
   W=tf.Variable(init([num_hidden, num_classes]))
   b=tf.Variable(init([1, num_classes]))
 
-  X,outputs=model(batch_size, num_inputs, num_channels, num_classes=num_hidden, init=init)
+  X,outputs=model(batch_size, num_timesteps, num_inputs, num_units=num_hidden, init=init)
   cls=tf.squeeze(tf.matmul(outputs[-1],W)+b)
   return X,cls
 
@@ -99,20 +99,22 @@ def mnist_load():
     yoh=np.zeros((y.shape[0],10),dtype=np.float32)
     yoh[np.arange(y.shape[0]),y]=1
     return yoh
+  Xl = Xl.astype(np.float32) / 255.0
+  Xt = Xt.astype(np.float32) / 255.0
   return (Xl,oh(yl)),(Xt,oh(yt))
 
 (Xl,yl),(Xt,yt)=mnist_load()
 
 def train():
   """ Main train """
-  batch_size=50
+  batch_size=128
   num_inputs=28
   num_channels=28
-  num_hidden=32
+  num_hidden=128
   num_classes=10
-  training_steps=int(60000/batch_size)
-  num_epochs=1000
+  training_steps=10000
   learning_rate=0.001
+  num_examples = Xl.shape[0]
   with tf.Session(graph=tf.Graph()) as sess:
     X,logits=model2(batch_size,num_inputs,num_channels,num_classes=num_classes,num_hidden=num_hidden,init=tf.random_normal)
     y = tf.placeholder(tf.float32, shape=(batch_size, num_classes))
@@ -126,16 +128,36 @@ def train():
     accuracy_op = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 
     sess.run(variables.global_variables_initializer())
-    for e in range(num_epochs):
-      for step in range(training_steps):
-        # TODO: One should randomize batches preperly. Approach below is very poor.
-        Xi_=Xl[step*batch_size:(step+1)*batch_size,:,:]
-        yi_=yl[step*batch_size:(step+1)*batch_size,:]
-        loss_,acc_,_=sess.run((loss_op,accuracy_op,train_op), feed_dict={X:Xi_, y:yi_})
 
-        if step%100==0:
-          print("epoch",e,"step",e*training_steps + step,"loss","{:.4f}".format(loss_),"acc","{:.2f}".format(acc_))
+    epoch = -1
+    batch_start = 0
+    batch_end = batch_size
 
+    def next_batch():
+      nonlocal epoch, batch_start, batch_end
+      global Xl, yl
+      if batch_end > num_examples or epoch == -1:
+        epoch += 1
+        batch_start = 0
+        batch_end = batch_size
+        perm0 = np.arange(num_examples)
+        np.random.shuffle(perm0)
+        Xl = Xl[perm0]
+        yl = yl[perm0]
+      Xi_ = Xl[batch_start:batch_end, :, :]
+      yi_ = yl[batch_start:batch_end, :]
+      batch_start = batch_end
+      batch_end = batch_start + batch_size
+      return {X: Xi_, y: yi_}
+
+    for step in range(training_steps):
+      batch = next_batch()
+      sess.run(train_op, feed_dict=batch)
+
+      if step % 100 == 0:
+        loss_, acc_ = sess.run((loss_op, accuracy_op), feed_dict=batch)
+        print("epoch", epoch, "step", step, "loss", "{:.4f}".format(loss_), "acc",
+              "{:.2f}".format(acc_))
 
 def go2():
   """ Test facility 2 """
@@ -145,7 +167,7 @@ def go2():
   num_hidden=128
   num_classes=10
   with tf.Session(graph=tf.Graph()) as sess:
-    X,os=model2(batch_size,num_inputs,num_channels,init=tf.ones)
+    X,os=model2(batch_size,num_inputs,num_channels,num_classes,num_hidden,init=tf.ones)
     sess.run(variables.global_variables_initializer())
 
     Xz_=np.zeros(shape=(batch_size,num_inputs,num_channels))
@@ -167,3 +189,5 @@ def go1():
     o_=sess.run(os, feed_dict={X:Xz_})
     return o_[-1]
 
+if __name__ == '__main__':
+  train()
