@@ -27,7 +27,7 @@ def lstm_cell(Ug,Vg,bg, Ui,Vi,bi, Uf,Vf,bf, Uo,Vo,bo):
   def call(xt,st,ht):
     g = lstm_gate(tf.tanh,    Ug,Vg,bg, xt,ht)
     i = lstm_gate(tf.sigmoid, Ui,Vi,bi, xt,ht)
-    f = lstm_gate(tf.sigmoid, Uf,Vf,bf + tf.constant(1.0), xt,ht)
+    f = lstm_gate(tf.sigmoid, Uf,Vf,bf, xt,ht)
     o = lstm_gate(tf.sigmoid, Uo,Vo,bo, xt,ht)
 
     st2 = st*f + g*i
@@ -44,7 +44,7 @@ def lstm_layer(cell, xs:List[TF_Tensor], s0, h0)->List[TF_Tensor]:
     hs.append(h)
   return hs
 
-def model(batch_size:int, num_timesteps:int, num_inputs:int, num_units:int, init=tf.random_normal):
+def model(batch_size:int, num_timesteps:int, num_inputs:int, num_units:int, init=tf.random_normal, bias_init=tf.zeros):
   """
   Create a single cell and replicate it `num_timesteps` times for training.
   Return X,[(batch_size,num_classes) x num_timesteps]
@@ -53,25 +53,25 @@ def model(batch_size:int, num_timesteps:int, num_inputs:int, num_units:int, init
 
   Ug = tf.Variable(init([num_inputs, num_units]))
   Vg = tf.Variable(init([num_units, num_units]))
-  bg = tf.Variable(init([1, num_units]))
+  bg = tf.Variable(bias_init([1, num_units]))
 
   Ui = tf.Variable(init([num_inputs, num_units]))
   Vi = tf.Variable(init([num_units, num_units]))
-  bi = tf.Variable(init([1, num_units]))
+  bi = tf.Variable(bias_init([1, num_units]))
 
   Uf = tf.Variable(init([num_inputs, num_units]))
   Vf = tf.Variable(init([num_units, num_units]))
-  bf = tf.Variable(init([1, num_units]))
+  bf = tf.Variable(bias_init([1, num_units]) + tf.constant(1.0))
 
   Uo = tf.Variable(init([num_inputs, num_units]))
   Vo = tf.Variable(init([num_units, num_units]))
-  bo = tf.Variable(init([1, num_units]))
+  bo = tf.Variable(bias_init([1, num_units]))
 
   cell = lstm_cell(Ug,Vg,bg, Ui,Vi,bi, Uf,Vf,bf, Uo,Vo,bo)
 
   # TODO: Not clear: should the initial state be a trainable parameter or a
   # constant?
-  s0 = tf.Variable(init([1, num_units]))
+  s0 = tf.constant(np.zeros(shape=[1, num_units], dtype=np.float32))
   # TODO: Not clear: shoule the initial h be a trainable parameter or a
   # constant?
   h0 = tf.constant(np.zeros(shape=[1, num_units], dtype=np.float32))
