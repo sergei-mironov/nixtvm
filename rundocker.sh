@@ -38,7 +38,7 @@ else
   DOCKER_BINARY="docker"
 fi
 
-DOCKER_IMG_NAME=$(echo "hitvm.${CONTAINER_TYPE}" | sed -e 's/=/_/g' -e 's/,/-/g' | tr '[:upper:]' '[:lower:]')
+DOCKER_IMG_NAME=$(echo "hitvm.${CONTAINER_TYPE}.${SUFFIX}" | sed -e 's/=/_/g' -e 's/,/-/g' | tr '[:upper:]' '[:lower:]')
 
 if test -z "$DOCKER_PROXY_ARGS" ; then
   if test -n "$https_proxy" ; then

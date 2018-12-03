@@ -224,6 +224,10 @@ Articles:
 * https://arxiv.org/pdf/1409.2329.pdf
   2015, Zaremba, Recurrent Neural Network Regularization
 
+* https://arxiv.org/abs/1810.04719
+  2018, Fully Supervised Speaker Diarization
+  - [https://github.com/google/uis-rnn](GitHub)
+
 ### Memory Networks
 
 * https://arxiv.org/abs/1410.3916
@@ -316,6 +320,8 @@ TVM
 * https://github.com/xiaomi/mace
   2018, MACE is a deep learning inference framework optimized for mobile heterogeneous computing platforms
 
+* https://github.com/Tencent/PocketFlow
+  PocketFlow, a kind of Autotuner for TF?
 
 ### Benchmarks
 
