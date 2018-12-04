@@ -104,3 +104,11 @@ This document describes TVM/NNVM issues, that were not reported to upstream yet.
  * Regarding custom scheduling in NNVM
    https://discuss.tvm.ai/t/supporting-flexible-precomputation/730
 
+ * Performance unit-tests for TOPI. In order to improve simplifiers we would
+   like to see a performance baseline for TOPI operations.
+
+ * `Map<Tensor,a>` problem. Tensors have full-scale `<` operation, but Map uses
+   old-style pointer-equivalence.
+
+
+
