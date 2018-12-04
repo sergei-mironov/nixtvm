@@ -286,6 +286,9 @@ TVM
 
 ### Competitors
 
+* http://halide-lang.org/
+  Halide itself
+
 * https://www.tensorflow.org/performance/xla/
   XLA (Accelerated Linear Algebra) is a domain-specific compiler for linear
   algebra that optimizes TensorFlow computations.
