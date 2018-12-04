@@ -1,4 +1,3 @@
-
 Basic workflow of TVM
 =====================
 
@@ -202,5 +201,6 @@ To demonstrate how to use the library we run the computation requested:
     0 11 22 33 44 55 66 77 88 99
 
 The result of addition is directed to the standard output.
+
 
 
