@@ -243,6 +243,8 @@ Media:
   LSTM tutorial
 * https://hackernoon.com/understanding-architecture-of-lstm-cell-from-scratch-with-code-8da40f0b71f4
   Understanding LSTM networks
+* https://arxiv.org/abs/1503.04069
+  LSTM: A Search Space Odyssey
 
 Articles:
 
