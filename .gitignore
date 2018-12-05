@@ -6,5 +6,7 @@ _logs/
 _dist/
 _jupyter/
 _build/
+_debug/
 tags
 data/*
+tvm-mironov
