@@ -44,6 +44,10 @@ Articles:
 
 * https://arxiv.org/pdf/1806.08342.pdf
   2018, Quantizing deep convolutional networks for efficient inference: A whitepaper
+* https://arxiv.org/pdf/1712.05877.pdf
+  2017, Quantization and Training of Neural Networks for Efficient Integer-Arithmetic-Only Inference
+* https://arxiv.org/pdf/1803.08607.pdf
+  2018, A Quantization-Friendly Separable Convolution for MobileNets
 
 Tasks by classes
 ----------------
