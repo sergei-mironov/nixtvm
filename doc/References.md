@@ -40,6 +40,11 @@ Articles:
 * https://arxiv.org/pdf/1805.01078
   2018, Exploration of Numerical Precision in Deep Neural Networks (some problems with downloading)
 
+### Quantizing
+
+* https://arxiv.org/pdf/1806.08342.pdf
+  2018, Quantizing deep convolutional networks for efficient inference: A whitepaper
+
 Tasks by classes
 ----------------
 
