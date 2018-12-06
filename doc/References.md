@@ -42,14 +42,14 @@ Articles:
 
 ### Quantizing
 
-* https://arxiv.org/pdf/1611.10176.pdf
+* https://arxiv.org/pdf/1611.10176.pdf <br/>
   2016, Effective Quantization Methods for Recurrent Neural Networks
-* https://arxiv.org/pdf/1712.05877.pdf
+* https://arxiv.org/pdf/1712.05877.pdf <br/>
   2017, Quantization and Training of Neural Networks for Efficient
   Integer-Arithmetic-Only Inference
-* https://arxiv.org/pdf/1806.08342.pdf
+* https://arxiv.org/pdf/1806.08342.pdf <br/>
   2018, Quantizing deep convolutional networks for efficient inference: A whitepaper
-* https://arxiv.org/ftp/arxiv/papers/1802/1802.02615.pdf
+* https://arxiv.org/ftp/arxiv/papers/1802/1802.02615.pdf <br/>
   2018, Effective Quantization Approaches for Recurrent Neural Networks
 
 Tasks by classes
@@ -254,15 +254,19 @@ Media:
 * http://adventuresinmachinelearning.com/recurrent-neural-networks-lstm-tutorial-tensorflow/
   LSTM tutorial
 * https://hackernoon.com/understanding-architecture-of-lstm-cell-from-scratch-with-code-8da40f0b71f4
+  2015, Colah's blog
+* http://colah.github.io/posts/2015-08-Understanding-LSTMs/
   Understanding LSTM networks
-* https://arxiv.org/abs/1503.04069
-  LSTM: A Search Space Odyssey
+* https://en.wikipedia.org/wiki/Differentiable_neural_computer
+  WIKI: Differentiable memory computer
 
 Articles:
 
-* https://arxiv.org/pdf/1508.02774.pdf
+* http://www.felixgers.de/papers/phd.pdf <br/>
+  2001, Long Short-Term Memory in Recurrent Neural Networks, PhD thesis
+* https://arxiv.org/pdf/1508.02774.pdf <br/>
   2015, Bruel, Benchmarking of LSTM Networks
-* https://arxiv.org/pdf/1503.04069.pdf
+* https://arxiv.org/pdf/1503.04069.pdf <br/>
   2017, LSTM: A Search Space Odyssey
 
 
