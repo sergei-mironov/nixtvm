@@ -262,6 +262,8 @@ Media:
 
 Articles:
 
+* http://www.bioinf.jku.at/publications/older/2604.pdf <br/>
+  1997, Long Short-Term Memory
 * http://www.felixgers.de/papers/phd.pdf <br/>
   2001, Long Short-Term Memory in Recurrent Neural Networks, PhD thesis
 * https://arxiv.org/pdf/1508.02774.pdf <br/>
