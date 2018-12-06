@@ -45,9 +45,3 @@ def demo_softmax():
 def demo_argmax():
   x = np.array([[0,0,1,0,0],[3,1,2,0,0],[0,0,0,1,2]]).astype(np.float32)
   return with_tvm(0,1,[x],lambda a: topi.argmax(a,axis=1))
-
-def demo_sigmoid():
-  x = np.array([[0,0,1,0,0],[3,1,2,0,0],[0,0,0,1,2]]).astype(np.float32)
-  r = with_tvm(0,1,[x],lambda a: topi.sigmoid(a))
-  print(r)
-

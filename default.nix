@@ -74,6 +74,7 @@ rec {
       # mxnet_localssl
       # onnx
       pillow
+      pylint
     ]);
 
     shellHook = ''

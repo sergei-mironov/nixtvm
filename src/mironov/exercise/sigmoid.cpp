@@ -1,8 +1,6 @@
 /*
-Inestigate how to perform scheduling in C++
-
-g++ -std=c++14  scheduling0.cpp -ltvm -o scheduling0.gen
-scheduling0.gen > scheduling0.s
+g++ -std=c++14  sigmoid.cpp -ltvm -o sigmoid.gen
+sigmoid.gen > sigmoid.s
 */
 
 #include <random>
@@ -36,7 +34,8 @@ int main()
   auto n = var("n");
   Array<Expr> shape = {n,n};
   Tensor A = placeholder(shape, Float(32), "A");
-  Tensor X = compute(shape, FCompute([=](auto i){ return tvm::sigmoid(A(i)); } )) ;
+  Tensor X = compute(shape, FCompute([=](auto i){ return tvm::exp(A(i)); } )) ;
+  /* Tensor X = compute(shape, FCompute([=](auto i){ return tvm::tanh(A(i)); } )) ; */
 
 
   auto vecadd_lowered = ({
