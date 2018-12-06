@@ -42,8 +42,15 @@ Articles:
 
 ### Quantizing
 
+* https://arxiv.org/pdf/1611.10176.pdf
+  2016, Effective Quantization Methods for Recurrent Neural Networks
+* https://arxiv.org/pdf/1712.05877.pdf
+  2017, Quantization and Training of Neural Networks for Efficient
+  Integer-Arithmetic-Only Inference
 * https://arxiv.org/pdf/1806.08342.pdf
   2018, Quantizing deep convolutional networks for efficient inference: A whitepaper
+* https://arxiv.org/ftp/arxiv/papers/1802/1802.02615.pdf
+  2018, Effective Quantization Approaches for Recurrent Neural Networks
 
 Tasks by classes
 ----------------
