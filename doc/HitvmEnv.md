@@ -136,3 +136,18 @@ connection should be made to port XXXX of the Host machine, which redirects the
 traffic to port 8888 of the Docker
 
 
+Obtaining core dumps in Docker
+------------------------------
+
+Docker containers use host's core patterns file `/proc/sys/kernel/core_pattern`
+but don't have `apport` installed, so the default setup doesn't do anything
+useful on segmentation fault. If you have a segmentation fault which doesn't
+produce a core file: 
+
+1. Run `cat /proc/sys/kernel/core_pattern` (on the host or in the container,
+it doesn't matter. 
+2. If it contains `apport`, do (on the host!)
+
+        echo '/tmp/core.%t.%e.%p' | sudo tee /proc/sys/kernel/core_pattern
+        
+Reference: https://le.qun.ch/en/blog/core-dump-file-in-docker/
