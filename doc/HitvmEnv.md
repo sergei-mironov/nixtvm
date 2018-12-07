@@ -19,7 +19,7 @@ Overall procedure
 
   3. Enter the development environment
 
-     The build hook (see `tvm.nix`) will set up the environment.
+     The build hook (see `default.nix`) will set up the environment.
 
         $ nix-shell
 
@@ -76,6 +76,7 @@ Running TVM tasks
 
 Running Python programs using TVM/NNVM
 --------------------------------------
+*TODO: Check the statement below. Maybe we already use `ipython`*
 Same as native mode, but one should use `ipython3` instead of `ipython`.
 
     (docker) $ ipython3
@@ -155,14 +156,18 @@ produce a core file:
 
  3. Somteimtes one has to execut `ulimit -c unlimited` from the terminal where 
     the core dump should be saved.
- 4. Recently we added `--debug` argument to `dmake`. It enables building with
+
+Reference: https://le.qun.ch/en/blog/core-dump-file-in-docker/
+
+Debugging python scripts
+------------------------
+
+ 1. Recently we added `--debug` argument to `dmake`. It enables building TVM with
     debug information
         
         $ dmake --debug -j20
 
- 5. Run your faulty script like this:
+ 2. Run your faulty script like this:
  
         $ gdb  --args `which python3.6` lstm2.py
 
-
-Reference: https://le.qun.ch/en/blog/core-dump-file-in-docker/
