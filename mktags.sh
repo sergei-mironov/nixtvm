@@ -6,13 +6,14 @@ if ! test -d "$CWD" ; then
 fi
 
 cd "$CWD"
-find src src/$USER/tvm -name '*cc' -or -name '*hpp' -or -name '*h' -or -name '*\.c' -or -name '*cpp' | \
+find -H src/$USER -name '*cc' -or -name '*hpp' -or -name '*\.h' -or -name '*\.c' -or -name '*cpp' | \
   ctags -L - --excmd=number --c++-kinds=+p --fields=+iaS --extras=+q --language-force=C++
 
 while test -n "$1" ; do
   case "$1" in
     py)
-      find src/$USER/tvm src -name '*py' | ctags --excmd=number --append -L -
+      find -H src/$USER -name '*py' | \
+      ctags --excmd=number --append -L -
       ;;
     tf)
       echo "Building Tensorflow tags" >&2

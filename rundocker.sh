@@ -22,13 +22,18 @@ while test -n "$1" ; do
   shift
 done
 
-UID=`id --user`
 test -z "$SUFFIX" && SUFFIX="dev"
+if test -f "$SUFFIX" ; then
+  DOCKERFILE_PATH="$SUFFIX"
+else
+  DOCKERFILE_PATH="./Dockerfile.${SUFFIX}"
+fi
+
+UID=`id --user`
 test -z "$NOPORT" && NOPORT=n
 test -z "$DOCKER_WORKSPACE" && DOCKER_WORKSPACE=`pwd`
 test -z "$DOCKER_COMMAND" && DOCKER_COMMAND="/bin/bash"
 DOCKER_CONTEXT_PATH="./src/$USER/tvm/docker"
-DOCKERFILE_PATH="./Dockerfile.${SUFFIX}"
 
 if echo "$SUFFIX" | grep -q gpu ; then
   CONTAINER_TYPE=gpu
@@ -38,7 +43,7 @@ else
   DOCKER_BINARY="docker"
 fi
 
-DOCKER_IMG_NAME=$(echo "hitvm.${CONTAINER_TYPE}.${SUFFIX}" | sed -e 's/=/_/g' -e 's/,/-/g' | tr '[:upper:]' '[:lower:]')
+DOCKER_IMG_NAME=$(echo "hitvm.${CONTAINER_TYPE}" | sed -e 's/=/_/g' -e 's/,/-/g' | tr '[:upper:]' '[:lower:]')
 
 if test -z "$DOCKER_PROXY_ARGS" ; then
   if test -n "$https_proxy" ; then
