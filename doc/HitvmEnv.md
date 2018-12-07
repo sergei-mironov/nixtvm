@@ -148,6 +148,6 @@ produce a core file:
 it doesn't matter. 
 2. If it contains `apport`, do (on the host!)
 
-        echo '/tmp/core.%t.%e.%p' | sudo tee /proc/sys/kernel/core_pattern
+        $ echo '/tmp/core.%t.%e.%p' | sudo tee /proc/sys/kernel/core_pattern
         
 Reference: https://le.qun.ch/en/blog/core-dump-file-in-docker/
