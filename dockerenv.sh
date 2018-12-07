@@ -17,7 +17,8 @@ export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
 export LIBRARY_PATH=$TVM/build-docker
 
 cdtvm() { cd $TVM ; }
-cdex() { cd $TVM/nnvm/examples; }
+cdc() { cd $CWD ; }
+cdu() { cd src/$USER ; }
 
 dclean() {(
   cdtvm
@@ -28,11 +29,18 @@ dclean() {(
 )}
 
 dmake() {(
+  if test "$1" = "--debug" ; then
+    DMAKE_DEBUG=y
+    shift
+  fi
   cdtvm
   mkdir build-docker 2>/dev/null
   cp $TVM/cmake/config.cmake $TVM/build-docker/config.cmake
   sed -i 's/USE_LLVM OFF/USE_LLVM ON/g' $TVM/build-docker/config.cmake
   sed -i 's/USE_GRAPH_RUNTIME_DEBUG OFF/USE_GRAPH_RUNTIME_DEBUG ON/g' $TVM/build-docker/config.cmake
+  if test -n "$DMAKE_DEBUG" ; then
+    echo 'set(CMAKE_BUILD_TYPE Debug)' >> $TVM/build-docker/config.cmake
+  fi
   ./tests/scripts/task_build.sh build-docker "$@" -j6
   ln -f -s build-docker build # FIXME: Python uses 'build' name
 )}
@@ -52,10 +60,6 @@ djupyter() {(
 dtensorboard() {(
   mkdir $CWD/_logs 2>/dev/null
   tensorboard --logdir=$CWD/_logs "$@"
-)}
-
-cdc() {(
-  cd $CWD
 )}
 
 

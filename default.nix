@@ -102,6 +102,7 @@ rec {
       # Fix g++(v7.3): error: unrecognized command line option ‘-stdlib=libstdc++’; did you mean ‘-static-libstdc++’?
       unset NIX_CXXSTDLIB_LINK NIX_TARGET_CXXSTDLIB_LINK
 
+      cdc() { cd $CWD ;  }
       cdtvm() { cd $TVM ; }
 
       alias ipython="$CWD/ipython.sh"
@@ -131,9 +132,6 @@ rec {
         sh ./tests/ci_build/ci_build.sh cpu ./tests/scripts/task_python_nnvm.sh
       )}
 
-      cdc() {(
-        cd $CWD
-      )}
     '';
   };
 
