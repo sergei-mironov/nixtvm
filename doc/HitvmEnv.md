@@ -155,9 +155,14 @@ produce a core file:
 
  3. Somteimtes one has to execut `ulimit -c unlimited` from the terminal where 
     the core dump should be saved.
- 4. Recently we added `--debug` argument to `dmake`:
+ 4. Recently we added `--debug` argument to `dmake`. It enables building with
+    debug information
         
         $ dmake --debug -j20
-    
+
+ 5. Run your faulty script like this:
+ 
+        $ gdb  --args `which python3.6` lstm2.py
+
 
 Reference: https://le.qun.ch/en/blog/core-dump-file-in-docker/
