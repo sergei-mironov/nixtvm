@@ -209,6 +209,8 @@ Articles
   2018, Differentiable Programming for Image Processing and Deep Learning in Halide
 * https://arxiv.org/pdf/1803.10228.pdf
   2018, Demystifying Differentiable Programming: Shift/Reset the Penultimate Backpropagator
+* http://conal.net/papers/essence-of-ad/
+  2018, The simple essence of automatic differentiation, by Elliott, at ICFP 2018
 
 
 
