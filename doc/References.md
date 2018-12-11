@@ -272,6 +272,8 @@ Articles:
   2015, Bruel, Benchmarking of LSTM Networks
 * https://arxiv.org/pdf/1503.04069.pdf <br/>
   2017, LSTM: A Search Space Odyssey
+* https://arxiv.org/ftp/arxiv/papers/1802/1802.02615.pdf <br/>
+  2018(?), Effective Quantization Approaches for Recurrent Neural Networks
 
 
 TVM
