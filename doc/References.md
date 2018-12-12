@@ -10,6 +10,8 @@ General
   2015, Neural Networks and Deep Learning book
 * https://github.com/janishar/mit-deep-learning-book-pdf/tree/master/complete-book-bookmarked-pdf
   2017, MIT Deep Learning Book
+* http://www.automl.org/book/
+  2018, AUTOML: METHODS, SYSTEMS, CHALLENGES (NEW BOOK)
 
 ### Datasets
 
